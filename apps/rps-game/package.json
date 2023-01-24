@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.5",
-    "@prisma/client": "^4.9.0",
     "next": "^13.1.1",
     "next-auth": "^4.18.8",
     "react": "^18.2.0",
@@ -23,9 +22,9 @@
     "@types/react": "^18.0.22",
     "@types/react-dom": "^18.0.7",
     "eslint": "7.32.0",
+    "typescript": "^4.5.3",
+    "database": "*",
     "eslint-config-custom": "*",
-    "prisma": "^4.9.0",
-    "tsconfig": "*",
-    "typescript": "^4.5.3"
+    "tsconfig": "*"
   }
 }
