@@ -1,4 +1,3 @@
 module.exports = {
-  root: true,
-  extends: ["custom"],
-};
+  ...require('eslint-config-custom/eslint-next'),
+}
