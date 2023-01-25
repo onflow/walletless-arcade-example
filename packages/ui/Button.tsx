@@ -1,7 +1,7 @@
 export const Button = () => {
   return (
-    <button type="button" className="h-16 w-16 bg-blue-500 hover:bg-blue-700">
-      Boop
+    <button className="rounded border border-blue-700 bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700">
+      Login
     </button>
   )
 }
