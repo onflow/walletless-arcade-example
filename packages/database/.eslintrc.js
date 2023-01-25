@@ -1,3 +1,3 @@
 module.exports = {
-  ...require('eslint-config-custom/eslint-next'),
+  ...require('eslint-config-custom/eslint-preset'),
 }

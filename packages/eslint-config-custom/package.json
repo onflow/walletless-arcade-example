@@ -7,13 +7,12 @@
     "access": "public"
   },
   "files": [
+    "eslint-preset.js",
     "eslint-next.js"
   ],
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.49.0",
-    "@typescript-eslint/parser": "^5.49.0",
-    "eslint": "^8.32.0",
-    "typescript": "^4.9.4"
+    "@typescript-eslint/parser": "^5.49.0"
   },
   "dependencies": {
     "eslint-config-next": "^13.1.5",
