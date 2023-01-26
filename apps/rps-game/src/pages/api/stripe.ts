@@ -23,8 +23,8 @@ export default async function handler(
       },
     ],
     mode: 'payment',
-    success_url: `http://localhost:3002?purchase_success=true`,
-    cancel_url: `http://localhost:3002?purchase_error=true`,
+    success_url: `http://localhost:${process.env.PORT}?purchase_success=true`,
+    cancel_url: `http://localhost:${process.env.PORT}?purchase_error=true`,
   })
 
   res.json({ url: session.url })

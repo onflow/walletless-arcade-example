@@ -6,7 +6,7 @@
     "build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**", ".next/**"],
-      "env": ["STRIPE_SK"]
+      "env": ["STRIPE_SK", "PORT"]
     },
     "dev": {
       "cache": false,
