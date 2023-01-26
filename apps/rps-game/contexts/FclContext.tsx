@@ -13,7 +13,7 @@ import {
 } from "react";
 import type { ReactNode } from "react";
 import { FLOW } from "../constants";
-import flowJSON from "../../../flow.json";
+import flowJSON from "../flow.json";
 
 interface IFclContext {
   currentUser: fcl.CurrentUserObject | null | undefined;
@@ -75,7 +75,7 @@ export default function FclContextProvider({
         "accessNode.api": FLOW.ACCESS_NODE_URLS[flowNetwork],
         "discovery.wallet": `https://fcl-discovery.onflow.org/${flowNetwork}/authn`,
         "app.detail.icon": iconUrl,
-        "app.detail.title": appTitle,
+        "app.detail.title": appTitle
       })
       // @ts-ignore
       .load({ flowJSON });

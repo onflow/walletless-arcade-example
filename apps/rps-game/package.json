@@ -3,14 +3,18 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3000",
+    "dev": "next dev",
+    "dev:local": "NEXT_PUBLIC_FLOW_NETWORK=local npm run dev",
+    "dev:local:deploy": "flow project deploy --network=emulator --update && NEXT_PUBLIC_FLOW_NETWORK=local npm run dev",
+    "dev:testnet": "NEXT_PUBLIC_FLOW_NETWORK=testnet npm run dev",
+    "dev:mainnet": "NEXT_PUBLIC_FLOW_NETWORK=mainnet npm run dev",
     "build": "next build",
     "start": "next start",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "next lint"
   },
   "dependencies": {
-    "@onflow/fcl": "^1.3.2",
+    "@onflow/fcl": "^1.3.3-alpha.0",
     "@onflow/fcl-wc": "^1.0.0",
     "@types/elliptic": "^6.4.14",
     "@types/secp256k1": "^4.0.3",
