@@ -4,10 +4,14 @@ import Image from 'next/image'
 import { Button } from 'ui'
 
 const Home: NextPage = () => {
+  const connect = () => {
+    console.log('connect')
+  }
+
   return (
     <div className="flex min-h-screen flex-col items-center justify-center py-2">
       <Head>
-        <title>Create Next App</title>
+        <title>Flow Prize Marketplace</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -15,12 +19,12 @@ const Home: NextPage = () => {
         <h1 className="text-6xl font-bold">
           Welcome to{' '}
           <a className="text-red-600" href="https://nextjs.org">
-            Prize Marketplace!
+            Flow Prize Marketplace!
           </a>
         </h1>
 
         <p className="mt-3 text-2xl">
-          <Button />
+          <Button onClick={connect}>Connect Wallet</Button>
         </p>
 
         <div className="mt-6 flex max-w-4xl flex-wrap items-center justify-around sm:w-full">
