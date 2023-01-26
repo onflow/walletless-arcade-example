@@ -1,6 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import Stripe from 'stripe'
 
-const stripe = require('stripe')(process.env.STRIPE_SK)
+const stripe = new Stripe(process.env.STRIPE_SK as string, {
+  apiVersion: '2022-11-15',
+})
 
 export default async function handler(
   req: NextApiRequest,

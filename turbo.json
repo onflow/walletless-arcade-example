@@ -5,7 +5,8 @@
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".next/**"]
+      "outputs": ["dist/**", ".next/**"],
+      "env": ["STRIPE_SK"]
     },
     "dev": {
       "cache": false,
