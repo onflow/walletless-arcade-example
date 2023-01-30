@@ -1,10 +1,11 @@
-const WALLETLESS_ONBOARDING = `// import ChildAccount from 0xChildAccount
+const WALLETLESS_ONBOARDING = `
 import ChildAccount from 0xChildAccount
 import MetadataViews from 0xMetadataViews
 import FungibleToken from 0xFungibleToken
 import NonFungibleToken from 0xNonFungibleToken
-import GamePieceNFT from 0xGamePieceNFT
+import MonsterMaker from 0xMonsterMaker
 import RockPaperScissorsGame from 0xRockPaperScissorsGame
+import TicketToken from 0xTicketToken
 
 /// This transaction creates an account from the given public key, using the
 /// ChildAccountCreator with the signer as the account's payer, additionally
@@ -19,11 +20,14 @@ transaction(
         childAccountDescription: String,
         clientIconURL: String,
         clientExternalURL: String,
-        minterAddress: Address
+        monsterBackground: Int,
+        monsterHead: Int,
+        monsterTorso: Int,
+        monsterLeg: Int
     ) {
 
     prepare(signer: AuthAccount) {
-        /* Create a new account from the given public key */
+        /* --- Create a new account --- */
         //
         // Get a reference to the signer's ChildAccountCreator
         let creatorRef = signer.borrow<
@@ -49,48 +53,59 @@ transaction(
             childAccountInfo: info
         )
 
-        /* Set up GamePieceNFT.Collection */
+        /* --- Set up MonsterMaker.Collection --- */
         //
-        // Create a new empty collection
-        let collection <- GamePieceNFT.createEmptyCollection()
-
-        // save it to the account
-        newAccount.save(<-collection, to: GamePieceNFT.CollectionStoragePath)
+        // create & save it to the account
+        newAccount.save(<-MonsterMaker.createEmptyCollection(), to: MonsterMaker.CollectionStoragePath)
 
         // create a public capability for the collection
-        newAccount.link<&{
-            NonFungibleToken.Receiver,
-            NonFungibleToken.CollectionPublic,
-            GamePieceNFT.GamePieceNFTCollectionPublic,
-            MetadataViews.ResolverCollection
-        }>(
-            GamePieceNFT.CollectionPublicPath,
-            target: GamePieceNFT.CollectionStoragePath
+        newAccount.link<
+            &MonsterMaker.Collection{NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, MonsterMaker.MonsterMakerCollectionPublic, MetadataViews.ResolverCollection}
+        >(
+            MonsterMaker.CollectionPublicPath,
+            target: MonsterMaker.CollectionStoragePath
         )
 
         // Link the Provider Capability in private storage
-        newAccount.link<&{
-            NonFungibleToken.Provider
-        }>(
-            GamePieceNFT.ProviderPrivatePath,
-            target: GamePieceNFT.CollectionStoragePath
+        newAccount.link<
+            &MonsterMaker.Collection{NonFungibleToken.Provider}
+        >(
+            MonsterMaker.CollectionPublicPath,
+            target: MonsterMaker.CollectionStoragePath
         )
-        // Grab Collection related references & Capabilities
-        let collectionRef = newAccount.borrow<&GamePieceNFT.Collection>(from: GamePieceNFT.CollectionStoragePath)!
-        
-        /* --- Make sure signer has a GamePieceNFT.NFT to play with --- */
-        //
-        // Get a reference to the MinterPublic Capability
-        let minterRef = getAccount(minterAddress)
-            .getCapability<
-                &{GamePieceNFT.MinterPublic}
-            >(
-                GamePieceNFT.MinterPublicPath
-            ).borrow()
-            ?? panic("Could not get a reference to the MinterPublic Capability at the specified address ".concat(minterAddress.toString()))
-        minterRef.mintNFT(recipient: collectionRef)
 
-        /* --- Set user up with GamePlayer --- */
+        // Grab Collection related references & Capabilities
+        let collectionRef = newAccount.borrow<&MonsterMaker.Collection>(from: MonsterMaker.CollectionStoragePath)!
+        
+        /* --- Make sure new account has a GamePieceNFT.NFT to play with --- */
+        //
+        // Borrow a reference to the NFTMinter Capability in minter account's storage
+        // NOTE: This assumes a Capability is stored, and not the base resource - this would occurr
+        // if the signing minter was granted the NFTMinter Capability for a base resource located in
+        // another account
+        let minterCapRef = signer.borrow<
+                &Capability<&MonsterMaker.NFTMinter>
+            >(
+                from: MonsterMaker.MinterStoragePath
+            ) ?? panic("Couldn't borrow reference to NFTMinter Capability in storage at ".concat(MonsterMaker.MinterStoragePath.toString()))
+        let minterRef = minterCapRef.borrow() ?? panic("Couldn't borrow reference to NFTMinter from Capability")
+        // Build the MonsterComponent struct from given arguments
+        let componentValue = MonsterMaker.MonsterComponent(
+                background: monsterBackground,
+                head: monsterHead,
+                torso: monsterTorso,
+                leg: monsterLeg
+            )
+        // TODO: Add royalty feature to MM using beneficiaries, cuts, and descriptions. At the moment, we don't provide royalties with KI, so this will be an empty list.
+        let royalties: [MetadataViews.Royalty] = []
+        // Mint the NFT to the new account's collection
+        minterRef.mintNFT(
+            recipient: collectionRef,
+            component: componentValue,
+            royalties: royalties
+        )
+
+        /* --- Set user up with GamePlayer in new account --- */
         //
         // Create GamePlayer resource
         let gamePlayer <- RockPaperScissorsGame.createGamePlayer()
@@ -104,14 +119,32 @@ transaction(
             target: RockPaperScissorsGame.GamePlayerStoragePath
         )
         // Link GamePlayerID Capability
-        signer.link<&{
+        newAccount.link<&{
             RockPaperScissorsGame.DelegatedGamePlayer,
             RockPaperScissorsGame.GamePlayerID
         }>(
             RockPaperScissorsGame.GamePlayerPrivatePath,
             target: RockPaperScissorsGame.GamePlayerStoragePath
         )
-    }
-}`;
 
-export default WALLETLESS_ONBOARDING;
+        /* --- Set user up with TicketToken.Vault --- */
+        //
+        // Create & save a Vault
+        newAccount.save(<-TicketToken.createEmptyVault(), to: TicketToken.VaultStoragePath)
+        // Create a public capability to the Vault that only exposes the deposit function
+        // & balance field through the Receiver & Balance interface
+        newAccount.link<&TicketToken.Vault{FungibleToken.Receiver, FungibleToken.Balance, MetadataViews.Resolver}>(
+            TicketToken.ReceiverPublicPath,
+            target: TicketToken.VaultStoragePath
+        )
+        // Create a private capability to the Vault that only exposes the withdraw function
+        // through the Provider interface
+        newAccount.link<&TicketToken.Vault{FungibleToken.Provider}>(
+            TicketToken.ProviderPrivatePath,
+            target: TicketToken.VaultStoragePath
+        )
+    }
+}
+`
+
+export default WALLETLESS_ONBOARDING

@@ -6,7 +6,9 @@
     "PORT",
     "STRIPE_SK",
     "GOOGLE_CLIENT_ID",
-    "GOOGLE_CLIENT_SECRET"
+    "GOOGLE_CLIENT_SECRET",
+    "NEXT_PUBLIC_ADMIN_ADDRESS",
+    "NEXT_PUBLIC_ADMIN_KEY_INDEX"
   ],
   "pipeline": {
     "build": {
@@ -15,6 +17,14 @@
       "env": ["STRIPE_SK", "PORT"]
     },
     "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "dev:local": {
+      "cache": false,
+      "persistent": true
+    },
+    "dev:local:deploy": {
       "cache": false,
       "persistent": true
     },
