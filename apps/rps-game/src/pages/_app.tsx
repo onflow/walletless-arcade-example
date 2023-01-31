@@ -1,10 +1,15 @@
 import { SessionProvider } from 'next-auth/react'
-import '../../styles/globals.css'
 import type { AppProps } from 'next/app'
-import { FclContext, GameAccountContext, UserContext, RpsGameContext } from "../../contexts"
-import { Navbar } from "../../components/navbar"
-import '../../styles/tailwind.css';
-import '../../styles/styles.css';
+import {
+  FclContext,
+  GameAccountContext,
+  UserContext,
+  RpsGameContext,
+} from '../contexts'
+import { Navbar } from '../components/navbar'
+import '../styles/globals.css'
+import '../styles/tailwind.css'
+import '../styles/styles.css'
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
@@ -14,7 +19,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
           <GameAccountContext>
             <UserContext>
               <RpsGameContext>
-                <div className="min-h-screen flex flex-col">
+                <div className="flex min-h-screen flex-col">
                   <Navbar />
                   <Component {...pageProps} />
                 </div>

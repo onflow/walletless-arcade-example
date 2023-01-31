@@ -1,5 +1,6 @@
+import Image from 'next/image'
 import { useState } from 'react'
-import OnFlowIcon from '../assets/flow-icon-bw-green.svg'
+import OnFlowIcon from '../../public/static/flow-icon-bw-green.svg'
 import { Hamburger } from './hamburger'
 
 function NavDropDown() {
@@ -69,7 +70,7 @@ export function Navbar() {
         className="font-display flex cursor-pointer items-center text-xl"
         href="/"
       >
-        <img
+        <Image
           className="mr-4"
           alt="flow_logo"
           width="50"

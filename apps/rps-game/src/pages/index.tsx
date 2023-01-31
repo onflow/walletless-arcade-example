@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { Button } from '../../components/button-v2'
+import { Button } from '../components/button-v2'
 import { useSession, signIn, signOut } from 'next-auth/react'
 
 const Home: NextPage = () => {
