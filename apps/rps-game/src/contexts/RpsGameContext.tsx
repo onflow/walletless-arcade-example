@@ -11,6 +11,7 @@ import {
 import type { ReactNode, Dispatch, SetStateAction } from "react";
 import { useFclContext } from "./FclContext";
 import { useGameAccountContext } from "./GameAccountContext";
+import { useTicketContext } from './TicketContext'
 import WALLETLESS_ONBOARDING from '../../cadence/transactions/onboarding/walletless-onboarding'
 import SETUP_NEW_SINGLE_PLAYER_MATCH from '../../cadence/transactions/rock-paper-scissors-game/game-player/setup-new-singleplayer-match'
 import GET_GAME_PLAYER_ID from '../../cadence/scripts/rock-paper-scissors-game/get-game-player-id'
@@ -219,13 +220,17 @@ export default function RpsGameContextProvider({ children }: Props) {
   } = useFclContext();
 
   const {
+    ticketAmount,
+    getTicketAmount,
+    mintTickets,
+  } = useTicketContext()
+
+  const {
     gameAccountAddress,
     gameAccountPublicKey,
     gameAccountPrivateKey,
     getChildAccountAddressFromGameAdmin,
   } = useGameAccountContext();
-
-  console.log("gameAccountAddress", gameAccountAddress)
 
   const isPlaying = useMemo(
     () => getIsPlaying(state, gameAccountAddress),
@@ -243,7 +248,6 @@ export default function RpsGameContextProvider({ children }: Props) {
   );
 
   const setGamePiecePurchased = useCallback(async (isPurchased: boolean) => {
-    console.log("here1!", isPurchased)
     dispatch({
       type: "SET_GAME_PIECE_PURCHASED",
       isGamePiecePurchased: isPurchased,
@@ -423,6 +427,12 @@ export default function RpsGameContextProvider({ children }: Props) {
           returnedNFTIDs,
         };
 
+        const isPlayerWinner = gamePlayerID === winningGamePlayer;
+
+        if (isPlayerWinner) {
+          await mintTickets(gameAccountAddress, "10.0")
+        }
+
         dispatch({
           type: "SET_GAME_RESULT",
           gameResult: endgame,
@@ -538,6 +548,13 @@ export default function RpsGameContextProvider({ children }: Props) {
     getChildAccountAddressFromGameAdmin,
     getGamePieceNFTID,
   ]);
+
+  useEffect(() => {
+    const fn = async () => {
+      await getTicketAmount(gameAccountAddress, false)
+    }
+    fn()
+  }, [gameAccountAddress])
 
   const providerProps = useMemo(
     () => ({

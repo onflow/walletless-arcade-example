@@ -13,20 +13,20 @@ import GET_BALANCE from "../../cadence/scripts/ticket-token/get-balance"
 
 interface Props {
   children?: ReactNode;
-  account: {
-    address: string | null;
-    isParentAccount: boolean;
-  }
 }
 
 interface ITicketContext {
   ticketAmount: string | null;
-  getTicketAmount: () => Promise<string | null>;
+  getTicketAmount: (address: string, isParentAccount: boolean) => Promise<string | null>;
+  mintTickets: (destinationAddress: string, amount: string) => Promise<void>
 }
 
 const initialState: ITicketContext = {
   ticketAmount: null,
-  getTicketAmount: function (): Promise<string | null> {
+  getTicketAmount: function (address: string, isParentAccount: boolean): Promise<string | null> {
+    throw new Error(`Function not implemented.`);
+  },
+  mintTickets: function (destinationAddress: string, amount: string): Promise<void> {
     throw new Error(`Function not implemented.`);
   },
 };
@@ -36,7 +36,7 @@ export const TicketContext =
 
 export const useTicketContext = () => useContext(TicketContext);
 
-export default function TicketContextProvider({ account: { address, isParentAccount }, children }: Props) {
+export default function TicketContextProvider({ children }: Props) {
   const { currentUser, executeScript } = useFclContext();
   const [ticketAmount, setTicketAmount] = useState<null | string>(
     null
@@ -57,7 +57,7 @@ export default function TicketContextProvider({ account: { address, isParentAcco
   }, 
   [])
 
-  const getTicketAmount = useCallback(async (): Promise<
+  const getTicketAmount = useCallback(async (address: string, isParentAccount: boolean): Promise<
     string | null
   > => {
     if (address) {
@@ -94,10 +94,6 @@ export default function TicketContextProvider({ account: { address, isParentAcco
     executeScript,
     currentUser
   ]);
-
-  useEffect(() => {
-    getTicketAmount();
-  }, [getTicketAmount]);
 
   const value = {
     ticketAmount,
