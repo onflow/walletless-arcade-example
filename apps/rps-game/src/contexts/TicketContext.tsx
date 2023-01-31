@@ -42,6 +42,21 @@ export default function TicketContextProvider({ account: { address, isParentAcco
     null
   );
 
+  const mintTickets = useCallback(async (destinationAddress: string, amount: string): Promise<void> => {
+    try {
+      await fetch("/api/tickets/mint", {
+        method: "POST",
+        body: JSON.stringify({
+          destinationAddress,
+          amount
+        })
+      })
+    } catch (e) {
+      return
+    }
+  }, 
+  [])
+
   const getTicketAmount = useCallback(async (): Promise<
     string | null
   > => {
@@ -86,7 +101,8 @@ export default function TicketContextProvider({ account: { address, isParentAcco
 
   const value = {
     ticketAmount,
-    getTicketAmount
+    getTicketAmount,
+    mintTickets
   };
 
   return (
