@@ -11,8 +11,13 @@
     "seed": "tsx packages/database/src/seed.ts"
   },
   "scripts": {
+    "start": "turbo run start",
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
+    "dev:local": "turbo run dev:local --parallel",
+    "dev:local:deploy": "flow project deploy --network=emulator --update && NEXT_PUBLIC_FLOW_NETWORK=local turbo run dev",
+    "dev:testnet": "turbo run dev:testnet --parallel",
+    "dev:mainnet": "turbo run dev:mainnet --parallel",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "generate": "turbo run generate",
