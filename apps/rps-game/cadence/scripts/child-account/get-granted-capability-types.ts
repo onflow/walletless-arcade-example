@@ -1,5 +1,5 @@
 const GET_GRANTED_CAPABILITY_TYPES = `
-import ChildAccount from 0XChildAccount
+import ChildAccount from 0xChildAccount
 
 /// Returns the types a child account has been granted via
 /// its ChildAccountTag

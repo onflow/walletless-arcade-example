@@ -1,5 +1,5 @@
 const GET_GAME_PLAYER_ID = `
-import RockPaperScissorsGame from 0XRockPaperScissorsGame
+import RockPaperScissorsGame from 0xRockPaperScissorsGame
 
 /// Returns the GamePlayer.id of the GamePlayer resource
 /// configured at the provided address if it exists

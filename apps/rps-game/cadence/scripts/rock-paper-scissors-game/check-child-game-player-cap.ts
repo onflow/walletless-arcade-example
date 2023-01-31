@@ -1,6 +1,6 @@
 const CHECK_CHILD_GAME_PLAYER_CAP = `
-import ChildAccount from 0XChildAccount
-import RockPaperScissorsGame from 0XRockPaperScissorsGame
+import ChildAccount from 0xChildAccount
+import RockPaperScissorsGame from 0xRockPaperScissorsGame
 
 /// Returns true if ChildAccountTag at given Address has a
 /// RockPaperScissorsGame.DelegatedGamePlayer Capability and

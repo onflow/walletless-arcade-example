@@ -15,7 +15,7 @@
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
     "dev:local": "turbo run dev:local --parallel",
-    "dev:local:deploy": "turbo run dev:local:deploy --parallel",
+    "dev:local:deploy": "flow project deploy --network=emulator --update && NEXT_PUBLIC_FLOW_NETWORK=local turbo run dev",
     "dev:testnet": "turbo run dev:testnet --parallel",
     "dev:mainnet": "turbo run dev:mainnet --parallel",
     "lint": "turbo run lint",

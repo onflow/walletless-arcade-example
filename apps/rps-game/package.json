@@ -5,7 +5,6 @@
   "scripts": {
     "dev": "next dev",
     "dev:local": "NEXT_PUBLIC_FLOW_NETWORK=local npm run dev",
-    "dev:local:deploy": "flow project deploy --network=emulator --update && NEXT_PUBLIC_FLOW_NETWORK=local npm run dev",
     "dev:testnet": "NEXT_PUBLIC_FLOW_NETWORK=testnet npm run dev",
     "dev:mainnet": "NEXT_PUBLIC_FLOW_NETWORK=mainnet npm run dev",
     "build": "next build",

@@ -1,6 +1,6 @@
 const GET_AVAILABLE_WHILE_IN_GAMEPLAY = `
-import NonFungibleToken from 0XNonFungibleToken
-import RockPaperScissorsGame from 0XRockPaperScissorsGame
+import NonFungibleToken from 0xNonFungibleToken
+import RockPaperScissorsGame from 0xRockPaperScissorsGame
 
 /// Returns an array with the moves available for a GamePlayer in the given Match.id
 pub fun main(playerAddr: Address, matchID: UInt64): [RockPaperScissorsGame.Moves]? {
