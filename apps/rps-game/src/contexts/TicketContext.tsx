@@ -7,6 +7,7 @@ import {
 } from "react";
 import type { ReactNode } from "react";
 import { useFclContext } from "./FclContext";
+import * as fcl from "@onflow/fcl";
 import GET_BALANCE_OF_ALL_CHILD_ACCOUNTS from "../../cadence/scripts/ticket-token/get-balance-of-all-child-accounts"
 import GET_BALANCE from "../../cadence/scripts/ticket-token/get-balance"
 
@@ -50,7 +51,7 @@ export default function TicketContextProvider({ account: { address, isParentAcco
           GET_BALANCE,
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           (arg: any, t: any) => [
-            arg(currentUser?.addr, t.Address)
+            arg(fcl.withPrefix(address), t.Address)
           ]
         );
 
@@ -59,7 +60,7 @@ export default function TicketContextProvider({ account: { address, isParentAcco
             GET_BALANCE_OF_ALL_CHILD_ACCOUNTS,
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (arg: any, t: any) => [
-              arg(currentUser?.addr, t.Address)
+              arg(fcl.withPrefix(address), t.Address)
             ]
           );
 
