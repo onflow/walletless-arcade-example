@@ -7,9 +7,15 @@ import {
 } from "react";
 import type { ReactNode } from "react";
 import { useFclContext } from "./FclContext";
+import GET_BALANCE_OF_ALL_CHILD_ACCOUNTS from "../../cadence/scripts/ticket-token/get-balance-of-all-child-accounts"
+import GET_BALANCE from "../../cadence/scripts/ticket-token/get-balance"
 
 interface Props {
   children?: ReactNode;
+  account: {
+    address: string | null;
+    isParentAccount: boolean;
+  }
 }
 
 interface ITicketContext {
@@ -29,7 +35,7 @@ export const TicketContext =
 
 export const useTicketContext = () => useContext(TicketContext);
 
-export default function TicketContextProvider({ children }: Props) {
+export default function TicketContextProvider({ account: { address, isParentAccount }, children }: Props) {
   const { currentUser, executeScript } = useFclContext();
   const [ticketAmount, setTicketAmount] = useState<null | string>(
     null
@@ -38,18 +44,33 @@ export default function TicketContextProvider({ children }: Props) {
   const getTicketAmount = useCallback(async (): Promise<
     string | null
   > => {
+    if (address) {
+      try {
+        let balance: string = await executeScript(
+          GET_BALANCE,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (arg: any, t: any) => [
+            arg(currentUser?.addr, t.Address)
+          ]
+        );
 
-    if (currentUser && currentUser?.addr) {
-      // TODO: Execute required script
-      const res: string = await executeScript(
-        "stub",
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (arg: any, t: any) => [
-        ]
-      );
+        if (isParentAccount) {
+          const childAccountsBalance = await executeScript(
+            GET_BALANCE_OF_ALL_CHILD_ACCOUNTS,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (arg: any, t: any) => [
+              arg(currentUser?.addr, t.Address)
+            ]
+          );
 
-      setTicketAmount(res);
-      return res;
+          balance = Number(Number(balance) + Number(childAccountsBalance)).toFixed(8)
+        }
+
+        setTicketAmount(balance);
+        return balance;
+      } catch(e) {
+        return null
+      }
     }
     return null
   }, [
