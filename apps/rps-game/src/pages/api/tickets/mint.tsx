@@ -1,7 +1,7 @@
 import { type NextApiRequest, type NextApiResponse } from 'next'
 import * as fcl from "@onflow/fcl";
-import { adminAuthorizationFunction } from "../../utils/authz-functions";
-import MINT_TOKENS from "../../../cadence/transactions/ticket-token/mint-tokens"
+import { adminAuthorizationFunction } from "../../../utils/authz-functions";
+import MINT_TOKENS from "../../../../cadence/transactions/ticket-token/mint-tokens"
 import '../../../utils/fcl-setup'
 
 export async function mintTicketHelper(destinationAddress: string, amount: string): Promise<void> {

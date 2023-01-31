@@ -551,7 +551,9 @@ export default function RpsGameContextProvider({ children }: Props) {
 
   useEffect(() => {
     const fn = async () => {
-      await getTicketAmount(gameAccountAddress, false)
+      if (gameAccountAddress) {
+        await getTicketAmount(gameAccountAddress, false)
+      }
     }
     fn()
   }, [gameAccountAddress])
