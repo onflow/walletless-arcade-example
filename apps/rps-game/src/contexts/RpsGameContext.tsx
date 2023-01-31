@@ -7,10 +7,10 @@ import {
   useCallback,
   useReducer,
   useMemo,
-} from 'react'
-import type { ReactNode } from 'react'
-import { useFclContext } from './FclContext'
-import { useGameAccountContext } from './GameAccountContext'
+} from "react";
+import type { ReactNode, Dispatch, SetStateAction } from "react";
+import { useFclContext } from "./FclContext";
+import { useGameAccountContext } from "./GameAccountContext";
 import WALLETLESS_ONBOARDING from '../../cadence/transactions/onboarding/walletless-onboarding'
 import SETUP_NEW_SINGLE_PLAYER_MATCH from '../../cadence/transactions/rock-paper-scissors-game/game-player/setup-new-singleplayer-match'
 import GET_GAME_PLAYER_ID from '../../cadence/scripts/rock-paper-scissors-game/get-game-player-id'
@@ -24,55 +24,61 @@ import {
 import RESOLVE_MATCH_AND_RETURN_NFTS from '../../cadence/transactions/rock-paper-scissors-game/game-player/resolve-match-and-return-nfts'
 
 interface Props {
-  children?: ReactNode
+  children?: ReactNode;
 }
 
 export enum GameStatus {
-  UNINITIALIZED = 'UNINITIALIZED',
-  INITIALIZED = 'INITIALIZED',
-  READY = 'READY',
-  PLAYING = 'PLAYING',
-  ENDED = 'ENDED',
+  UNINITIALIZED = "UNINITIALIZED",
+  INITIALIZED = "INITIALIZED",
+  READY = "READY",
+  PLAYING = "PLAYING",
+  ENDED = "ENDED",
+  UNPURCHASED = "UNPURCHASED"
 }
 
 type Action =
-  | { type: 'SET_IS_GAME_INITIALIZED'; isGameInitialized: boolean }
-  | { type: 'SET_GAME_PIECE_NFT_ID'; gamePieceNFTID: string | null }
-  | { type: 'SET_GAME_PLAYER_ID'; gamePlayerID: string | null }
-  | { type: 'SET_GAME_MATCH_ID'; gameMatchID: string | null }
-  | { type: 'SET_GAME_STATUS'; gameStatus: GameStatus }
-  | { type: 'SET_GAME_RESULT'; gameResult: any | null }
-  | { type: 'SET_WIN_LOSS_RECORD'; winLossRecord: any | null }
-  | { type: 'RESET_GAME' }
-  | {
-      type: 'SET_HANDLERS'
-      getGamePieceNFTID: () => Promise<void>
-      getWinLossRecord: () => Promise<void>
-      setupNewSinglePlayerMatch: () => Promise<void>
-      submitBothSinglePlayerMoves: (_move: number) => Promise<void>
-      resolveMatchAndReturnNFTS: () => Promise<void>
-      resetGame: () => Promise<void>
-    }
+  | { type: "SET_IS_GAME_INITIALIZED"; isGameInitialized: boolean }
+  | { type: "SET_GAME_PIECE_PURCHASED"; isGamePiecePurchased: boolean }
+  | { type: "SET_GAME_PIECE_NFT_ID"; gamePieceNFTID: string | null }
+  | { type: "SET_GAME_PLAYER_ID"; gamePlayerID: string | null }
+  | { type: "SET_GAME_MATCH_ID"; gameMatchID: string | null }
+  | { type: "SET_GAME_STATUS"; gameStatus: GameStatus }
+  | { type: "SET_GAME_RESULT"; gameResult: any | null }
+  | { type: "SET_WIN_LOSS_RECORD"; winLossRecord: any | null }
+  | { type: "RESET_GAME"; }
+  | { 
+    type: "SET_HANDLERS"; 
+    getGamePieceNFTID: () => Promise<void>;
+    getWinLossRecord: () => Promise<void>;
+    setupNewSinglePlayerMatch: () => Promise<void>;
+    submitBothSinglePlayerMoves: (_move: number) => Promise<void>;
+    resolveMatchAndReturnNFTS: () => Promise<void>;
+    resetGame: () => Promise<void>;
+    setGamePiecePurchased: (isPurchased: boolean) => Promise<void>;
+  };
 
 interface State {
-  gameStatus: GameStatus
-  gameMatchID: string | null
-  gamePieceNFTID: string | null
-  gamePlayerID: string | null
-  gameResult: any | null
-  winLossRecord: any | null
-  isGameInitialized: boolean
-  isGameInitializedStateLoading: boolean
-  setupNewSinglePlayerMatch: () => Promise<void>
-  getGamePieceNFTID: () => Promise<void>
-  getWinLossRecord: () => Promise<void>
-  submitBothSinglePlayerMoves: (_move: number) => Promise<void>
-  resolveMatchAndReturnNFTS: () => Promise<void>
-  resetGame: () => Promise<void>
+  gameStatus: GameStatus;
+  isGamePiecePurchased: boolean;
+  gameMatchID: string | null;
+  gamePieceNFTID: string | null;
+  gamePlayerID: string | null;
+  gameResult: any | null;
+  winLossRecord: any | null;
+  isGameInitialized: boolean;
+  isGameInitializedStateLoading: boolean;
+  setGamePiecePurchased: (isGamePiecePurchased: boolean) => Promise<void>;
+  setupNewSinglePlayerMatch: () => Promise<void>;
+  getGamePieceNFTID: () => Promise<void>;
+  getWinLossRecord: () => Promise<void>;
+  submitBothSinglePlayerMoves: (_move: number) => Promise<void>;
+  resolveMatchAndReturnNFTS: () => Promise<void>;
+  resetGame: () => Promise<void>;
 }
 
 const initialState: State = {
-  gameStatus: GameStatus.UNINITIALIZED,
+  gameStatus: GameStatus.UNPURCHASED,
+  isGamePiecePurchased: false,
   gameMatchID: null,
   gamePlayerID: null,
   gamePieceNFTID: null,
@@ -80,52 +86,65 @@ const initialState: State = {
   winLossRecord: null,
   isGameInitialized: false,
   isGameInitializedStateLoading: false,
-  setupNewSinglePlayerMatch: function (): Promise<void> {
-    throw new Error('Function not implemented.')
+  setGamePiecePurchased: async function(isGamePiecePurchased: boolean): Promise<void> {
+    // throw new Error("Function not implemented.");
+    console.log("here0")
+    return undefined
   },
-  getGamePieceNFTID: function (): Promise<void> {
-    throw new Error('Function not implemented.')
+  setupNewSinglePlayerMatch: async function (): Promise<void> {
+    // throw new Error("Function not implemented.");
+    return undefined
   },
-  getWinLossRecord: function (): Promise<void> {
-    throw new Error(`Function not implemented.`)
+  getGamePieceNFTID: async function (): Promise<void> {
+    // throw new Error("Function not implemented.");
+    return undefined
   },
-  submitBothSinglePlayerMoves: function (_move: number): Promise<void> {
-    throw new Error(`Function not implemented. ${_move}`)
+  getWinLossRecord: async function (): Promise<void> {
+    // throw new Error(`Function not implemented.`);
+    return undefined
   },
-  resolveMatchAndReturnNFTS: function (): Promise<void> {
-    throw new Error('Function not implemented.')
+  submitBothSinglePlayerMoves: async function (_move: number): Promise<void> {
+    // throw new Error(`Function not implemented. ${_move}`);
+    return undefined
   },
-  resetGame: function (): Promise<void> {
-    throw new Error('Function not implemented.')
+  resolveMatchAndReturnNFTS: async function (): Promise<void> {
+    // throw new Error("Function not implemented.");
+    return undefined
   },
-}
+  resetGame: async function (): Promise<void> {
+    // throw new Error("Function not implemented.");
+    return undefined
+  },
+};
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
-    case 'SET_IS_GAME_INITIALIZED':
-      return { ...state, isGameInitialized: action.isGameInitialized }
-    case 'SET_GAME_PIECE_NFT_ID':
-      return { ...state, gamePieceNFTID: action.gamePieceNFTID }
-    case 'SET_GAME_PLAYER_ID':
-      return { ...state, gamePlayerID: action.gamePlayerID }
-    case 'SET_GAME_MATCH_ID':
-      return { ...state, gameMatchID: action.gameMatchID }
-    case 'SET_GAME_STATUS':
+    case "SET_IS_GAME_INITIALIZED":
+      return { ...state, isGameInitialized: action.isGameInitialized };
+    case "SET_GAME_PIECE_PURCHASED":
+      return { ...state, isGamePiecePurchased: action.isGamePiecePurchased };
+    case "SET_GAME_PIECE_NFT_ID":
+      return { ...state, gamePieceNFTID: action.gamePieceNFTID };
+    case "SET_GAME_PLAYER_ID":
+        return { ...state, gamePlayerID: action.gamePlayerID };
+    case "SET_GAME_MATCH_ID":
+      return { ...state, gameMatchID: action.gameMatchID };
+    case "SET_GAME_STATUS":
       return {
         ...state,
         gameStatus: action.gameStatus,
-      }
-    case 'SET_GAME_RESULT':
+      };
+    case "SET_GAME_RESULT":
       return {
         ...state,
         gameResult: action.gameResult,
-      }
-    case 'SET_WIN_LOSS_RECORD':
+      };
+    case "SET_WIN_LOSS_RECORD":
       return {
         ...state,
         winLossRecord: action.winLossRecord,
-      }
-    case 'SET_HANDLERS':
+      };
+    case "SET_HANDLERS": 
       return {
         ...state,
         submitBothSinglePlayerMoves: action.submitBothSinglePlayerMoves,
@@ -133,94 +152,80 @@ function reducer(state: State, action: Action): State {
         getGamePieceNFTID: action.getGamePieceNFTID,
         resolveMatchAndReturnNFTS: action.resolveMatchAndReturnNFTS,
         getWinLossRecord: action.getWinLossRecord,
+        setGamePiecePurchased: action.setGamePiecePurchased,
         resetGame: action.resetGame,
       }
-    case 'RESET_GAME':
+    case "RESET_GAME":
       return {
         ...state,
         gameMatchID: null,
       }
     default:
-      return state
+      return state;
   }
 }
 
 // Selectors
 const getIsPlaying = (state: State, gameAccountAddress: string | null) => {
   if (state) {
-    const { isGameInitialized, gamePieceNFTID, gamePlayerID, gameMatchID } =
-      state
-    return (
-      isGameInitialized &&
-      gamePieceNFTID &&
-      gamePlayerID &&
-      gameMatchID &&
-      gameAccountAddress
-    )
+    const { isGameInitialized, gamePieceNFTID, gamePlayerID , gameMatchID, isGamePiecePurchased} = state;
+    return isGameInitialized && isGamePiecePurchased && gamePieceNFTID && gamePlayerID && gameMatchID && gameAccountAddress;
   } else {
-    return null
+    return null;
   }
-}
+};
 
 const getIsReady = (state: State, gameAccountAddress: string | null) => {
   if (state) {
-    const { isGameInitialized, gamePieceNFTID, gamePlayerID } = state
-    return (
-      isGameInitialized && gamePieceNFTID && gamePlayerID && gameAccountAddress
-    )
+    const { isGameInitialized, gamePieceNFTID, gamePlayerID, isGamePiecePurchased} = state;
+    return isGameInitialized && isGamePiecePurchased && gamePieceNFTID && gamePlayerID && gameAccountAddress;
   } else {
-    return null
+    return null;
   }
-}
+};
 
 const getIsInitialized = (state: State, gameAccountAddress: string | null) => {
   if (state) {
-    const { isGameInitialized } = state
-    return isGameInitialized && !gameAccountAddress
+    const { isGameInitialized, isGamePiecePurchased } = state;
+    return isGameInitialized && isGamePiecePurchased && !gameAccountAddress;
   } else {
-    return null
+    return null;
   }
-}
+};
 
 export const RpsGameContext = createContext<{
-  state: State
-  dispatch: React.Dispatch<Action>
-  gameAccountAddress: string | null
-  gameAccountPublicKey: string | null
+  state: State;
+  dispatch: React.Dispatch<Action>;
+  gameAccountAddress: string | null;
+  gameAccountPublicKey: string | null;
 }>({
   state: initialState,
   dispatch: () => null,
   gameAccountAddress: null,
   gameAccountPublicKey: null,
-})
+});
 
-export const useRpsGameContext = () => useContext(RpsGameContext)
+export const useRpsGameContext = () => useContext(RpsGameContext);
 
 export default function RpsGameContextProvider({ children }: Props) {
-  const [state, dispatch] = useReducer(reducer, initialState)
-  const {
-    gameStatus,
-    isGameInitialized,
-    gamePieceNFTID,
-    gameMatchID,
-    gamePlayerID,
-  } = state
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const { gameStatus, isGameInitialized, gamePieceNFTID, gameMatchID, gamePlayerID, isGamePiecePurchased } = state;
 
   const {
     currentUser,
     executeScript,
     executeTransaction,
     getTransactionStatusOnSealed,
-  } = useFclContext()
+  } = useFclContext();
 
   const {
     gameAccountAddress,
     gameAccountPublicKey,
     gameAccountPrivateKey,
     getChildAccountAddressFromGameAdmin,
-  } = useGameAccountContext()
+  } = useGameAccountContext();
 
-  console.log('gameAccountAddress', gameAccountAddress)
+  console.log("gameAccountAddress", gameAccountAddress)
 
   const isPlaying = useMemo(
     () => getIsPlaying(state, gameAccountAddress),
@@ -230,12 +235,20 @@ export default function RpsGameContextProvider({ children }: Props) {
   const isReady = useMemo(
     () => getIsReady(state, gameAccountAddress),
     [state, gameAccountAddress]
-  )
+  );
 
   const isInitialized = useMemo(
     () => getIsInitialized(state, gameAccountAddress),
     [state, gameAccountAddress]
-  )
+  );
+
+  const setGamePiecePurchased = useCallback(async (isPurchased: boolean) => {
+    console.log("here1!", isPurchased)
+    dispatch({
+      type: "SET_GAME_PIECE_PURCHASED",
+      isGamePiecePurchased: isPurchased,
+    });
+  }, [])
 
   const checkGameClientInitialized = useCallback(async () => {
     if (!isGameInitialized && gameAccountPublicKey) {
@@ -243,72 +256,72 @@ export default function RpsGameContextProvider({ children }: Props) {
         WALLETLESS_ONBOARDING,
         (arg: any, t: any) => [
           arg(gameAccountPublicKey, t.String),
-          arg('100.0', t.UFix64),
-          arg('RPS Proxy Account', t.String),
-          arg('Proxy Account for Flow RPS', t.String),
-          arg('flow-games.com/icon.png', t.String),
-          arg('flow-games.com', t.String),
+          arg("100.0", t.UFix64),
+          arg("RPS Proxy Account", t.String),
+          arg("Proxy Account for Flow RPS", t.String),
+          arg("flow-games.com/icon.png", t.String),
+          arg("flow-games.com", t.String),
           arg(process.env.NEXT_PUBLIC_ADMIN_ADDRESS, t.Address),
         ],
         {
           limit: 9999,
           payer: adminAuthorizationFunction,
           proposer: adminAuthorizationFunction,
-          authorizations: [adminAuthorizationFunction],
+          authorizations: [adminAuthorizationFunction]
         }
-      )
+      );
 
-      console.log('checkGameClientInitialized txid', txid)
+      console.log("checkGameClientInitialized txid", txid)
 
       dispatch({
-        type: 'SET_IS_GAME_INITIALIZED',
+        type: "SET_IS_GAME_INITIALIZED",
         isGameInitialized: true,
-      })
+      });
     } else {
       // TODO: Support case where current user is not logged in
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser?.addr, isGameInitialized, gameAccountPublicKey])
+  }, [currentUser?.addr, isGameInitialized, gameAccountPublicKey]);
 
   const getGamePieceNFTID = useCallback(async () => {
     if (isGameInitialized && gameAccountAddress) {
-      const playerAddress = gameAccountAddress
+      const playerAddress = gameAccountAddress;
 
       const res = await executeScript(
         GET_COLLECTION_IDS,
         (arg: any, t: any) => [arg(playerAddress, t.Address)]
-      )
+      );
       if (!Array.isArray(res) || res.length <= 0) return
 
       dispatch({
-        type: 'SET_GAME_PIECE_NFT_ID',
+        type: "SET_GAME_PIECE_NFT_ID",
         gamePieceNFTID: res[0],
-      })
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isGameInitialized, gameAccountAddress])
+  }, [isGameInitialized, gameAccountAddress]);
 
   const getGamePlayerID = useCallback(async () => {
     if (isGameInitialized && gameAccountAddress) {
-      const playerAddress = gameAccountAddress
+      const playerAddress = gameAccountAddress;
 
       const res = await executeScript(
         GET_GAME_PLAYER_ID,
         (arg: any, t: any) => [arg(playerAddress, t.Address)]
-      )
+      );
 
       dispatch({
-        type: 'SET_GAME_PLAYER_ID',
+        type: "SET_GAME_PLAYER_ID",
         gamePlayerID: res,
-      })
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isGameInitialized, gameAccountAddress])
+  }, [isGameInitialized, gameAccountAddress]);
 
   const setupNewSinglePlayerMatch = useCallback(async () => {
     if (gamePieceNFTID && gameAccountPrivateKey && gameAccountAddress) {
-      const submittingNFTID = gamePieceNFTID
-      const matchTimeLimitInMinutes = 5
+      const submittingNFTID = gamePieceNFTID;
+      const matchTimeLimitInMinutes = 5;
 
       const txId = await executeTransaction(
         SETUP_NEW_SINGLE_PLAYER_MATCH,
@@ -318,249 +331,205 @@ export default function RpsGameContextProvider({ children }: Props) {
         ],
         {
           limit: 9999,
-          payer: userAuthorizationFunction(
-            gameAccountPrivateKey,
-            '0',
-            gameAccountAddress
-          ),
-          proposer: userAuthorizationFunction(
-            gameAccountPrivateKey,
-            '0',
-            gameAccountAddress
-          ),
-          authorizations: [
-            userAuthorizationFunction(
-              gameAccountPrivateKey,
-              '0',
-              gameAccountAddress
-            ),
-          ],
+          payer: userAuthorizationFunction(gameAccountPrivateKey, "0", gameAccountAddress),
+          proposer: userAuthorizationFunction(gameAccountPrivateKey, "0", gameAccountAddress),
+          authorizations: [userAuthorizationFunction(gameAccountPrivateKey, "0", gameAccountAddress)]
         }
-      )
-      if (!txId) return
+      );
+      if (!txId) return;
 
-      const transactionStatus = await getTransactionStatusOnSealed(txId)
-      const transactionEvents = transactionStatus?.events
+      const transactionStatus = await getTransactionStatusOnSealed(txId);
+      const transactionEvents = transactionStatus?.events;
 
-      if (!transactionEvents || !Array.isArray(transactionEvents)) return
+      if (!transactionEvents || !Array.isArray(transactionEvents)) return;
 
-      const newMatchCreatedEvent = transactionEvents.find(event =>
-        event?.type.includes('NewMatchCreated')
-      )
-      const matchId = newMatchCreatedEvent.data?.matchID
+      const newMatchCreatedEvent = transactionEvents.find((event) =>
+        event?.type.includes("NewMatchCreated")
+      );
+      const matchId = newMatchCreatedEvent.data?.matchID;
 
       dispatch({
-        type: 'SET_GAME_MATCH_ID',
+        type: "SET_GAME_MATCH_ID",
         gameMatchID: matchId,
-      })
+      });
     }
-  }, [
-    gamePieceNFTID,
-    gameAccountPrivateKey,
-    gameAccountAddress,
-    executeTransaction,
-  ])
+  }, [gamePieceNFTID, gameAccountPrivateKey, gameAccountAddress, executeTransaction]);
 
   const submitBothSinglePlayerMoves = useCallback(
     async (_move: number) => {
-      if (
-        gamePieceNFTID &&
-        gameMatchID &&
-        gameAccountPrivateKey &&
-        gameAccountAddress
-      ) {
-        const matchID = gameMatchID
-        const move = _move // 0 = rock, 1 = paper, 2 = scissors
+      if (gamePieceNFTID && gameMatchID && gameAccountPrivateKey && gameAccountAddress) {
+        const matchID = gameMatchID;
+        const move = _move; // 0 = rock, 1 = paper, 2 = scissors
 
         const txId = await executeTransaction(
           SUBMIT_BOTH_SINGLE_PLAYER_MOVES,
           (arg: any, t: any) => [arg(matchID, t.UInt64), arg(move, t.UInt8)],
           {
             limit: 9999,
-            payer: userAuthorizationFunction(
-              gameAccountPrivateKey,
-              '0',
-              gameAccountAddress
-            ),
-            proposer: userAuthorizationFunction(
-              gameAccountPrivateKey,
-              '0',
-              gameAccountAddress
-            ),
-            authorizations: [
-              userAuthorizationFunction(
-                gameAccountPrivateKey,
-                '0',
-                gameAccountAddress
-              ),
-            ],
+            payer: userAuthorizationFunction(gameAccountPrivateKey, "0", gameAccountAddress),
+            proposer: userAuthorizationFunction(gameAccountPrivateKey, "0", gameAccountAddress),
+            authorizations: [userAuthorizationFunction(gameAccountPrivateKey, "0", gameAccountAddress)]
           }
-        )
+        );
       }
     },
-    [
-      gamePieceNFTID,
-      gameMatchID,
-      executeTransaction,
-      gameAccountPrivateKey,
-      gameAccountAddress,
-    ]
+    [gamePieceNFTID, gameMatchID, executeTransaction, gameAccountPrivateKey, gameAccountAddress]
+  );
+
+  const resolveMatchAndReturnNFTS = useCallback(
+    async () => {
+      if (gameMatchID && gameAccountPrivateKey && gameAccountAddress) {
+        const matchID = gameMatchID
+
+        const txId = await executeTransaction(
+          RESOLVE_MATCH_AND_RETURN_NFTS,
+          (arg: any, t: any) => [arg(matchID, t.UInt64)],
+          {
+            limit: 9999,
+            payer: userAuthorizationFunction(gameAccountPrivateKey, "0", gameAccountAddress),
+            proposer: userAuthorizationFunction(gameAccountPrivateKey, "0", gameAccountAddress),
+            authorizations: [userAuthorizationFunction(gameAccountPrivateKey, "0", gameAccountAddress)]
+          }
+        );
+
+        if (!txId) return;
+        const transactionStatus = await getTransactionStatusOnSealed(txId);
+        const transactionEvents = transactionStatus?.events;
+
+        if (!transactionEvents || !Array.isArray(transactionEvents)) return;
+
+        const newMatchCreatedEvent = transactionEvents.find((event) =>
+          event?.type.includes("MatchOver")
+        );
+        // const matchId = newMatchCreatedEvent.data?.matchID
+        const player1ID = newMatchCreatedEvent.data?.player1ID;
+        const player1MoveRawValue =
+          newMatchCreatedEvent.data?.player1MoveRawValue;
+        const player2ID = newMatchCreatedEvent.data?.player2ID;
+        const player2MoveRawValue =
+          newMatchCreatedEvent.data?.player2MoveRawValue;
+        const winningGamePlayer = newMatchCreatedEvent.data?.winningGamePlayer;
+        const winningNFTID = newMatchCreatedEvent.data?.winningNFTID;
+        const returnedNFTIDs = newMatchCreatedEvent.data?.returnedNFTIDs;
+
+        const endgame = {
+          matchID,
+          player1ID,
+          player1MoveRawValue,
+          player2ID,
+          player2MoveRawValue,
+          winningGamePlayer,
+          winningNFTID,
+          returnedNFTIDs,
+        };
+
+        dispatch({
+          type: "SET_GAME_RESULT",
+          gameResult: endgame,
+        });
+
+        dispatch({ 
+          type: "SET_GAME_STATUS",
+          gameStatus: GameStatus.ENDED
+        });
+      }
+    }, 
+    [gamePieceNFTID, gameMatchID, executeTransaction, gameAccountPrivateKey, gameAccountAddress]
   )
 
-  const resolveMatchAndReturnNFTS = useCallback(async () => {
-    if (gameMatchID && gameAccountPrivateKey && gameAccountAddress) {
-      const matchID = gameMatchID
-
-      const txId = await executeTransaction(
-        RESOLVE_MATCH_AND_RETURN_NFTS,
-        (arg: any, t: any) => [arg(matchID, t.UInt64)],
-        {
-          limit: 9999,
-          payer: userAuthorizationFunction(
-            gameAccountPrivateKey,
-            '0',
-            gameAccountAddress
-          ),
-          proposer: userAuthorizationFunction(
-            gameAccountPrivateKey,
-            '0',
-            gameAccountAddress
-          ),
-          authorizations: [
-            userAuthorizationFunction(
-              gameAccountPrivateKey,
-              '0',
-              gameAccountAddress
-            ),
-          ],
-        }
-      )
-
-      if (!txId) return
-      const transactionStatus = await getTransactionStatusOnSealed(txId)
-      const transactionEvents = transactionStatus?.events
-
-      if (!transactionEvents || !Array.isArray(transactionEvents)) return
-
-      const newMatchCreatedEvent = transactionEvents.find(event =>
-        event?.type.includes('MatchOver')
-      )
-      // const matchId = newMatchCreatedEvent.data?.matchID
-      const player1ID = newMatchCreatedEvent.data?.player1ID
-      const player1MoveRawValue = newMatchCreatedEvent.data?.player1MoveRawValue
-      const player2ID = newMatchCreatedEvent.data?.player2ID
-      const player2MoveRawValue = newMatchCreatedEvent.data?.player2MoveRawValue
-      const winningGamePlayer = newMatchCreatedEvent.data?.winningGamePlayer
-      const winningNFTID = newMatchCreatedEvent.data?.winningNFTID
-      const returnedNFTIDs = newMatchCreatedEvent.data?.returnedNFTIDs
-
-      const endgame = {
-        matchID,
-        player1ID,
-        player1MoveRawValue,
-        player2ID,
-        player2MoveRawValue,
-        winningGamePlayer,
-        winningNFTID,
-        returnedNFTIDs,
+  const getWinLossRecord = useCallback(
+    async () => {
+      if (isGameInitialized && gameAccountAddress && gamePieceNFTID) {
+        const playerAddress = gameAccountAddress;
+        const nftID = gamePieceNFTID
+  
+        const res = await executeScript(
+          GET_RPS_WIN_LOSS,
+          (arg: any, t: any) => [arg(playerAddress, t.Address), arg(nftID, t.UInt64)]
+        );
+  
+        dispatch({
+          type: "SET_WIN_LOSS_RECORD",
+          winLossRecord: res,
+        });
       }
+    },
+    [isInitialized, gameAccountAddress, gamePieceNFTID]
+  )
 
-      dispatch({
-        type: 'SET_GAME_RESULT',
-        gameResult: endgame,
-      })
-
-      dispatch({
-        type: 'SET_GAME_STATUS',
-        gameStatus: GameStatus.ENDED,
-      })
-    }
-  }, [
-    gamePieceNFTID,
-    gameMatchID,
-    executeTransaction,
-    gameAccountPrivateKey,
-    gameAccountAddress,
-  ])
-
-  const getWinLossRecord = useCallback(async () => {
-    if (isGameInitialized && gameAccountAddress && gamePieceNFTID) {
-      const playerAddress = gameAccountAddress
-      const nftID = gamePieceNFTID
-
-      const res = await executeScript(GET_RPS_WIN_LOSS, (arg: any, t: any) => [
-        arg(playerAddress, t.Address),
-        arg(nftID, t.UInt64),
-      ])
-
-      dispatch({
-        type: 'SET_WIN_LOSS_RECORD',
-        winLossRecord: res,
-      })
-    }
-  }, [isInitialized, gameAccountAddress, gamePieceNFTID])
-
-  const resetGame = useCallback(async () => {
-    dispatch({
-      type: 'RESET_GAME',
-    })
-  }, [])
+  const resetGame = useCallback(
+    async () => {
+      dispatch({ 
+        type: "RESET_GAME",
+      });
+    }, 
+    []
+  )
 
   useEffect(() => {
     dispatch({
-      type: 'SET_HANDLERS',
+      type: "SET_HANDLERS",
       setupNewSinglePlayerMatch,
       getGamePieceNFTID,
       submitBothSinglePlayerMoves,
       resolveMatchAndReturnNFTS,
       resetGame,
       getWinLossRecord,
+      setGamePiecePurchased,
     })
-  }, [
-    submitBothSinglePlayerMoves,
-    setupNewSinglePlayerMatch,
-    getGamePieceNFTID,
-    resolveMatchAndReturnNFTS,
-  ])
+  }, [submitBothSinglePlayerMoves, setupNewSinglePlayerMatch, getGamePieceNFTID, resolveMatchAndReturnNFTS])
 
   useEffect(() => {
     if (isPlaying) {
-      dispatch({ type: 'SET_GAME_STATUS', gameStatus: GameStatus.PLAYING })
-      return
+      dispatch({ type: "SET_GAME_STATUS", gameStatus: GameStatus.PLAYING });
+      return;
     }
     if (isReady) {
-      dispatch({ type: 'SET_GAME_STATUS', gameStatus: GameStatus.READY })
-      return
+      dispatch({ type: "SET_GAME_STATUS", gameStatus: GameStatus.READY });
+      return;
     }
     if (isInitialized) {
-      dispatch({ type: 'SET_GAME_STATUS', gameStatus: GameStatus.INITIALIZED })
-      return
+      dispatch({ type: "SET_GAME_STATUS", gameStatus: GameStatus.INITIALIZED });
+      return;
     }
-    if (!isInitialized) {
+    if (!isInitialized && isGamePiecePurchased) {
       dispatch({
-        type: 'SET_GAME_STATUS',
+        type: "SET_GAME_STATUS",
         gameStatus: GameStatus.UNINITIALIZED,
+      });
+      return;
+    }
+    if (isGamePiecePurchased) {
+      dispatch({
+        type: "SET_GAME_STATUS",
+        gameStatus: GameStatus.UNPURCHASED
       })
       return
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser?.addr, isPlaying, isReady, isInitialized])
+  }, [
+    currentUser?.addr,
+    isPlaying,
+    isReady,
+    isInitialized,
+    isGamePiecePurchased
+  ]);
 
   useEffect(() => {
     switch (gameStatus) {
       case GameStatus.UNINITIALIZED:
-        checkGameClientInitialized()
-        return
+        checkGameClientInitialized();
+        return;
       case GameStatus.INITIALIZED:
-        const key = gameAccountPublicKey ?? ''
-        getWinLossRecord()
-        getChildAccountAddressFromGameAdmin(key)
-        getGamePieceNFTID()
-        getGamePlayerID()
-        return
+        const key = gameAccountPublicKey ?? "";
+        getWinLossRecord();
+        getChildAccountAddressFromGameAdmin(key);
+        getGamePieceNFTID();
+        getGamePlayerID();
+        return;
       case GameStatus.ENDED:
-        getWinLossRecord()
-        return
+        getWinLossRecord();
+        return;
     }
   }, [
     gameStatus,
@@ -568,7 +537,7 @@ export default function RpsGameContextProvider({ children }: Props) {
     checkGameClientInitialized,
     getChildAccountAddressFromGameAdmin,
     getGamePieceNFTID,
-  ])
+  ]);
 
   const providerProps = useMemo(
     () => ({
@@ -576,13 +545,14 @@ export default function RpsGameContextProvider({ children }: Props) {
       dispatch,
       gameAccountAddress,
       gameAccountPublicKey,
+      setGamePiecePurchased,
     }),
-    [state, dispatch, gameAccountAddress, gameAccountPublicKey]
-  )
+    [state, dispatch, gameAccountAddress, gameAccountPublicKey, setGamePiecePurchased]
+  );
 
   return (
     <RpsGameContext.Provider value={{ ...providerProps }}>
       {children}
     </RpsGameContext.Provider>
-  )
+  );
 }

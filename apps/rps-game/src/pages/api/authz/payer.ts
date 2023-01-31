@@ -1,6 +1,6 @@
 import { type NextApiRequest, type NextApiResponse } from 'next'
 
-import { generateKeys, sign } from '../../../../utils/crypto'
+import { generateKeys, sign } from '../../../utils/crypto'
 
 const payerAuthorization = async (
   req: NextApiRequest,

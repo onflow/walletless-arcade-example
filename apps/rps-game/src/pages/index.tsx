@@ -2,8 +2,8 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import { Button } from '../components/button-v2'
 import { useSession, signIn, signOut } from 'next-auth/react'
-import { useRpsGameContext } from '../../contexts'
-import purchaseNft from "../../utils/purchase-nft"
+import { useRpsGameContext } from '../contexts'
+import purchaseNft from "../utils/purchase-nft"
 import { useRouter } from 'next/router';
 import { useEffect } from 'react'
 
@@ -82,7 +82,7 @@ const Home: NextPage = () => {
 
           {session && isGamePiecePurchased && (
             <div className="mt-3">
-              <a href="/game"> <Button>Play!</Button></a>
+              <a href="/game"><Button onClick={() => null}>Play!</Button></a>
             </div>
           )}
         </p>
