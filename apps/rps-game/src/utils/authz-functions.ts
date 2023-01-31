@@ -1,4 +1,5 @@
 import { sign } from './crypto'
+import type { AuthorizationObject } from '@onflow/fcl'
 
 // export function adminAuthorizationFunction(account: any) {
 //   const adminPrivateKey = env.NEXT_PUBLIC_ADMIN_PRIVATE_KEY_ID;
@@ -23,7 +24,7 @@ import { sign } from './crypto'
 //   };
 // }
 
-export function adminAuthorizationFunction(account: any) {
+export function adminAuthorizationFunction(account: any): AuthorizationObject {
   const address = process.env.NEXT_PUBLIC_ADMIN_ADDRESS
   const keyIndex = process.env.NEXT_PUBLIC_ADMIN_KEY_INDEX
   return {
