@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
-import { useFclContext, useRpsGameContext, GameStatus } from '../contexts'
+import { useRpsGameContext, GameStatus } from '../contexts'
 import useUtils from '../utils'
 import rock from '../../public/rock.png'
 import paper from '../../public/static/paper.png'
@@ -10,9 +10,6 @@ import { Button } from './button-v3'
 const GameView = () => {
   const [locked, setLocked] = useState(false)
   const [playerMove, setPlayerMove] = useState(null)
-  const { currentUser, connect, logout, executeTransaction, transaction } =
-    useFclContext()
-  const { gameAccountAddress } = useRpsGameContext()
 
   const {
     state: {
