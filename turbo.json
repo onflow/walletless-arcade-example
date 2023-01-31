@@ -14,7 +14,14 @@
     "build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**", ".next/**"],
-      "env": ["STRIPE_SK", "PORT"]
+      "env": [
+        "STRIPE_SK",
+        "PORT",
+        "NEXT_PUBLIC_APP_NAME",
+        "NEXT_PUBLIC_FLOW_NETWORK",
+        "NEXT_PUBLIC_ADMIN_ADDRESS",
+        "NEXT_PUBLIC_ADMIN_KEY_INDEX"
+      ]
     },
     "dev": {
       "cache": false,

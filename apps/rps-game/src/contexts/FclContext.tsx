@@ -61,7 +61,7 @@ export default function FclContextProvider({
   const [transactionError, setTransactionError] = useState('')
   const [transactionEvents, setTransactionEvents] = useState(null)
   const [txId, setTxId] = useState<string | null>(null)
-  const [client, setClient] = useState(null)
+  const [client] = useState(null)
 
   useEffect(() => fcl.currentUser.subscribe(setCurrentUser), [])
 
