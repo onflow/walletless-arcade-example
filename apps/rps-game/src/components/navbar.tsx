@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import OnFlowIcon from '../assets/flow-icon-bw-green.svg'
+import OnFlowIcon from '../../public/static/flow-icon-bw-green.svg'
 import { Hamburger } from './hamburger'
 
 function NavDropDown() {

@@ -11,17 +11,17 @@ import {
 import type { ReactNode } from 'react'
 import { useFclContext } from './FclContext'
 import { useGameAccountContext } from './GameAccountContext'
-import WALLETLESS_ONBOARDING from '../cadence/transactions/onboarding/walletless-onboarding'
-import SETUP_NEW_SINGLE_PLAYER_MATCH from '../cadence/transactions/rock-paper-scissors-game/game-player/setup-new-singleplayer-match'
-import GET_GAME_PLAYER_ID from '../cadence/scripts/rock-paper-scissors-game/get-game-player-id'
-import SUBMIT_BOTH_SINGLE_PLAYER_MOVES from '../cadence/transactions/rock-paper-scissors-game/game-player/submit-both-singleplayer-moves'
-import GET_COLLECTION_IDS from '../cadence/scripts/monster-maker/get-collection-ids'
-import GET_RPS_WIN_LOSS from '../cadence/scripts/monster-maker/get-rps-win-loss'
+import WALLETLESS_ONBOARDING from '../../cadence/transactions/onboarding/walletless-onboarding'
+import SETUP_NEW_SINGLE_PLAYER_MATCH from '../../cadence/transactions/rock-paper-scissors-game/game-player/setup-new-singleplayer-match'
+import GET_GAME_PLAYER_ID from '../../cadence/scripts/rock-paper-scissors-game/get-game-player-id'
+import SUBMIT_BOTH_SINGLE_PLAYER_MOVES from '../../cadence/transactions/rock-paper-scissors-game/game-player/submit-both-singleplayer-moves'
+import GET_COLLECTION_IDS from '../../cadence/scripts/monster-maker/get-collection-ids'
+import GET_RPS_WIN_LOSS from '../../cadence/scripts/monster-maker/get-rps-win-loss'
 import {
   userAuthorizationFunction,
   adminAuthorizationFunction,
 } from '../utils/authz-functions'
-import RESOLVE_MATCH_AND_RETURN_NFTS from '../cadence/transactions/rock-paper-scissors-game/game-player/resolve-match-and-return-nfts'
+import RESOLVE_MATCH_AND_RETURN_NFTS from '../../cadence/transactions/rock-paper-scissors-game/game-player/resolve-match-and-return-nfts'
 
 interface Props {
   children?: ReactNode

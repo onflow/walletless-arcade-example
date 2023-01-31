@@ -5,9 +5,9 @@ import {
   useEffect,
   useState,
 } from 'react'
-import { useFclContext } from '../contexts'
+import { useFclContext } from '.'
 import type { ReactNode } from 'react'
-import IS_GAME_PIECE_NFT_COLLECTION_CONFIGURED from '../cadence/scripts/monster-maker/is-monster-maker-collection-configured'
+import IS_GAME_PIECE_NFT_COLLECTION_CONFIGURED from '../../cadence/scripts/monster-maker/is-monster-maker-collection-configured'
 import { useGameAccountContext } from './GameAccountContext'
 
 interface Props {
