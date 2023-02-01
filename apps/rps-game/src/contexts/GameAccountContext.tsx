@@ -45,6 +45,7 @@ export const useGameAccountContext = () => useContext(GameAccountContext)
 
 export default function GameAccountContextProvider({ children }: Props) {
   const { currentUser, executeScript } = useFclContext()
+
   const [gameAccountAddress, setGameAccountAddress] = useState<null | string>(
     null
   )

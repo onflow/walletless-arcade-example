@@ -5,6 +5,7 @@ import {
   GameAccountContext,
   UserContext,
   RpsGameContext,
+  TicketContext
 } from '../contexts'
 import { Navbar } from '../components/navbar'
 import '../styles/globals.css'
@@ -16,16 +17,18 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
     <div className="bg-primary-gray-50">
       <SessionProvider session={session}>
         <FclContext>
-          <GameAccountContext>
-            <UserContext>
-              <RpsGameContext>
-                <div className="flex min-h-screen flex-col">
-                  <Navbar />
-                  <Component {...pageProps} />
-                </div>
-              </RpsGameContext>
-            </UserContext>
-          </GameAccountContext>
+          <TicketContext>
+            <GameAccountContext>
+              <UserContext>
+                <RpsGameContext>
+                  <div className="flex min-h-screen flex-col">
+                    <Navbar />
+                    <Component {...pageProps} />
+                  </div>
+                </RpsGameContext>
+              </UserContext>
+            </GameAccountContext>
+          </TicketContext>
         </FclContext>
       </SessionProvider>
     </div>
