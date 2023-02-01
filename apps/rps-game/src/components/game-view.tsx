@@ -1,15 +1,14 @@
 import { useState, useEffect, useCallback } from 'react'
-import Image from 'next/image'
 import { useRpsGameContext, GameStatus } from '../contexts'
 import useUtils from '../utils'
-import rock from '../../public/rock.png'
-import paper from '../../public/static/paper.png'
-import scissors from '../../public/static/scissors.png'
 import { Button } from './button-v3'
+
+type PlayerMove = 'rock' | 'paper' | 'scissors' | undefined
 
 const GameView = () => {
   const [locked, setLocked] = useState(false)
-  const [playerMove, setPlayerMove] = useState(null)
+  const [playerMove, setPlayerMove] = useState<PlayerMove>(undefined)
+  const [opponentMove, setOpponentMove] = useState<PlayerMove>(undefined)
 
   const {
     state: {
@@ -31,7 +30,6 @@ const GameView = () => {
   const { delay } = useUtils()
 
   console.log('RPS GAME STATE', {
-    scissors,
     gameStatus,
     gameMatchID,
     gamePieceNFTID,
@@ -66,22 +64,25 @@ const GameView = () => {
       const opponentMove =
         playerID === player1ID ? player2MoveRawValue : player1MoveRawValue
 
-      let playerMoveString
+      let playerMoveString: PlayerMove
       if (playerMove === '0') {
-        playerMoveString = 'Rock'
+        playerMoveString = 'rock'
       } else if (playerMove === '1') {
-        playerMoveString = 'Paper'
+        playerMoveString = 'paper'
       } else if (playerMove === '2') {
-        playerMoveString = 'Scissors'
+        playerMoveString = 'scissors'
       }
 
-      let opponentMoveString
+      let opponentMoveString: PlayerMove
       if (opponentMove === '0') {
-        opponentMoveString = 'Rock'
+        opponentMoveString = 'rock'
+        setOpponentMove('rock')
       } else if (opponentMove === '1') {
-        opponentMoveString = 'Paper'
+        opponentMoveString = 'paper'
+        setOpponentMove('paper')
       } else if (opponentMove === '2') {
-        opponentMoveString = 'Scissors'
+        opponentMoveString = 'scissors'
+        setOpponentMove('scissors')
       }
 
       if (winningNFTID === null) {
@@ -120,14 +121,6 @@ const GameView = () => {
     setLocked(locked => !locked)
   }
 
-  const printP1Move = async (move: string) => {
-    console.log('printP1Move', move)
-  }
-
-  const printP2Move = async (move: string) => {
-    console.log('printP2Move', move)
-  }
-
   const handleResetAnswer = async (command: string) => {
     if (gameStatus !== GameStatus.ENDED) return
 
@@ -139,19 +132,17 @@ const GameView = () => {
   }
 
   const handleMove = async (command: string) => {
-    console.log('handleMove', command)
-
     if (gameStatus !== GameStatus.PLAYING) return
     toggleDisableButtons()
 
     if (command === 'r') {
-      printP1Move('Rock')
+      setPlayerMove('rock')
       await submitBothSinglePlayerMoves(0)
     } else if (command === 'p') {
-      printP1Move('Paper')
+      setPlayerMove('paper')
       await submitBothSinglePlayerMoves(1)
     } else if (command === 's') {
-      printP1Move('Scissors')
+      setPlayerMove('scissors')
       await submitBothSinglePlayerMoves(2)
     }
 
@@ -167,9 +158,15 @@ const GameView = () => {
             {winLossRecord?.wins ?? 0}
           </h2>
           <div>
-            <div>
-              <Image src={scissors} alt="Game Piece" width={500} height={500} />
-            </div>
+            {playerMove === 'rock' && (
+              <span className="text-9xl font-extrabold">🪨</span>
+            )}
+            {playerMove === 'paper' && (
+              <span className="text-9xl font-extrabold">📄</span>
+            )}
+            {playerMove === 'scissors' && (
+              <span className="text-9xl font-extrabold">✂️</span>
+            )}
           </div>
         </section>
         <section id="middle">
@@ -177,7 +174,6 @@ const GameView = () => {
           <h2 className="text-3xl font-extrabold leading-normal text-gray-700 md:text-[3rem]">
             {winLossRecord?.ties ?? 0}
           </h2>
-          <div></div>
         </section>
         <section id="opponent">
           <h1 className="text-2xl text-gray-700">OPPONENT</h1>
@@ -185,9 +181,15 @@ const GameView = () => {
             {winLossRecord?.losses ?? 0}
           </h2>
           <div>
-            <div>
-              <Image src={scissors} alt="Game Piece" width={500} height={500} />
-            </div>
+            {opponentMove === 'rock' && (
+              <span className="text-9xl font-extrabold">🪨</span>
+            )}
+            {opponentMove === 'paper' && (
+              <span className="text-9xl font-extrabold">📄</span>
+            )}
+            {opponentMove === 'scissors' && (
+              <span className="text-9xl font-extrabold">✂️</span>
+            )}
           </div>
         </section>
       </div>
