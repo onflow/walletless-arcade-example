@@ -12,7 +12,7 @@ import type { ReactNode, Dispatch, SetStateAction } from "react";
 import { useFclContext } from "./FclContext";
 import { useGameAccountContext } from "./GameAccountContext";
 import { useTicketContext } from './TicketContext'
-import WALLETLESS_ONBOARDING from '../../cadence/transactions/onboarding/walletless-onboarding'
+import WALLETLESS_ONBOARDING_MINT_FROM_RESOURCE from '../../cadence/transactions/onboarding/walletless-onboarding-mint-from-resource'
 import SETUP_NEW_SINGLE_PLAYER_MATCH from '../../cadence/transactions/rock-paper-scissors-game/game-player/setup-new-singleplayer-match'
 import GET_GAME_PLAYER_ID from '../../cadence/scripts/rock-paper-scissors-game/get-game-player-id'
 import SUBMIT_BOTH_SINGLE_PLAYER_MOVES from '../../cadence/transactions/rock-paper-scissors-game/game-player/submit-both-singleplayer-moves'
@@ -23,6 +23,7 @@ import {
   adminAuthorizationFunction,
 } from '../utils/authz-functions'
 import RESOLVE_MATCH_AND_RETURN_NFTS from '../../cadence/transactions/rock-paper-scissors-game/game-player/resolve-match-and-return-nfts'
+import * as fcl from "@onflow/fcl"
 
 interface Props {
   children?: ReactNode;
@@ -255,9 +256,11 @@ export default function RpsGameContextProvider({ children }: Props) {
   }, [])
 
   const checkGameClientInitialized = useCallback(async () => {
+    console.log("Checking game client initialized", isGameInitialized, gameAccountPublicKey, gameAccountAddress)
     if (!isGameInitialized && gameAccountPublicKey) {
+      console.log("pre WALLETLESS_ONBOARDING_MINT_FROM_RESOURCE", WALLETLESS_ONBOARDING_MINT_FROM_RESOURCE)
       const txid = await executeTransaction(
-        WALLETLESS_ONBOARDING,
+        WALLETLESS_ONBOARDING_MINT_FROM_RESOURCE,
         (arg: any, t: any) => [
           arg(gameAccountPublicKey, t.String),
           arg("100.0", t.UFix64),
@@ -265,7 +268,10 @@ export default function RpsGameContextProvider({ children }: Props) {
           arg("Proxy Account for Flow RPS", t.String),
           arg("flow-games.com/icon.png", t.String),
           arg("flow-games.com", t.String),
-          arg(process.env.NEXT_PUBLIC_ADMIN_ADDRESS, t.Address),
+          arg("0", t.Int),
+          arg("0", t.Int),
+          arg("0", t.Int),
+          arg("0", t.Int)
         ],
         {
           limit: 9999,
@@ -449,6 +455,7 @@ export default function RpsGameContextProvider({ children }: Props) {
 
   const getWinLossRecord = useCallback(
     async () => {
+      console.log("Getting win loss record", isGameInitialized, gameAccountAddress, gamePieceNFTID)
       if (isGameInitialized && gameAccountAddress && gamePieceNFTID) {
         const playerAddress = gameAccountAddress;
         const nftID = gamePieceNFTID
@@ -531,6 +538,7 @@ export default function RpsGameContextProvider({ children }: Props) {
         checkGameClientInitialized();
         return;
       case GameStatus.INITIALIZED:
+        console.log("Running initialization")
         const key = gameAccountPublicKey ?? "";
         getWinLossRecord();
         getChildAccountAddressFromGameAdmin(key);

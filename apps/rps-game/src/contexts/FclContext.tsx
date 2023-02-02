@@ -13,7 +13,7 @@ import {
 } from 'react'
 import type { ReactNode } from 'react'
 import { FLOW } from '../constants'
-import flowJSON from '../../flow.json'
+import flowJSON from '../../../../flow.json'
 
 interface IFclContext {
   currentUser: fcl.CurrentUserObject | null | undefined
