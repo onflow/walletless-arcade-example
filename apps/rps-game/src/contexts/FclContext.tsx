@@ -70,7 +70,7 @@ export default function FclContextProvider({
     const appTitle = process.env.NEXT_PUBLIC_APP_NAME || 'Flow Games'
     const flowNetwork = process.env.NEXT_PUBLIC_FLOW_NETWORK
 
-    console.log('Dapp running on network:', flowNetwork, flowJSON)
+    console.log('Dapp running on network:', flowNetwork)
 
     fcl
       .config({
@@ -83,9 +83,6 @@ export default function FclContextProvider({
       })
       // @ts-ignore
       .load({ flowJSON })
-
-    // @ts-ignore
-    window.fcl = fcl;
   }, [client])
 
   const connect = useCallback(() => {

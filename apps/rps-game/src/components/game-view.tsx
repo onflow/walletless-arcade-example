@@ -132,7 +132,7 @@ const GameView = () => {
   }
 
   const handleMove = async (command: string) => {
-    // if (gameStatus !== GameStatus.PLAYING) return
+    if (gameStatus !== GameStatus.PLAYING) return
     toggleDisableButtons()
 
     if (command === 'r') {
@@ -209,3 +209,4 @@ const GameView = () => {
 }
 
 export default GameView
+ 
