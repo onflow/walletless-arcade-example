@@ -1,5 +1,3 @@
-import * as React from 'react'
-
 export const Card = ({
   title,
   cta,
@@ -14,13 +12,11 @@ export const Card = ({
       target="_blank"
       rel="noopener noreferrer"
       href={href}
-      className="ui-group ui-mt-4 ui-rounded-lg ui-border ui-border-transparent ui-overflow-hidden ui-bg-origin-border ui-bg-gradient-to-r ui-from-brandred ui-to-brandblue ui-text-[#6b7280]"
+      className="from-brandred to-brandblue group mt-4 overflow-hidden rounded-lg border border-transparent bg-gradient-to-r bg-origin-border text-[#6b7280]"
     >
-      <div className="ui-p-4 ui-bg-zinc-900 ui-h-full">
-        <p className="ui-inline-block ui-text-xl ui-text-white">{title}</p>
-        <div className="ui-text-xs ui-mt-4 group-hover:ui-underline">
-          {cta} →
-        </div>
+      <div className="h-full bg-zinc-900 p-4">
+        <p className="inline-block text-xl text-white">{title}</p>
+        <div className="mt-4 text-xs group-hover:underline">{cta} →</div>
       </div>
     </a>
   )

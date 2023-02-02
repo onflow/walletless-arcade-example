@@ -7,13 +7,13 @@ type Ref = HTMLButtonElement
 
 interface ButtonProps {
   children: string | ReactElement<any, any> | null
-  onClick: () => void
-  type: 'submit' | 'button'
-  className: string
-  pill: boolean
-  disabled: boolean
-  variant: 'primary' | 'secondary' | 'danger'
-  size: 'small' | 'normal' | 'large'
+  onClick?: () => void
+  type?: 'submit' | 'button'
+  className?: string
+  pill?: boolean
+  disabled?: boolean
+  variant?: 'primary' | 'secondary' | 'danger'
+  size?: 'small' | 'normal' | 'large'
 }
 
 const classes = {
@@ -42,7 +42,7 @@ export const ButtonRef = forwardRef<Ref, ButtonProps>(function ButtonRef(
     className,
     variant = 'primary',
     size = 'normal',
-    pill,
+    pill = true,
     disabled = false,
     ...props
   },
