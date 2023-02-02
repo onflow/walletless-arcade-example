@@ -329,6 +329,7 @@ export default function RpsGameContextProvider({ children }: Props) {
   }, [isGameInitialized, gameAccountAddress]);
 
   const setupNewSinglePlayerMatch = useCallback(async () => {
+    console.log("called setupNewSinglePlayerMatch", gamePieceNFTID, gameAccountPrivateKey, gameAccountAddress)
     if (gamePieceNFTID && gameAccountPrivateKey && gameAccountAddress) {
       const submittingNFTID = gamePieceNFTID;
       const matchTimeLimitInMinutes = 5;
@@ -564,7 +565,7 @@ export default function RpsGameContextProvider({ children }: Props) {
       }
     }
     fn()
-  }, [gameAccountAddress])
+  }, [gameAccountAddress, gameStatus])
 
   const providerProps = useMemo(
     () => ({
@@ -583,3 +584,4 @@ export default function RpsGameContextProvider({ children }: Props) {
     </RpsGameContext.Provider>
   );
 }
+ 

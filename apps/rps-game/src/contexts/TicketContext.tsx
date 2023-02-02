@@ -44,7 +44,7 @@ export default function TicketContextProvider({ children }: Props) {
 
   const mintTickets = useCallback(async (destinationAddress: string, amount: string): Promise<void> => {
     try {
-      await fetch("/api/tickets/mint", {
+      await fetch(`/api/tickets/mint`, {
         method: "POST",
         body: JSON.stringify({
           destinationAddress,

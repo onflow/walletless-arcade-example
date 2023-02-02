@@ -2,7 +2,7 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import { Button } from '../components/button-v2'
 import { useSession, signIn, signOut } from 'next-auth/react'
-import { useRpsGameContext } from '../contexts'
+import { useRpsGameContext, useTicketContext } from '../contexts'
 import purchaseNft from '../utils/purchase-nft'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
@@ -33,6 +33,10 @@ const Home: NextPage = () => {
       setGamePiecePurchased,
     },
   } = useRpsGameContext()
+
+  const {
+    ticketAmount,
+  } = useTicketContext()
 
   console.log('isGamePiecePurchased', isGamePiecePurchased)
 

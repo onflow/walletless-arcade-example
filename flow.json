@@ -1,6 +1,11 @@
 {
   "contracts": {
-    "ArcadePrize": "./cadence/contracts/ArcadePrize.cdc",
+    "ArcadePrize": {
+      "source":  "./cadence/contracts/ArcadePrize.cdc",
+      "aliases": {
+        "emulator": "0xf8d6e0586b0a20c7"
+      }
+    },
     "ChildAccount": {
       "source": "./cadence/contracts/ChildAccount.cdc",
       "aliases": {
@@ -25,8 +30,18 @@
         "testnet": "0x9a0766d93b6608b7"
       }
     },
-    "GamePieceNFT": "./cadence/contracts/GamePieceNFT.cdc",
-    "GamingMetadataViews": "./cadence/contracts/GamingMetadataViews.cdc",
+    "GamePieceNFT": {
+      "source": "./cadence/contracts/GamePieceNFT.cdc",
+      "aliases": {
+        "emulator": "0xf8d6e0586b0a20c7"
+      }
+    },
+    "GamingMetadataViews": {
+      "source": "./cadence/contracts/GamingMetadataViews.cdc",
+      "aliases": {
+        "emulator": "0xf8d6e0586b0a20c7"
+      }
+    },
     "MetadataViews": {
       "source": "./cadence/contracts/utility/MetadataViews.cdc",
       "aliases": {

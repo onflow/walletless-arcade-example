@@ -9,7 +9,8 @@
     "GOOGLE_CLIENT_SECRET",
     "NEXT_PUBLIC_ADMIN_ADDRESS",
     "NEXT_PUBLIC_ADMIN_KEY_INDEX",
-    "ADMIN_PRIVATE_KEY_HEX"
+    "ADMIN_PRIVATE_KEY_HEX",
+    "VERCEL_URL"
   ],
   "pipeline": {
     "build": {
@@ -22,7 +23,8 @@
         "NEXT_PUBLIC_FLOW_NETWORK",
         "NEXT_PUBLIC_ADMIN_ADDRESS",
         "NEXT_PUBLIC_ADMIN_KEY_INDEX",
-        "ADMIN_PRIVATE_KEY_HEX"
+        "ADMIN_PRIVATE_KEY_HEX",
+        "VERCEL_URL"
       ]
     },
     "dev": {
