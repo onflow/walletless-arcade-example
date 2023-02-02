@@ -15,7 +15,8 @@
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
     "dev:local": "turbo run dev:local --parallel",
-    "dev:local:deploy": "flow project deploy --network=emulator --update && NEXT_PUBLIC_FLOW_NETWORK=local turbo run dev",
+    "dev:local:deploy": "flow project deploy --network=emulator --update && npm run dev:local:provision && NEXT_PUBLIC_FLOW_NETWORK=local turbo run dev",
+    "dev:local:provision": "flow transactions send --network=emulator --signer emulator-account ./cadence/transactions/child_account/setup_child_account_creator.cdc",
     "dev:testnet": "turbo run dev:testnet --parallel",
     "dev:mainnet": "turbo run dev:mainnet --parallel",
     "lint": "turbo run lint",
@@ -46,3 +47,4 @@
     "@onflow/six-create-account": "^0.0.9"
   }
 }
+ 
