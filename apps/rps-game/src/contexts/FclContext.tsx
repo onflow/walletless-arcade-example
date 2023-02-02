@@ -13,7 +13,7 @@ import {
 } from 'react'
 import type { ReactNode } from 'react'
 import { FLOW } from '../constants'
-import flowJSON from '../../flow.json'
+import flowJSON from '../../../../flow.json'
 
 interface IFclContext {
   currentUser: fcl.CurrentUserObject | null | undefined
@@ -70,7 +70,7 @@ export default function FclContextProvider({
     const appTitle = process.env.NEXT_PUBLIC_APP_NAME || 'Flow Games'
     const flowNetwork = process.env.NEXT_PUBLIC_FLOW_NETWORK
 
-    console.log('Dapp running on network:', flowNetwork)
+    console.log('Dapp running on network:', flowNetwork, flowJSON)
 
     fcl
       .config({
@@ -83,6 +83,9 @@ export default function FclContextProvider({
       })
       // @ts-ignore
       .load({ flowJSON })
+
+    // @ts-ignore
+    window.fcl = fcl;
   }, [client])
 
   const connect = useCallback(() => {
