@@ -50,8 +50,18 @@
         "testnet": "0x631e88ae7f1d7c20"
       }
     },
-    "RockPaperScissorsGame": "./cadence/contracts/RockPaperScissorsGame.cdc",
-    "TicketToken": "./cadence/contracts/TicketToken.cdc"
+    "RockPaperScissorsGame": {
+      "source":  "./cadence/contracts/RockPaperScissorsGame.cdc",
+      "aliases": {
+        "emulator": "0xf8d6e0586b0a20c7"
+      }
+    },
+    "TicketToken": {
+      "source":  "./cadence/contracts/TicketToken.cdc",
+      "aliases": {
+        "emulator": "0xf8d6e0586b0a20c7"
+      }
+    }
   },
   "networks": {
     "emulator": "127.0.0.1:3569",
@@ -68,7 +78,6 @@
       "emulator-account": [
         "ArcadePrize",
         "ChildAccount",
-        "FungibleToken",
         "FungibleTokenMetadataViews",
         "GamingMetadataViews",
         "MetadataViews",
@@ -80,3 +89,4 @@
     }
   }
 }
+ 
