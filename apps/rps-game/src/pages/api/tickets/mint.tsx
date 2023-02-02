@@ -40,9 +40,6 @@ const mintTickets = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const destinationAddress = body?.destinationAddress
   const amount = body?.amount
-
-  console.log("destinationAddress", destinationAddress)
-  console.log("amount", amount)
   
   try {
     await mintTicketHelper(destinationAddress, amount)  
@@ -50,7 +47,6 @@ const mintTickets = async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(200)
     res.end()
   } catch (e) {
-    console.log("mint err ", e)
     res.status(500)
     res.end()
   }

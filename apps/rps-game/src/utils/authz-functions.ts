@@ -37,8 +37,6 @@ export function adminAuthorizationFunction(account: any): AuthorizationObject {
       // Singing functions are passed a signable and need to return a composite signature
       // signable.message is a hex string of what needs to be signed.
 
-      console.log('getUrl', getUrl())
-
       const signature = await fetch(`${getUrl()}/api/authz/admin`, {
         method: 'POST',
         headers: {
