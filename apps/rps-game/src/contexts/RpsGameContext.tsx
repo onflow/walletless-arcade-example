@@ -256,9 +256,7 @@ export default function RpsGameContextProvider({ children }: Props) {
   }, [])
 
   const checkGameClientInitialized = useCallback(async () => {
-    console.log("Checking game client initialized", isGameInitialized, gameAccountPublicKey, gameAccountAddress)
     if (!isGameInitialized && gameAccountPublicKey) {
-      console.log("pre WALLETLESS_ONBOARDING_MINT_FROM_RESOURCE", WALLETLESS_ONBOARDING_MINT_FROM_RESOURCE)
       const txid = await executeTransaction(
         WALLETLESS_ONBOARDING_MINT_FROM_RESOURCE,
         (arg: any, t: any) => [
@@ -329,7 +327,6 @@ export default function RpsGameContextProvider({ children }: Props) {
   }, [isGameInitialized, gameAccountAddress]);
 
   const setupNewSinglePlayerMatch = useCallback(async () => {
-    console.log("called setupNewSinglePlayerMatch", gamePieceNFTID, gameAccountPrivateKey, gameAccountAddress)
     if (gamePieceNFTID && gameAccountPrivateKey && gameAccountAddress) {
       const submittingNFTID = gamePieceNFTID;
       const matchTimeLimitInMinutes = 5;
@@ -456,7 +453,6 @@ export default function RpsGameContextProvider({ children }: Props) {
 
   const getWinLossRecord = useCallback(
     async () => {
-      console.log("Getting win loss record", isGameInitialized, gameAccountAddress, gamePieceNFTID)
       if (isGameInitialized && gameAccountAddress && gamePieceNFTID) {
         const playerAddress = gameAccountAddress;
         const nftID = gamePieceNFTID
