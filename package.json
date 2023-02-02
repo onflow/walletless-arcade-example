@@ -20,6 +20,7 @@
     "dev:mainnet": "turbo run dev:mainnet --parallel",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "clean": "turbo run clean",
     "generate": "turbo run generate",
     "db:migrate:deploy": "turbo run db:migrate:deploy",
     "db:push": "turbo run db:push",
@@ -35,7 +36,7 @@
     "prettier": "^2.8.3",
     "prettier-plugin-tailwindcss": "^0.2.1",
     "tailwindcss": "^3.2.4",
-    "turbo": "^1.7.0",
+    "turbo": "^1.7.2",
     "typescript": "^4.9.4"
   },
   "engines": {

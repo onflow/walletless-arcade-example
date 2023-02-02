@@ -1,7 +1,7 @@
+const sharedConfig = require('tailwind-config/tailwind.config.js')
+
 module.exports = {
-  content: ['./**/*.{js,ts,jsx,tsx}'],
-  theme: {
-    extend: {},
-  },
-  plugins: [],
+  // prefix ui lib classes to avoid conflicting with the app
+  prefix: 'ui-',
+  ...sharedConfig,
 }
