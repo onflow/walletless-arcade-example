@@ -6,14 +6,6 @@ import { loadFCLConfig  } from '../../../utils/fcl-setup';
 loadFCLConfig()
 
 export async function mintTicketHelper(destinationAddress: string, amount: string): Promise<void> {
-  console.log("accessNode.api", await fcl.config().get("accessNode.api"))
-
-  await fcl.config().put("accessNode.api", "http://localhost:8888")
-
-  console.log("dummy script", await fcl.query({
-    cadence: `pub fun main(): Int { return 12 }`
-  }))
-
   const txId = 
     await fcl.mutate({
       cadence: MINT_TOKENS,
