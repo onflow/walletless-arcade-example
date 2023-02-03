@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { useRpsGameContext, GameStatus } from '../contexts'
+import { useRpsGameContext, GameStatus, useTicketContext } from '../contexts'
 import useUtils from '../utils'
 import { Button } from './button-v3'
 
@@ -9,6 +9,7 @@ const GameView = () => {
   const [locked, setLocked] = useState(false)
   const [playerMove, setPlayerMove] = useState<PlayerMove>(undefined)
   const [opponentMove, setOpponentMove] = useState<PlayerMove>(undefined)
+  const [message, setMessage] = useState<string>("")
 
   const {
     state: {
@@ -26,6 +27,10 @@ const GameView = () => {
       winLossRecord,
     },
   } = useRpsGameContext()
+
+  const {
+    ticketAmount,
+  } = useTicketContext()
 
   const { delay } = useUtils()
 
@@ -92,14 +97,14 @@ const GameView = () => {
       const isPlayerWinner = playerID === winningGamePlayer
 
       if (isPlayerWinner) {
-        console.log('You won!')
+        setMessage('You won!')
       } else if (winningNFTID && !isPlayerWinner) {
-        console.log(
+        setMessage(
           `You Played ${playerMoveString} and Lost against ${opponentMoveString}!`
         )
       }
       delay(3000).then(() => {
-        console.log(`Shall we play again?`)
+        setMessage(`Shall we play again?`)
       })
     },
     [delay, gamePieceNFTID, gamePlayerID]
@@ -114,8 +119,9 @@ const GameView = () => {
     }
     if (gameStatus === GameStatus.ENDED) {
       handleEndgame(gameResult)
+      resetGame()
     }
-  }, [gameResult, gameStatus, handleEndgame, setupNewSinglePlayerMatch])
+  }, [gameResult, gameStatus, handleEndgame, setupNewSinglePlayerMatch, resetGame])
 
   const toggleDisableButtons = () => {
     setLocked(locked => !locked)
@@ -151,6 +157,11 @@ const GameView = () => {
 
   return (
     <>
+      { message && (
+        <section className="flex w-full items-center justify-center space-x-4 pt-6 text-2xl text-blue-500">
+          <span className="text-xl font-extrabold">{message}</span>
+        </section>
+      )}
       <div className="mt-3 grid gap-3 pt-3 text-center md:grid-cols-3 lg:w-2/3">
         <section id="player">
           <h1 className="text-2xl text-gray-700">PLAYER</h1>
@@ -204,6 +215,12 @@ const GameView = () => {
           Scissors
         </Button>
       </div>
+
+      { ticketAmount && (
+        <div className="flex w-full items-center justify-center space-x-4 pt-6 text-2xl text-blue-500">
+          <span className="text-xl font-extrabold">Tickets: {ticketAmount}</span>
+        </div>
+      )}
     </>
   )
 }

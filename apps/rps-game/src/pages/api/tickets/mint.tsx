@@ -2,7 +2,8 @@ import { type NextApiRequest, type NextApiResponse } from 'next'
 import * as fcl from "@onflow/fcl";
 import { adminAuthorizationFunction } from "../../../utils/authz-functions";
 import MINT_TOKENS from "../../../../cadence/transactions/ticket-token/mint-tokens"
-import '../../../utils/fcl-setup'
+import { loadFCLConfig  } from '../../../utils/fcl-setup';
+loadFCLConfig()
 
 export async function mintTicketHelper(destinationAddress: string, amount: string): Promise<void> {
   const txId = 
@@ -14,7 +15,8 @@ export async function mintTicketHelper(destinationAddress: string, amount: strin
       args: (arg, t) => [
         arg(fcl.withPrefix(destinationAddress), t.Address),
         arg(amount, t.UFix64)
-      ]
+      ],
+      limit: 9999
     })
 
   return new Promise((res, rej) => {
@@ -34,9 +36,10 @@ const mintTickets = async (req: NextApiRequest, res: NextApiResponse) => {
     return
   }
 
-  const body = req.body
+  const body = JSON.parse(req.body)
 
-  const { destinationAddress, amount } = body
+  const destinationAddress = body?.destinationAddress
+  const amount = body?.amount
   
   try {
     await mintTicketHelper(destinationAddress, amount)  
@@ -50,3 +53,4 @@ const mintTickets = async (req: NextApiRequest, res: NextApiResponse) => {
 }
 
 export default mintTickets
+ 

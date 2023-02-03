@@ -14,6 +14,7 @@ import {
 import type { ReactNode } from 'react'
 import { FLOW } from '../constants'
 import flowJSON from '../../../../flow.json'
+import { loadFCLConfig } from "../utils/fcl-setup"
 
 interface IFclContext {
   currentUser: fcl.CurrentUserObject | null | undefined
@@ -66,23 +67,10 @@ export default function FclContextProvider({
   useEffect(() => fcl.currentUser.subscribe(setCurrentUser), [])
 
   useEffect(() => {
-    const iconUrl = window.location.origin + '/public/flow-icon.png'
-    const appTitle = process.env.NEXT_PUBLIC_APP_NAME || 'Flow Games'
-    const flowNetwork = process.env.NEXT_PUBLIC_FLOW_NETWORK
+    loadFCLConfig()
 
-    console.log('Dapp running on network:', flowNetwork)
-
-    fcl
-      .config({
-        'flow.network': flowNetwork as fcl.Environment,
-        // @ts-ignore
-        'accessNode.api': FLOW.ACCESS_NODE_URLS[flowNetwork],
-        'discovery.wallet': `https://fcl-discovery.onflow.org/${flowNetwork}/authn`,
-        'app.detail.icon': iconUrl,
-        'app.detail.title': appTitle,
-      })
-      // @ts-ignore
-      .load({ flowJSON })
+    // @ts-ignore
+    window.fcl = fcl
   }, [client])
 
   const connect = useCallback(() => {
@@ -151,6 +139,7 @@ export default function FclContextProvider({
         })
       } catch (error) {
         console.error(error)
+        throw error
       }
     },
     []
