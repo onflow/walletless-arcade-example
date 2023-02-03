@@ -71,6 +71,7 @@ export default function TicketContextProvider({ children }: Props) {
         );
 
         if (isParentAccount) {
+        // if (currentUser) {
           const childAccountsBalance = await executeScript(
             GET_BALANCE_OF_ALL_CHILD_ACCOUNTS,
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -79,8 +80,11 @@ export default function TicketContextProvider({ children }: Props) {
             ]
           );
 
+          console.log("childAccountsBalance", childAccountsBalance)
+
           balance = Number(Number(balance) + Number(childAccountsBalance)).toFixed(8)
         }
+        // }
 
         setTicketAmount(balance);
         return balance;
@@ -107,3 +111,4 @@ export default function TicketContextProvider({ children }: Props) {
     </TicketContext.Provider>
   );
 }
+ 

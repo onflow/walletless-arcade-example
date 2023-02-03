@@ -2,9 +2,10 @@ import { useState } from 'react';
 import OnFlowIcon from '../../public/static/flow-icon-bw-green.svg';
 import { Hamburger } from "./hamburger"
 import { useSession, signIn, signOut } from 'next-auth/react'
+import { useFclContext } from "../contexts"
 import * as fcl from "@onflow/fcl"
 
-function NavDropDown() {
+function NavDropDown({ currentUser }: { currentUser: any }) {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="relative">
@@ -20,7 +21,13 @@ function NavDropDown() {
       {isOpen && (
         <div className="absolute right-0 w-48 mt-2 origin-top-right rounded-md shadow-lg">
           <div className="px-2 py-2 bg-white rounded-md shadow-xs">
-            <div onClick={() => fcl.authenticate()} className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100">Connect Flow Wallet</div>
+            {
+              currentUser?.addr ? 
+              <div onClick={() => fcl.unauthenticate()} className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100">{currentUser?.addr}</div>
+              :
+              <div onClick={() => fcl.authenticate()} className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100">Connect Flow Wallet</div>    
+            }
+
           </div>
           <div className="px-2 py-2 bg-white rounded-md shadow-xs">
             <div onClick={() => signOut()} className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100">Logout</div>
@@ -58,6 +65,7 @@ function NavButton({
 export function Navbar() {
   console.log("OnFlowIcon", OnFlowIcon)
   const { data: session, status } = useSession()
+  const { currentUser } = useFclContext()
 
   const [menuOpen, setMenuOpen] = useState(false);
   return (
@@ -95,7 +103,7 @@ export function Navbar() {
           )}
           { session && (
             <>
-              <NavDropDown /> 
+              <NavDropDown currentUser={currentUser}/> 
               <div className="h-1/2 border-l border-primary-gray-100"></div>
             </>
           )}

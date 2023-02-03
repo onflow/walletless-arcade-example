@@ -139,6 +139,7 @@ export default function FclContextProvider({
         })
       } catch (error) {
         console.error(error)
+        throw error
       }
     },
     []

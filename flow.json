@@ -1,107 +1,110 @@
 {
-  "contracts": {
-    "ArcadePrize": {
-      "source":  "./cadence/contracts/ArcadePrize.cdc",
-      "aliases": {
-        "emulator": "0xf8d6e0586b0a20c7"
-      }
-    },
-    "ChildAccount": {
-      "source": "./cadence/contracts/ChildAccount.cdc",
-      "aliases": {
-        "emulator": "0xf8d6e0586b0a20c7",
-        "mainnet": "0xf233dcee88fe0abe",
-        "testnet": "0x9a0766d93b6608b7"
-      }
-    },
-    "FungibleToken": {
-      "source": "./cadence/contracts/utility/FungibleToken.cdc",
-      "aliases": {
-        "emulator": "0xee82856bf20e2aa6",
-        "mainnet": "0xf233dcee88fe0abe",
-        "testnet": "0x9a0766d93b6608b7"
-      }
-    },
-    "FungibleTokenMetadataViews": {
-      "source": "./cadence/contracts/utility/FungibleTokenMetadataViews.cdc",
-      "aliases": {
-        "emulator": "0xf8d6e0586b0a20c7",
-        "mainnet": "0xf233dcee88fe0abe",
-        "testnet": "0x9a0766d93b6608b7"
-      }
-    },
-    "GamePieceNFT": {
-      "source": "./cadence/contracts/GamePieceNFT.cdc",
-      "aliases": {
-        "emulator": "0xf8d6e0586b0a20c7"
-      }
-    },
-    "GamingMetadataViews": {
-      "source": "./cadence/contracts/GamingMetadataViews.cdc",
-      "aliases": {
-        "emulator": "0xf8d6e0586b0a20c7"
-      }
-    },
-    "MetadataViews": {
-      "source": "./cadence/contracts/utility/MetadataViews.cdc",
-      "aliases": {
-        "emulator": "0xf8d6e0586b0a20c7",
-        "mainnet": "0x1d7e57aa55817448",
-        "testnet": "0x631e88ae7f1d7c20"
-      }
-    },
-    "MonsterMaker": {
-      "source": "./cadence/contracts/MonsterMaker.cdc",
-      "aliases": {
-        "emulator": "0xf8d6e0586b0a20c7",
-        "testnet": "0xfd3d8fe2c8056370"
-      }
-    },
-    "NonFungibleToken": {
-      "source": "./cadence/contracts/utility/NonFungibleToken.cdc",
-      "aliases": {
-        "emulator": "0xf8d6e0586b0a20c7",
-        "mainnet": "0x1d7e57aa55817448",
-        "testnet": "0x631e88ae7f1d7c20"
-      }
-    },
-    "RockPaperScissorsGame": {
-      "source":  "./cadence/contracts/RockPaperScissorsGame.cdc",
-      "aliases": {
-        "emulator": "0xf8d6e0586b0a20c7"
-      }
-    },
-    "TicketToken": {
-      "source":  "./cadence/contracts/TicketToken.cdc",
-      "aliases": {
-        "emulator": "0xf8d6e0586b0a20c7"
-      }
-    }
-  },
-  "networks": {
-    "emulator": "127.0.0.1:3569",
-    "mainnet": "access.mainnet.nodes.onflow.org:9000",
-    "testnet": "access.devnet.nodes.onflow.org:9000"
-  },
-  "accounts": {
-    "emulator-account": {
-      "fromFile": "./emulator.private.json"
-    }
-  },
-  "deployments": {
-    "emulator": {
-      "emulator-account": [
-        "ArcadePrize",
-        "ChildAccount",
-        "FungibleTokenMetadataViews",
-        "GamingMetadataViews",
-        "MetadataViews",
-        "MonsterMaker",
-        "NonFungibleToken",
-        "RockPaperScissorsGame",
-        "TicketToken"
-      ]
-    }
-  }
+	"contracts": {
+		"ArcadePrize": {
+			"source": "./cadence/contracts/ArcadePrize.cdc",
+			"aliases": {
+				"emulator": "0xf8d6e0586b0a20c7"
+			}
+		},
+		"ChildAccount": {
+			"source": "./cadence/contracts/ChildAccount.cdc",
+			"aliases": {
+				"emulator": "0xf8d6e0586b0a20c7",
+				"mainnet": "0xf233dcee88fe0abe",
+				"testnet": "0x9a0766d93b6608b7"
+			}
+		},
+		"FungibleToken": {
+			"source": "./cadence/contracts/utility/FungibleToken.cdc",
+			"aliases": {
+				"emulator": "0xee82856bf20e2aa6",
+				"mainnet": "0xf233dcee88fe0abe",
+				"testnet": "0x9a0766d93b6608b7"
+			}
+		},
+		"FungibleTokenMetadataViews": {
+			"source": "./cadence/contracts/utility/FungibleTokenMetadataViews.cdc",
+			"aliases": {
+				"emulator": "0xf8d6e0586b0a20c7",
+				"mainnet": "0xf233dcee88fe0abe",
+				"testnet": "0x9a0766d93b6608b7"
+			}
+		},
+		"GamePieceNFT": {
+			"source": "./cadence/contracts/GamePieceNFT.cdc",
+			"aliases": {
+				"emulator": "0xf8d6e0586b0a20c7"
+			}
+		},
+		"GamingMetadataViews": {
+			"source": "./cadence/contracts/GamingMetadataViews.cdc",
+			"aliases": {
+				"emulator": "0xf8d6e0586b0a20c7"
+			}
+		},
+		"MetadataViews": {
+			"source": "./cadence/contracts/utility/MetadataViews.cdc",
+			"aliases": {
+				"emulator": "0xf8d6e0586b0a20c7",
+				"mainnet": "0x1d7e57aa55817448",
+				"testnet": "0x631e88ae7f1d7c20"
+			}
+		},
+		"MonsterMaker": {
+			"source": "./cadence/contracts/MonsterMaker.cdc",
+			"aliases": {
+				"emulator": "0xf8d6e0586b0a20c7",
+				"testnet": "0xfd3d8fe2c8056370"
+			}
+		},
+		"NonFungibleToken": {
+			"source": "./cadence/contracts/utility/NonFungibleToken.cdc",
+			"aliases": {
+				"emulator": "0xf8d6e0586b0a20c7",
+				"mainnet": "0x1d7e57aa55817448",
+				"testnet": "0x631e88ae7f1d7c20"
+			}
+		},
+		"RockPaperScissorsGame": {
+			"source": "./cadence/contracts/RockPaperScissorsGame.cdc",
+			"aliases": {
+				"emulator": "0xf8d6e0586b0a20c7"
+			}
+		},
+		"TicketToken": {
+			"source": "./cadence/contracts/TicketToken.cdc",
+			"aliases": {
+				"emulator": "0xf8d6e0586b0a20c7"
+			}
+		}
+	},
+	"networks": {
+		"emulator": "127.0.0.1:3569",
+		"mainnet": "access.mainnet.nodes.onflow.org:9000",
+		"testnet": "access.devnet.nodes.onflow.org:9000"
+	},
+	"accounts": {
+		"emulator-account": {
+			"fromFile": "./emulator.private.json"
+		},
+		"test": {
+			"address": "1a3929154acc3869",
+			"key": "5f0c2875f34e5a8a0d1a7212eedfc61453805230c6e786358e5f073820abf62e"
+		}
+	},
+	"deployments": {
+		"emulator": {
+			"emulator-account": [
+				"ArcadePrize",
+				"ChildAccount",
+				"FungibleTokenMetadataViews",
+				"GamingMetadataViews",
+				"MetadataViews",
+				"MonsterMaker",
+				"NonFungibleToken",
+				"RockPaperScissorsGame",
+				"TicketToken"
+			]
+		}
+	}
 }
- 
