@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
+import { Row } from 'ui'
 import { useRpsGameContext, GameStatus, useTicketContext } from '../contexts'
 import useUtils from '../utils'
 import { Button } from './button-v3'
@@ -9,7 +10,7 @@ const GameView = () => {
   const [locked, setLocked] = useState(false)
   const [playerMove, setPlayerMove] = useState<PlayerMove>(undefined)
   const [opponentMove, setOpponentMove] = useState<PlayerMove>(undefined)
-  const [message, setMessage] = useState<string>("")
+  const [message, setMessage] = useState<string>('')
 
   const {
     state: {
@@ -28,9 +29,7 @@ const GameView = () => {
     },
   } = useRpsGameContext()
 
-  const {
-    ticketAmount,
-  } = useTicketContext()
+  const { ticketAmount } = useTicketContext()
 
   const { delay } = useUtils()
 
@@ -121,7 +120,13 @@ const GameView = () => {
       handleEndgame(gameResult)
       resetGame()
     }
-  }, [gameResult, gameStatus, handleEndgame, setupNewSinglePlayerMatch, resetGame])
+  }, [
+    gameResult,
+    gameStatus,
+    handleEndgame,
+    setupNewSinglePlayerMatch,
+    resetGame,
+  ])
 
   const toggleDisableButtons = () => {
     setLocked(locked => !locked)
@@ -157,13 +162,13 @@ const GameView = () => {
 
   return (
     <>
-      { message && (
+      {message && (
         <section className="flex w-full items-center justify-center space-x-4 pt-6 text-2xl text-blue-500">
           <span className="text-xl font-extrabold">{message}</span>
         </section>
       )}
-      <div className="mt-3 grid gap-3 pt-3 text-center md:grid-cols-3 lg:w-2/3">
-        <section id="player">
+      <div className="grid gap-3 pt-3 md:grid-cols-3 lg:w-2/3">
+        <section>
           <h1 className="text-2xl text-gray-700">PLAYER</h1>
           <h2 className="text-3xl font-extrabold leading-normal text-gray-700 md:text-[3rem]">
             {winLossRecord?.wins ?? 0}
@@ -180,13 +185,13 @@ const GameView = () => {
             )}
           </div>
         </section>
-        <section id="middle">
+        <section>
           <h1 className="text-2xl text-gray-700">TIES</h1>
           <h2 className="text-3xl font-extrabold leading-normal text-gray-700 md:text-[3rem]">
             {winLossRecord?.ties ?? 0}
           </h2>
         </section>
-        <section id="opponent">
+        <section>
           <h1 className="text-2xl text-gray-700">OPPONENT</h1>
           <h2 className="text-3xl font-extrabold leading-normal text-gray-700 md:text-[3rem]">
             {winLossRecord?.losses ?? 0}
@@ -204,7 +209,7 @@ const GameView = () => {
           </div>
         </section>
       </div>
-      <div className="flex w-full items-center justify-center space-x-4 pt-6 text-2xl text-blue-500">
+      <Row>
         <Button onClick={() => handleMove('r')} disabled={locked}>
           Rock
         </Button>
@@ -214,11 +219,13 @@ const GameView = () => {
         <Button onClick={() => handleMove('s')} disabled={locked}>
           Scissors
         </Button>
-      </div>
+      </Row>
 
-      { ticketAmount && (
+      {ticketAmount && (
         <div className="flex w-full items-center justify-center space-x-4 pt-6 text-2xl text-blue-500">
-          <span className="text-xl font-extrabold">Tickets: {ticketAmount}</span>
+          <span className="text-xl font-extrabold">
+            Tickets: {ticketAmount}
+          </span>
         </div>
       )}
     </>
@@ -226,4 +233,3 @@ const GameView = () => {
 }
 
 export default GameView
- 

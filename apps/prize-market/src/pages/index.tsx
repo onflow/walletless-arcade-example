@@ -1,7 +1,7 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
-import { Button, ButtonRef, Card } from 'ui'
+import { Button, ButtonRef, Card, Row } from 'ui'
 
 const Home: NextPage = () => {
   const connect = () => {
@@ -23,7 +23,10 @@ const Home: NextPage = () => {
           </a>
         </h1>
 
-        <Card title="Shared Card" cta="LFG" href="#" />
+        <Row>
+          <Card title="Shared Card" cta="LFG" href="#" />
+          <Card title="Shared Card 2" cta="LFG" href="#" />
+        </Row>
         <p className="mt-3 text-2xl">
           <Button onClick={connect}>Connect Wallet</Button>
         </p>

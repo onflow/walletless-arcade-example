@@ -1,5 +1,5 @@
 import { forwardRef } from 'react'
-import { cls } from './utils/helpers'
+import { cls } from '../utils/helpers'
 
 import type { ReactElement } from 'react'
 

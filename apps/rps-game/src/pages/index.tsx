@@ -34,9 +34,7 @@ const Home: NextPage = () => {
     },
   } = useRpsGameContext()
 
-  const {
-    ticketAmount,
-  } = useTicketContext()
+  const { ticketAmount } = useTicketContext()
 
   console.log('isGamePiecePurchased', isGamePiecePurchased)
 
@@ -58,42 +56,45 @@ const Home: NextPage = () => {
     )
   }
   return (
-    <div className="flex flex-grow flex-col items-center justify-center py-2">
+    <>
       <Head>
         <title>Flow Game Arcade</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <main className="flex w-full flex-1 flex-col items-center justify-center px-20 text-center">
-        {!session && (
-          <h1 className="text-6xl font-bold">
-            Welcome to{' '}
-            <a className="text-blue-600" href="https://nextjs.org">
-              Flow Game Arcade!
-            </a>
-          </h1>
-        )}
-        <p className="mt-3 text-2xl">
+      <div className="flex flex-grow flex-col items-center justify-center">
+        <main className="flex w-full flex-col items-center justify-center text-center">
           {!session && (
-            <div className="mt-3">
-              <Button onClick={signIn}>Sign in</Button>
-            </div>
+            <h1 className="text-6xl font-bold">
+              Welcome to{' '}
+              <a className="text-blue-600" href="https://nextjs.org">
+                Flow Game Arcade!
+              </a>
+            </h1>
           )}
+          <p className="mt-3 text-2xl">
+            {!session && (
+              <div className="mt-3">
+                <Button onClick={signIn}>Sign in</Button>
+              </div>
+            )}
 
-          {session && !isGamePiecePurchased && (
-            <div className="mt-3">
-              <Button onClick={() => purchaseNft()}>Purchase Game Piece</Button>
-            </div>
-          )}
+            {session && !isGamePiecePurchased && (
+              <div className="mt-3">
+                <Button onClick={() => purchaseNft()}>
+                  Purchase Game Piece
+                </Button>
+              </div>
+            )}
 
-          {session && isGamePiecePurchased && (
-            <div className="mt-3">
-              <GameView />
-            </div>
-          )}
-        </p>
-      </main>
-    </div>
+            {session && isGamePiecePurchased && (
+              <div>
+                <GameView />
+              </div>
+            )}
+          </p>
+        </main>
+      </div>
+    </>
   )
 }
 
