@@ -1,7 +1,8 @@
 import { type NextApiRequest, type NextApiResponse } from 'next'
 import { generateKeys } from '../../../utils/crypto'
 import { createAccount as createAccountUtil } from '../../../utils/flow'
-import '../../../utils/fcl-setup'
+import { loadFCLConfig } from '../../../utils/fcl-setup'
+loadFCLConfig()
 
 const createAccount = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'POST') {

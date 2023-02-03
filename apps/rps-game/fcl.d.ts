@@ -107,6 +107,8 @@ declare module '@onflow/fcl' {
       key: string,
       fallback?: string | number
     ): Promise<string | number | undefined>
+
+    load({ flowJSON }: { flowJSON: any }): Configuration
   }
 
   /**

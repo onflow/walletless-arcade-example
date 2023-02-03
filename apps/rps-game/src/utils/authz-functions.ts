@@ -1,5 +1,6 @@
 import { sign } from './crypto'
 import type { AuthorizationObject } from '@onflow/fcl'
+import { getUrl } from './get-url'
 
 // export function adminAuthorizationFunction(account: any) {
 //   const adminPrivateKey = env.NEXT_PUBLIC_ADMIN_PRIVATE_KEY_ID;
@@ -36,7 +37,7 @@ export function adminAuthorizationFunction(account: any): AuthorizationObject {
       // Singing functions are passed a signable and need to return a composite signature
       // signable.message is a hex string of what needs to be signed.
 
-      const signature = await fetch('/api/authz/admin', {
+      const signature = await fetch(`${getUrl()}/api/authz/admin`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -61,6 +62,7 @@ export function userAuthorizationFunction(
   keyIndex: string,
   address: string
 ) {
+  console.log('userAuthorizationFunction', address)
   return async function (account: any) {
     // authorization function need to return an account
 
@@ -73,7 +75,7 @@ export function userAuthorizationFunction(
         // Singing functions are passed a signable and need to return a composite signature
         // signable.message is a hex string of what needs to be signed.
 
-        const signature = await fetch('/api/authz/user', {
+        const signature = await fetch(`${getUrl()}/api/authz/user`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
