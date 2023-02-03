@@ -4,6 +4,7 @@
   "globalEnv": [
     "NODE_ENV",
     "PORT",
+    "NEXT_PUBLIC_PORT",
     "STRIPE_SK",
     "GOOGLE_CLIENT_ID",
     "GOOGLE_CLIENT_SECRET",
@@ -19,6 +20,7 @@
       "env": [
         "STRIPE_SK",
         "PORT",
+        "NEXT_PUBLIC_PORT",
         "NEXT_PUBLIC_APP_NAME",
         "NEXT_PUBLIC_FLOW_NETWORK",
         "NEXT_PUBLIC_ADMIN_ADDRESS",
