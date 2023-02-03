@@ -189,7 +189,7 @@ const getIsReady = (state: State, gameAccountAddress: string | null) => {
 const getIsInitialized = (state: State, gameAccountAddress: string | null) => {
   if (state) {
     const { isGameInitialized, isGamePiecePurchased } = state;
-    return isGameInitialized && isGamePiecePurchased && !gameAccountAddress;
+    return isGameInitialized && isGamePiecePurchased;
   } else {
     return null;
   }
@@ -256,7 +256,7 @@ export default function RpsGameContextProvider({ children }: Props) {
   }, [])
 
   const checkGameClientInitialized = useCallback(async () => {
-    if (!isGameInitialized && gameAccountPublicKey) {
+    if (!isGameInitialized && !gameAccountAddress && gameAccountPublicKey) {
       const txid = await executeTransaction(
         WALLETLESS_ONBOARDING_MINT_FROM_RESOURCE,
         (arg: any, t: any) => [
@@ -279,19 +279,24 @@ export default function RpsGameContextProvider({ children }: Props) {
         }
       );
 
-      console.log("checkGameClientInitialized txid", txid)
+      await getChildAccountAddressFromGameAdmin(gameAccountPublicKey)
 
       dispatch({
         type: "SET_IS_GAME_INITIALIZED",
         isGameInitialized: true,
       });
-    } else {
-      // TODO: Support case where current user is not logged in
+    } else if (!isGameInitialized && gameAccountAddress) {
+      console.log("Restoring game with game account: ", gameAccountAddress)
+      dispatch({
+        type: "SET_IS_GAME_INITIALIZED",
+        isGameInitialized: true,
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser?.addr, isGameInitialized, gameAccountPublicKey]);
+  }, [currentUser?.addr, isGameInitialized, gameAccountAddress, gameAccountPublicKey]);
 
   const getGamePieceNFTID = useCallback(async () => {
+    console.log("getGamePieceNFTID", isGameInitialized, gameAccountAddress)
     if (isGameInitialized && gameAccountAddress) {
       const playerAddress = gameAccountAddress;
 
@@ -299,6 +304,9 @@ export default function RpsGameContextProvider({ children }: Props) {
         GET_COLLECTION_IDS,
         (arg: any, t: any) => [arg(playerAddress, t.Address)]
       );
+
+      console.log("getGamePieceNFTID res", res)
+
       if (!Array.isArray(res) || res.length <= 0) return
 
       dispatch({
@@ -327,6 +335,7 @@ export default function RpsGameContextProvider({ children }: Props) {
   }, [isGameInitialized, gameAccountAddress]);
 
   const setupNewSinglePlayerMatch = useCallback(async () => {
+    console.log("setupNewSinglePlayerMatch", gamePieceNFTID, gameAccountPrivateKey, gameAccountAddress)
     if (gamePieceNFTID && gameAccountPrivateKey && gameAccountAddress) {
       const submittingNFTID = gamePieceNFTID;
       const matchTimeLimitInMinutes = 5;
@@ -453,6 +462,7 @@ export default function RpsGameContextProvider({ children }: Props) {
 
   const getWinLossRecord = useCallback(
     async () => {
+      console.log("Calling getWinLossRecord", isGameInitialized, gameAccountAddress, gamePieceNFTID)
       if (isGameInitialized && gameAccountAddress && gamePieceNFTID) {
         const playerAddress = gameAccountAddress;
         const nftID = gamePieceNFTID
@@ -461,6 +471,8 @@ export default function RpsGameContextProvider({ children }: Props) {
           GET_RPS_WIN_LOSS,
           (arg: any, t: any) => [arg(playerAddress, t.Address), arg(nftID, t.UInt64)]
         );
+
+        console.log("Get win loss: ", res)
   
         dispatch({
           type: "SET_WIN_LOSS_RECORD",
@@ -536,9 +548,9 @@ export default function RpsGameContextProvider({ children }: Props) {
         return;
       case GameStatus.INITIALIZED:
         console.log("Running initialization")
-        const key = gameAccountPublicKey ?? "";
+        // const key = gameAccountPublicKey ?? "";
         getWinLossRecord();
-        getChildAccountAddressFromGameAdmin(key);
+        // getChildAccountAddressFromGameAdmin(key);
         getGamePieceNFTID();
         getGamePlayerID();
         return;
@@ -548,7 +560,14 @@ export default function RpsGameContextProvider({ children }: Props) {
     }
   }, [
     gameStatus,
+    isPlaying,
+    isReady,
+    isInitialized,
+    isGamePiecePurchased,
+    gameMatchID,
+    gamePlayerID,
     gameAccountPublicKey,
+    gameAccountAddress,
     checkGameClientInitialized,
     getChildAccountAddressFromGameAdmin,
     getGamePieceNFTID,

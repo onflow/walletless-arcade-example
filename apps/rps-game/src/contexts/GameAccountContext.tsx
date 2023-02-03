@@ -61,32 +61,39 @@ export default function GameAccountContextProvider({ children }: Props) {
   const [parentAccountWalletConnected, setParentAccountWalletConnected] =
     useState<boolean>(false)
 
-  const getChildAccountAddressFromGameAdmin = useCallback(async (): Promise<
+  const getChildAccountAddressFromGameAdmin = useCallback(async (gameAccountPublicKey: string): Promise<
     string | null
   > => {
     const adminAdress = fcl.withPrefix(
       process.env.NEXT_PUBLIC_ADMIN_ADDRESS || ''
     )
 
-    const res: string = await executeScript(
-      GET_CHILD_ADDRESS_FROM_PUBLIC_KEY_ON_CREATOR,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (arg: any, t: any) => [
-        arg(adminAdress, t.Address),
-        arg(gameAccountPublicKey, t.String),
-      ]
-    )
+    if (adminAdress && gameAccountPublicKey) {
+      const res: string = await executeScript(
+        GET_CHILD_ADDRESS_FROM_PUBLIC_KEY_ON_CREATOR,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (arg: any, t: any) => [
+          arg(adminAdress, t.Address),
+          arg(gameAccountPublicKey, t.String),
+        ]
+      )
 
-    const session = await getSession()
-    await setSession({
-      ...session,
-      address: res,
-    })
-    setGameAccountAddress(res)
-    return res
-  }, [setGameAccountAddress, gameAccountPublicKey, executeScript])
+      console.log("getChildAccountAddressFromGameAdmin", res)
 
-  const getOrCreateGameAccount = useCallback(async () => {
+      if (res) {
+        const session = await getSession()
+        await setSession({
+          ...session,
+          address: res,
+        })
+        setGameAccountAddress(res)
+      }
+      return res
+    }
+    return null
+  }, [setGameAccountAddress, executeScript])
+
+  const getOrCreateGameAccountKeys = useCallback(async () => {
     let gameAccountPublicKey: string
     let gameAccountPrivateKey: string
     let gameAccountAddress: string | null = null
@@ -101,6 +108,14 @@ export default function GameAccountContextProvider({ children }: Props) {
         ? session.gameAccountAddress
         : null
       parentAccountAddress = session.parentAccountAddress
+
+      if (!gameAccountAddress) {
+        gameAccountAddress = await getChildAccountAddressFromGameAdmin(gameAccountPublicKey)
+        await setSession({
+          ...session,
+          gameAccountAddress: gameAccountAddress,
+        })
+      }
     } else {
       const gameAccountKeys = await generateKeys()
       gameAccountPublicKey = gameAccountKeys.publicKey
@@ -113,10 +128,13 @@ export default function GameAccountContextProvider({ children }: Props) {
         parentAccountWalletConnected = true
       }
 
+      gameAccountAddress = await getChildAccountAddressFromGameAdmin(gameAccountPublicKey)
+      console.log("after getChildAccountAddressFromGameAdmin in iffy", gameAccountAddress)
+
       await setSession({
         gameAccountPrivateKey: gameAccountPrivateKey,
         gameAccountPublicKey: gameAccountPublicKey,
-        gameAccountAddress: null,
+        gameAccountAddress: gameAccountAddress,
         parentAccountAddress: parentAccountAddress ?? null,
         parentAccountWalletConnected: parentAccountWalletConnected,
       })
@@ -133,15 +151,21 @@ export default function GameAccountContextProvider({ children }: Props) {
   }, [currentUser?.addr])
 
   useEffect(() => {
-    getOrCreateGameAccount()
-  }, [getOrCreateGameAccount])
+    getOrCreateGameAccountKeys()
+  }, [getOrCreateGameAccountKeys])
+
+  // useEffect(() => {
+  //   if (gameAccountPublicKey) {
+  //     getChildAccountAddressFromGameAdmin(gameAccountPublicKey)  
+  //   }
+  // }, [getChildAccountAddressFromGameAdmin, gameAccountPublicKey])
 
   const value = {
     gameAccountAddress,
     gameAccountPublicKey,
     gameAccountPrivateKey,
     getChildAccountAddressFromGameAdmin,
-    getOrCreateGameAccount,
+    getOrCreateGameAccountKeys,
     parentAccountAddress,
     parentAccountWalletConnected,
   }

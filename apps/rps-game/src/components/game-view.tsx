@@ -112,14 +112,14 @@ const GameView = () => {
 
   useEffect(() => {
     if (gameStatus === GameStatus.READY) {
-      setupNewSinglePlayerMatch()
+      // setupNewSinglePlayerMatch()
     }
     if (gameStatus === GameStatus.PLAYING) {
       console.log('gameStatus', gameStatus)
     }
     if (gameStatus === GameStatus.ENDED) {
       handleEndgame(gameResult)
-      resetGame()
+      // resetGame()
     }
   }, [gameResult, gameStatus, handleEndgame, setupNewSinglePlayerMatch, resetGame])
 
@@ -138,9 +138,11 @@ const GameView = () => {
   }
 
   const handleMove = async (command: string) => {
-    if (gameStatus !== GameStatus.PLAYING) return
+    if (gameStatus !== GameStatus.READY) return
     toggleDisableButtons()
 
+    await setupNewSinglePlayerMatch()
+    
     if (command === 'r') {
       setPlayerMove('rock')
       await submitBothSinglePlayerMoves(0)
@@ -162,7 +164,7 @@ const GameView = () => {
           <span className="text-xl font-extrabold">{message}</span>
         </section>
       )}
-      <div className="mt-3 grid gap-3 pt-3 text-center md:grid-cols-3 lg:w-2/3">
+      <div className="mt-3 grid gap-3 pt-3 text-center md:grid-cols-3">
         <section id="player">
           <h1 className="text-2xl text-gray-700">PLAYER</h1>
           <h2 className="text-3xl font-extrabold leading-normal text-gray-700 md:text-[3rem]">
@@ -218,7 +220,7 @@ const GameView = () => {
 
       { ticketAmount && (
         <div className="flex w-full items-center justify-center space-x-4 pt-6 text-2xl text-blue-500">
-          <span className="text-xl font-extrabold">Tickets: {ticketAmount}</span>
+          <span className="text-xl font-extrabold">🎟 Tickets: {ticketAmount}</span>
         </div>
       )}
     </>
