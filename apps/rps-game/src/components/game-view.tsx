@@ -1,8 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
-import { Row } from 'ui'
+import { FlashButton, Row } from 'ui'
 import { useRpsGameContext, GameStatus, useTicketContext } from '../contexts'
 import useUtils from '../utils'
-import { Button } from './button-v3'
 
 type PlayerMove = 'rock' | 'paper' | 'scissors' | undefined
 
@@ -143,6 +142,7 @@ const GameView = () => {
   }
 
   const handleMove = async (command: string) => {
+    console.log('handleMove', command)
     if (gameStatus !== GameStatus.PLAYING) return
     toggleDisableButtons()
 
@@ -210,15 +210,15 @@ const GameView = () => {
         </section>
       </div>
       <Row>
-        <Button onClick={() => handleMove('r')} disabled={locked}>
+        <FlashButton onClick={() => handleMove('r')} disabled={locked}>
           Rock
-        </Button>
-        <Button onClick={() => handleMove('p')} disabled={locked}>
+        </FlashButton>
+        <FlashButton onClick={() => handleMove('p')} disabled={locked}>
           Paper
-        </Button>
-        <Button onClick={() => handleMove('s')} disabled={locked}>
+        </FlashButton>
+        <FlashButton onClick={() => handleMove('s')} disabled={locked}>
           Scissors
-        </Button>
+        </FlashButton>
       </Row>
 
       {ticketAmount && (

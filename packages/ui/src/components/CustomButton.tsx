@@ -8,7 +8,7 @@ interface Props {
   onClick: () => void
 }
 
-export function Button(props: Props) {
+export default function CustomButton(props: Props) {
   return (
     <button
       className={`${props.bgColor || 'bg-white'} ${

@@ -1,8 +1,6 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import Image from 'next/image'
-import { Row } from 'ui'
-import { FlexContainer, Button, ButtonRef, Card, Footer, LinkCard } from 'ui'
+import { FlexContainer, Row, Button, ButtonRef, Card, LinkCard } from 'ui'
 
 const Home: NextPage = () => {
   const connect = () => {
@@ -10,13 +8,12 @@ const Home: NextPage = () => {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center py-2">
+    <>
       <Head>
-        <title>Flow Prize Marketplace</title>
+        <title>Flow Game Arcade</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <main className="flex w-full flex-1 flex-col items-center justify-center px-20 text-center">
+      <main className="flex w-full flex-col items-center justify-center text-center">
         <h1 className="text-6xl font-bold">
           Welcome to{' '}
           <a className="text-red-600" href="https://nextjs.org">
@@ -55,14 +52,7 @@ const Home: NextPage = () => {
           text="Instantly deploy your Next.js site to a public URL with Vercel."
         ></LinkCard>
       </main>
-
-      <Footer>
-        <>
-          Powered by{' '}
-          <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-        </>
-      </Footer>
-    </div>
+    </>
   )
 }
 

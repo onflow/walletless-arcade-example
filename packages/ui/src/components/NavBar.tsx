@@ -1,12 +1,22 @@
 import { useState } from 'react'
-import { Hamburger } from 'ui'
-import { useSession, signOut } from 'next-auth/react'
-import * as fcl from '@onflow/fcl'
-import Image from 'next/image'
-import { useFclContext } from '../contexts'
-import OnFlowIcon from '../../public/static/flow-icon-bw-green.svg'
+import FlowLogo from '../components/FlowLogo'
+import Hamburger from './Hamburger'
 
-function NavDropDown({ currentUser }: { currentUser: fcl.CurrentUserObject }) {
+function NavDropDown({
+  session,
+  currentUser,
+  connect,
+  disconnect,
+  signIn,
+  signOut,
+}: {
+  session: any
+  currentUser: any | undefined
+  connect: any
+  disconnect: any
+  signIn: any
+  signOut: any
+}) {
   const [isOpen, setIsOpen] = useState(false)
   return (
     <div className="relative">
@@ -30,14 +40,14 @@ function NavDropDown({ currentUser }: { currentUser: fcl.CurrentUserObject }) {
           <div className="shadow-xs rounded-md bg-white px-2 py-2">
             {currentUser?.addr ? (
               <div
-                onClick={() => fcl.unauthenticate()}
+                onClick={disconnect}
                 className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
               >
                 {currentUser?.addr}
               </div>
             ) : (
               <div
-                onClick={() => fcl.authenticate()}
+                onClick={connect}
                 className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
               >
                 Connect Flow Wallet
@@ -82,10 +92,19 @@ function NavButton({
   )
 }
 
-export default function Navbar() {
-  const { data: session } = useSession()
-  const { currentUser } = useFclContext()
-
+interface NavProps {
+  session?: any
+  currentUser?: any
+  connect?: any
+  disconnect?: any
+  signIn?: any
+  signOut?: any
+}
+export default function Navbar({
+  navProps: { session, currentUser, connect, disconnect, signIn, signOut },
+}: {
+  navProps: NavProps
+}) {
   const [menuOpen, setMenuOpen] = useState(false)
   return (
     <nav className="text-primary-gray-400 border-primary-gray-100 z-40 flex min-h-[96px] items-center border-2 bg-white p-4 lg:px-8">
@@ -93,13 +112,7 @@ export default function Navbar() {
         className="font-display flex cursor-pointer items-center text-xl"
         href="/"
       >
-        <Image
-          className="mr-4"
-          alt="flow_logo"
-          width="50"
-          height="50"
-          src={OnFlowIcon.src}
-        />
+        <FlowLogo className="mr-4" />
         <header>
           <b>flow</b> games demo
         </header>
@@ -132,7 +145,14 @@ export default function Navbar() {
           )}
           {session && currentUser && (
             <>
-              <NavDropDown currentUser={currentUser} />
+              <NavDropDown
+                session={session}
+                currentUser={currentUser}
+                connect={connect}
+                disconnect={disconnect}
+                signIn={signIn}
+                signOut={signOut}
+              />
               <div className="border-primary-gray-100 h-1/2 border-l"></div>
             </>
           )}

@@ -1,8 +1,6 @@
 const ROUTES = {
-  HOME: "/",
-  WALLET: "/wallet",
-  GAMES: "/games",
-  RPS: "/games/rps",
-};
+  HOME: '/',
+  WALLET: '/wallet',
+}
 
-export default ROUTES;
+export default ROUTES

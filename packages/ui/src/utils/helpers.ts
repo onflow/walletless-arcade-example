@@ -11,6 +11,3 @@ export const styles = {
     'my-4 lg:my-10 p-2 bg-gray-200 rounded-md shadow-inner md:container md:mx-auto',
   li: 'rounded-md border border-gray-300 p-3 text-blue-900 bg-blue-200',
 }
-
-export const threeItems = ['1', '2', '3']
-export const fiveItems = ['1', '2', '3', '4', '5']
