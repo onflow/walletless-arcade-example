@@ -1,12 +1,12 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { Button } from '../components/button-v2'
-import { useSession, signIn, signOut } from 'next-auth/react'
+import { Button } from 'ui'
+import { useSession, signIn } from 'next-auth/react'
 import { useRpsGameContext, useTicketContext } from '../contexts'
 import purchaseNft from '../utils/purchase-nft'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
-import GameView from '../components/game-view'
+import { GameView } from '../components'
 
 const Home: NextPage = () => {
   const { data: session, status } = useSession()
@@ -61,39 +61,31 @@ const Home: NextPage = () => {
         <title>Flow Game Arcade</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="flex flex-grow flex-col items-center justify-center">
-        <main className="flex w-full flex-col items-center justify-center text-center">
+      <main className="flex w-full flex-col items-center justify-center text-center">
+        {!session && (
+          <h1 className="text-6xl font-bold">
+            Welcome to{' '}
+            <a className="text-blue-600" href="https://nextjs.org">
+              Flow Game Arcade!
+            </a>
+          </h1>
+        )}
+        <div className="mt-3 text-2xl">
           {!session && (
-            <h1 className="text-6xl font-bold">
-              Welcome to{' '}
-              <a className="text-blue-600" href="https://nextjs.org">
-                Flow Game Arcade!
-              </a>
-            </h1>
+            <div className="mt-3">
+              <Button onClick={signIn}>Sign in</Button>
+            </div>
           )}
-          <p className="mt-3 text-2xl">
-            {!session && (
-              <div className="mt-3">
-                <Button onClick={signIn}>Sign in</Button>
-              </div>
-            )}
 
-            {session && !isGamePiecePurchased && (
-              <div className="mt-3">
-                <Button onClick={() => purchaseNft()}>
-                  Purchase Game Piece
-                </Button>
-              </div>
-            )}
+          {session && !isGamePiecePurchased && (
+            <div className="mt-3">
+              <Button onClick={() => purchaseNft()}>Purchase Game Piece</Button>
+            </div>
+          )}
 
-            {session && isGamePiecePurchased && (
-              <div>
-                <GameView />
-              </div>
-            )}
-          </p>
-        </main>
-      </div>
+          {session && isGamePiecePurchased && <GameView />}
+        </div>
+      </main>
     </>
   )
 }
