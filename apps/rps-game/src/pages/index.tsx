@@ -6,7 +6,7 @@ import { useRpsGameContext, useTicketContext } from '../contexts'
 import purchaseNft from '../utils/purchase-nft'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
-import GameView from '../components/game-view'
+import { GameView } from '../components'
 
 const Home: NextPage = () => {
   const { data: session, status } = useSession()

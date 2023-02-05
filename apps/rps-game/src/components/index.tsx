@@ -1,1 +1,1 @@
-export {default as NavBar} from './navbar'
+export { default as GameView } from './game-view'
