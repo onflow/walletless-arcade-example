@@ -70,7 +70,7 @@ const Home: NextPage = () => {
             </a>
           </h1>
         )}
-        <p className="mt-3 text-2xl">
+        <div className="mt-3 text-2xl">
           {!session && (
             <div className="mt-3">
               <Button onClick={signIn}>Sign in</Button>
@@ -83,12 +83,8 @@ const Home: NextPage = () => {
             </div>
           )}
 
-          {session && isGamePiecePurchased && (
-            <div>
-              <GameView />
-            </div>
-          )}
-        </p>
+          {session && isGamePiecePurchased && <GameView />}
+        </div>
       </main>
     </>
   )

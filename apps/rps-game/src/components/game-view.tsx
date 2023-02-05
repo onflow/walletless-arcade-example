@@ -169,10 +169,10 @@ const GameView = () => {
       )}
       <div className="grid gap-3 pt-3 md:grid-cols-3 lg:w-2/3">
         <section>
-          <h1 className="text-2xl text-gray-700">PLAYER</h1>
-          <h2 className="text-3xl font-extrabold leading-normal text-gray-700 md:text-[3rem]">
+          <div className="text-2xl text-gray-700">PLAYER</div>
+          <div className="text-3xl font-extrabold leading-normal text-gray-700 md:text-[3rem]">
             {winLossRecord?.wins ?? 0}
-          </h2>
+          </div>
           <div>
             {playerMove === 'rock' && (
               <span className="text-9xl font-extrabold">🪨</span>
@@ -186,16 +186,16 @@ const GameView = () => {
           </div>
         </section>
         <section>
-          <h1 className="text-2xl text-gray-700">TIES</h1>
-          <h2 className="text-3xl font-extrabold leading-normal text-gray-700 md:text-[3rem]">
+          <div className="text-2xl text-gray-700">TIES</div>
+          <div className="text-3xl font-extrabold leading-normal text-gray-700 md:text-[3rem]">
             {winLossRecord?.ties ?? 0}
-          </h2>
+          </div>
         </section>
         <section>
-          <h1 className="text-2xl text-gray-700">OPPONENT</h1>
-          <h2 className="text-3xl font-extrabold leading-normal text-gray-700 md:text-[3rem]">
+          <div className="text-2xl text-gray-700">OPPONENT</div>
+          <div className="text-3xl font-extrabold leading-normal text-gray-700 md:text-[3rem]">
             {winLossRecord?.losses ?? 0}
-          </h2>
+          </div>
           <div>
             {opponentMove === 'rock' && (
               <span className="text-9xl font-extrabold">🪨</span>
