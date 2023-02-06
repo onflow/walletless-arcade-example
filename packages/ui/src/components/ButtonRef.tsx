@@ -1,12 +1,12 @@
 import { forwardRef } from 'react'
 import { cls } from '../utils/helpers'
 
-import type { ReactElement } from 'react'
+import type { ReactNode } from 'react'
 
 type Ref = HTMLButtonElement
 
 interface ButtonProps {
-  children: string | ReactElement<any, any> | null
+  children: ReactNode
   onClick?: () => void
   type?: 'submit' | 'button'
   className?: string
