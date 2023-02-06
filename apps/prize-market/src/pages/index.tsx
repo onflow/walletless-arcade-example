@@ -1,6 +1,7 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { FlexContainer, Row, Button, ButtonRef, Card, LinkCard } from 'ui'
+import { FlippyOnHover } from '../components'
 
 const Home: NextPage = () => {
   const connect = () => {
@@ -22,9 +23,7 @@ const Home: NextPage = () => {
         </h1>
 
         <FlexContainer height={48}>
-          <Card title="Shared Card" cta="LFG" href="#" />
-          <Card title="Shared Card 2" cta="LFG" href="#" />
-          <Card title="Shared Card 2" cta="LFG" href="#" />
+          <FlippyOnHover flipDirection="horizontal" imageSrc="" />
         </FlexContainer>
         <Row>
           <Button onClick={connect}>Connect Wallet</Button>
