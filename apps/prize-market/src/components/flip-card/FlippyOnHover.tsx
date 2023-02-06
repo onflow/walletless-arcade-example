@@ -1,6 +1,6 @@
 import Flippy from './Flippy'
 import DefaultCardContents from './DefaultCardContents'
-import Dood from '../../../public/static/rainbow-dood.png'
+import Prize from '../../../public/static/rainbowduck.png'
 
 const FlippyStyle = {
   width: '200px',
@@ -8,7 +8,7 @@ const FlippyStyle = {
   textAlign: 'center',
   color: '#FFF',
   fontFamily: 'sans-serif',
-  fontSize: '30px',
+  fontSize: '1.25em',
   justifyContent: 'center',
 }
 
@@ -18,7 +18,7 @@ const FlippyOnHover = ({
   flipDirection: string
 }) => (
   <Flippy flipOnHover={true} flipDirection={flipDirection} style={FlippyStyle}>
-    <DefaultCardContents image={Dood} />
+    <DefaultCardContents image={Prize}>10 Tickets</DefaultCardContents>
   </Flippy>
 )
 

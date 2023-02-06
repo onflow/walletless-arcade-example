@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { FlexContainer, Row, Button, ButtonRef, Card, LinkCard } from 'ui'
+import { Row, Col, CustomButton } from 'ui'
 import { FlippyOnHover } from '../components'
 
 const Home: NextPage = () => {
@@ -17,27 +17,48 @@ const Home: NextPage = () => {
       <main className="flex w-full flex-col items-center justify-center text-center">
         <h1 className="m-4 text-4xl font-bold">
           Welcome to{' '}
-          <a className="text-red-600" href="https://nextjs.org">
+          <a className="text-blue-300" href="https://nextjs.org">
             Flow Prize Marketplace!
           </a>
         </h1>
 
+        <p className="mb-4 text-2xl text-blue-600">Ticket Balance: 100</p>
+
         <Row>
-          <FlippyOnHover flipDirection="horizontal" />
-          <FlippyOnHover flipDirection="horizontal" />
-          <FlippyOnHover flipDirection="horizontal" />
+          <Col>
+            <FlippyOnHover flipDirection="horizontal" />
+            <CustomButton
+              textColor="white"
+              hoverColor="blue-800"
+              bgColor="blue-600"
+              onClick={() => console.log('clicked')}
+            >
+              Buy
+            </CustomButton>
+          </Col>
+          <Col>
+            <FlippyOnHover flipDirection="horizontal" />
+            <CustomButton
+              textColor="white"
+              hoverColor="blue-800"
+              bgColor="blue-600"
+              onClick={() => console.log('clicked')}
+            >
+              Buy
+            </CustomButton>
+          </Col>
+          <Col>
+            <FlippyOnHover flipDirection="horizontal" />
+            <CustomButton
+              textColor="white"
+              hoverColor="blue-800"
+              bgColor="blue-600"
+              onClick={() => console.log('clicked')}
+            >
+              Buy
+            </CustomButton>
+          </Col>
         </Row>
-        <p className="mt-3 text-2xl">
-          <ButtonRef
-            onClick={connect}
-            pill={true}
-            disabled={false}
-            variant={'primary'}
-            size={'small'}
-          >
-            Connect Wallet
-          </ButtonRef>
-        </p>
       </main>
     </>
   )

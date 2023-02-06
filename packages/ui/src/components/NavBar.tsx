@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import FlowLogo from '../components/FlowLogo'
+import ButtonRef from './ButtonRef'
 import Hamburger from './Hamburger'
 
 function NavDropDown({
@@ -157,28 +158,16 @@ export default function Navbar({
             </>
           )}
           <div className="px-4">
-            <a
-              className="text-md hover:text-primary-gray-100 flex items-center space-x-0 text-blue-700 lg:text-base"
-              target="_blank"
-              href="https://flow.com"
-              rel="noreferrer"
-            >
-              Flow.com
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="white"
-                viewBox="0 0 24 24"
-                strokeWidth={2.5}
-                stroke="black"
-                className="ml-2 mr-4 h-4 w-4"
+            {!currentUser?.addr && (
+              <ButtonRef
+                onClick={!currentUser?.addr ? connect : disconnect}
+                pill={true}
+                variant={'primary'}
+                size={'small'}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"
-                />
-              </svg>
-            </a>
+                {!currentUser?.addr ? 'Connect' : 'Disconnect'} Wallet
+              </ButtonRef>
+            )}
           </div>
         </ul>
       </div>
