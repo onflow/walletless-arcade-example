@@ -15,19 +15,17 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex w-full flex-col items-center justify-center text-center">
-        <h1 className="text-6xl font-bold">
+        <h1 className="m-4 text-4xl font-bold">
           Welcome to{' '}
           <a className="text-red-600" href="https://nextjs.org">
             Flow Prize Marketplace!
           </a>
         </h1>
 
-        <FlexContainer height={48}>
-          <FlippyOnHover flipDirection="horizontal" imageSrc="" />
-        </FlexContainer>
         <Row>
-          <Button onClick={connect}>Connect Wallet</Button>
-          <Button onClick={connect}>Connect Wallet</Button>
+          <FlippyOnHover flipDirection="horizontal" />
+          <FlippyOnHover flipDirection="horizontal" />
+          <FlippyOnHover flipDirection="horizontal" />
         </Row>
         <p className="mt-3 text-2xl">
           <ButtonRef
@@ -40,16 +38,6 @@ const Home: NextPage = () => {
             Connect Wallet
           </ButtonRef>
         </p>
-
-        <FlexContainer>
-          <Card title="Shared Card" cta="LFG" href="#" />
-          <Card title="Shared Card 2" cta="LFG" href="#" />
-        </FlexContainer>
-        <LinkCard
-          src="#"
-          title="Link Card"
-          text="Instantly deploy your Next.js site to a public URL with Vercel."
-        ></LinkCard>
       </main>
     </>
   )

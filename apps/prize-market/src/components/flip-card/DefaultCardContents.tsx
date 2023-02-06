@@ -1,3 +1,4 @@
+import type { StaticImageData } from 'next/image'
 import Image from 'next/image'
 import type { ReactNode } from 'react'
 import BackSide from './BackSide'
@@ -5,11 +6,10 @@ import FrontSide from './FrontSide'
 
 interface IProps {
   children?: ReactNode
-  imageSrc: string
-  image: string
+  image: StaticImageData
 }
 
-const DefaultCardContents = ({ children, imageSrc, image }: IProps) => (
+const DefaultCardContents = ({ children, image }: IProps) => (
   <>
     <FrontSide
       style={{

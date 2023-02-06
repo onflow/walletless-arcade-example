@@ -19,7 +19,7 @@ export default function FlexContainer({
   return (
     <div className={styles.container}>
       <div
-        className={`flex h-${height} items-center flex-${direction} justify-${justify} align-${align}`}
+        className={`flex h-${height} flex-${direction} justify-${justify} align-${align}`}
       >
         {children}
       </div>

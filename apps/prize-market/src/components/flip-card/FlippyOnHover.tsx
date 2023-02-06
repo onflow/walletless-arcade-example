@@ -14,13 +14,11 @@ const FlippyStyle = {
 
 const FlippyOnHover = ({
   flipDirection = 'vertical',
-  imageSrc,
 }: {
   flipDirection: string
-  imageSrc: string
 }) => (
   <Flippy flipOnHover={true} flipDirection={flipDirection} style={FlippyStyle}>
-    <DefaultCardContents imageSrc={imageSrc} image={Dood} />
+    <DefaultCardContents image={Dood} />
   </Flippy>
 )
 
