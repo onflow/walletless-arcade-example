@@ -30,12 +30,13 @@ interface Props {
 }
 
 export enum GameStatus {
+  UNPURCHASED = "UNPURCHASED",
+  UNLOADED = "UNLOADED",
   UNINITIALIZED = "UNINITIALIZED",
   INITIALIZED = "INITIALIZED",
   READY = "READY",
   PLAYING = "PLAYING",
   ENDED = "ENDED",
-  UNPURCHASED = "UNPURCHASED"
 }
 
 type Action =
@@ -168,28 +169,28 @@ function reducer(state: State, action: Action): State {
 }
 
 // Selectors
-const getIsPlaying = (state: State, gameAccountAddress: string | null) => {
+const getIsPlaying = (state: State, gameAccountAddress: string | null, isLoaded: boolean) => {
   if (state) {
     const { isGameInitialized, gamePieceNFTID, gamePlayerID , gameMatchID, isGamePiecePurchased} = state;
-    return isGameInitialized && isGamePiecePurchased && gamePieceNFTID && gamePlayerID && gameMatchID && gameAccountAddress;
+    return isGameInitialized && isGamePiecePurchased && gamePieceNFTID && gamePlayerID && gameMatchID && gameAccountAddress && isLoaded;
   } else {
     return null;
   }
 };
 
-const getIsReady = (state: State, gameAccountAddress: string | null) => {
+const getIsReady = (state: State, gameAccountAddress: string | null, isLoaded: boolean) => {
   if (state) {
     const { isGameInitialized, gamePieceNFTID, gamePlayerID, isGamePiecePurchased} = state;
-    return isGameInitialized && isGamePiecePurchased && gamePieceNFTID && gamePlayerID && gameAccountAddress;
+    return isGameInitialized && isGamePiecePurchased && gamePieceNFTID && gamePlayerID && gameAccountAddress && isLoaded;
   } else {
     return null;
   }
 };
 
-const getIsInitialized = (state: State, gameAccountAddress: string | null) => {
+const getIsInitialized = (state: State, gameAccountAddress: string | null, isLoaded: boolean) => {
   if (state) {
     const { isGameInitialized, isGamePiecePurchased } = state;
-    return isGameInitialized && isGamePiecePurchased;
+    return isGameInitialized && isGamePiecePurchased && isLoaded;
   } else {
     return null;
   }
@@ -230,22 +231,24 @@ export default function RpsGameContextProvider({ children }: Props) {
     gameAccountAddress,
     gameAccountPublicKey,
     gameAccountPrivateKey,
-    getChildAccountAddressFromGameAdmin,
+    getGameAccountAddressFromGameAdmin,
+    isLoaded,
+    loadGameAccount,
   } = useGameAccountContext();
 
   const isPlaying = useMemo(
-    () => getIsPlaying(state, gameAccountAddress),
+    () => getIsPlaying(state, gameAccountAddress, isLoaded),
     [state, gameAccountAddress]
   )
 
   const isReady = useMemo(
-    () => getIsReady(state, gameAccountAddress),
+    () => getIsReady(state, gameAccountAddress, isLoaded),
     [state, gameAccountAddress]
   );
 
   const isInitialized = useMemo(
-    () => getIsInitialized(state, gameAccountAddress),
-    [state, gameAccountAddress]
+    () => getIsInitialized(state, gameAccountAddress, isLoaded),
+    [state, gameAccountAddress, isLoaded]
   );
 
   const setGamePiecePurchased = useCallback(async (isPurchased: boolean) => {
@@ -256,6 +259,10 @@ export default function RpsGameContextProvider({ children }: Props) {
   }, [])
 
   const checkGameClientInitialized = useCallback(async () => {
+
+    console.log("checkGameClientInitialized", isLoaded, gameAccountAddress, gameAccountPublicKey)
+    if (!isLoaded) return;
+
     if (!isGameInitialized && !gameAccountAddress && gameAccountPublicKey) {
       const txid = await executeTransaction(
         WALLETLESS_ONBOARDING_MINT_FROM_RESOURCE,
@@ -279,7 +286,7 @@ export default function RpsGameContextProvider({ children }: Props) {
         }
       );
 
-      await getChildAccountAddressFromGameAdmin(gameAccountPublicKey)
+      await getGameAccountAddressFromGameAdmin(gameAccountPublicKey)
 
       dispatch({
         type: "SET_IS_GAME_INITIALIZED",
@@ -293,7 +300,7 @@ export default function RpsGameContextProvider({ children }: Props) {
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser?.addr, isGameInitialized, gameAccountAddress, gameAccountPublicKey]);
+  }, [currentUser?.addr, isGameInitialized, gameAccountAddress, gameAccountPublicKey, isLoaded]);
 
   const getGamePieceNFTID = useCallback(async () => {
     console.log("getGamePieceNFTID", isGameInitialized, gameAccountAddress)
@@ -374,6 +381,7 @@ export default function RpsGameContextProvider({ children }: Props) {
 
   const submitBothSinglePlayerMoves = useCallback(
     async (_move: number) => {
+      console.log("submitBothSinglePlayerMoves", gamePieceNFTID, gameMatchID, gameAccountPrivateKey, gameAccountAddress)
       if (gamePieceNFTID && gameMatchID && gameAccountPrivateKey && gameAccountAddress) {
         const matchID = gameMatchID;
         const move = _move; // 0 = rock, 1 = paper, 2 = scissors
@@ -395,6 +403,7 @@ export default function RpsGameContextProvider({ children }: Props) {
 
   const resolveMatchAndReturnNFTS = useCallback(
     async () => {
+      console.log("resolveMatchAndReturnNFTS", gameMatchID, gameAccountPrivateKey, gameAccountAddress)
       if (gameMatchID && gameAccountPrivateKey && gameAccountAddress) {
         const matchID = gameMatchID
 
@@ -518,7 +527,7 @@ export default function RpsGameContextProvider({ children }: Props) {
       dispatch({ type: "SET_GAME_STATUS", gameStatus: GameStatus.INITIALIZED });
       return;
     }
-    if (!isInitialized && isGamePiecePurchased) {
+    if (isLoaded) {
       dispatch({
         type: "SET_GAME_STATUS",
         gameStatus: GameStatus.UNINITIALIZED,
@@ -528,21 +537,30 @@ export default function RpsGameContextProvider({ children }: Props) {
     if (isGamePiecePurchased) {
       dispatch({
         type: "SET_GAME_STATUS",
-        gameStatus: GameStatus.UNPURCHASED
-      })
-      return
+        gameStatus: GameStatus.UNLOADED,
+      });
+      return;
     }
+    dispatch({
+      type: "SET_GAME_STATUS",
+      gameStatus: GameStatus.UNPURCHASED
+    })
+    return
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     currentUser?.addr,
     isPlaying,
     isReady,
     isInitialized,
-    isGamePiecePurchased
+    isGamePiecePurchased,
+    isLoaded,
   ]);
 
   useEffect(() => {
     switch (gameStatus) {
+      case GameStatus.UNLOADED:
+        loadGameAccount()
+        return
       case GameStatus.UNINITIALIZED:
         checkGameClientInitialized();
         return;
@@ -569,7 +587,8 @@ export default function RpsGameContextProvider({ children }: Props) {
     gameAccountPublicKey,
     gameAccountAddress,
     checkGameClientInitialized,
-    getChildAccountAddressFromGameAdmin,
+    getGameAccountAddressFromGameAdmin,
+    loadGameAccount,
     getGamePieceNFTID,
   ]);
 

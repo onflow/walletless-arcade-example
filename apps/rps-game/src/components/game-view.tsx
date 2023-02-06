@@ -103,11 +103,8 @@ const GameView = () => {
           `You Played ${playerMoveString} and Lost against ${opponentMoveString}!`
         )
       }
-      delay(3000).then(() => {
-        setMessage(`Shall we play again?`)
-      })
     },
-    [delay, gamePieceNFTID, gamePlayerID]
+    [gamePieceNFTID, gamePlayerID]
   )
 
   useEffect(() => {
@@ -127,21 +124,28 @@ const GameView = () => {
     setLocked(locked => !locked)
   }
 
-  const handleResetAnswer = async (command: string) => {
+  const handlePlayAgain = async (command: string) => {
     if (gameStatus !== GameStatus.ENDED) return
 
     if (command === 'y') {
       await resetGame()
+      await setupNewSinglePlayerMatch()
+      toggleDisableButtons()
+    }
+  }
 
+  const handlePlay = async (command: string) => {
+    if (gameStatus !== GameStatus.READY) return
+
+    if (command === 'y') {
+      await setupNewSinglePlayerMatch()
       toggleDisableButtons()
     }
   }
 
   const handleMove = async (command: string) => {
-    if (gameStatus !== GameStatus.READY) return
+    if (gameStatus !== GameStatus.PLAYING) return
     toggleDisableButtons()
-
-    await setupNewSinglePlayerMatch()
     
     if (command === 'r') {
       setPlayerMove('rock')
@@ -206,17 +210,33 @@ const GameView = () => {
           </div>
         </section>
       </div>
-      <div className="flex w-full items-center justify-center space-x-4 pt-6 text-2xl text-blue-500">
-        <Button onClick={() => handleMove('r')} disabled={locked}>
-          Rock
-        </Button>
-        <Button onClick={() => handleMove('p')} disabled={locked}>
-          Paper
-        </Button>
-        <Button onClick={() => handleMove('s')} disabled={locked}>
-          Scissors
-        </Button>
-      </div>
+      { gameStatus === GameStatus.PLAYING && (
+        <div className="flex w-full items-center justify-center space-x-4 pt-6 text-2xl text-blue-500">
+          <Button onClick={() => handleMove('r')} disabled={locked}>
+            Rock
+          </Button>
+          <Button onClick={() => handleMove('p')} disabled={locked}>
+            Paper
+          </Button>
+          <Button onClick={() => handleMove('s')} disabled={locked}>
+            Scissors
+          </Button>
+        </div>
+      )}
+      { gameStatus === GameStatus.ENDED && (
+        <div className="flex w-full items-center justify-center space-x-4 pt-6 text-2xl text-blue-500">
+          <Button onClick={() => handlePlayAgain("y")} disabled={locked}>
+            Play Again!
+          </Button>
+        </div>
+      )}
+      { gameStatus === GameStatus.READY && (
+        <div className="flex w-full items-center justify-center space-x-4 pt-6 text-2xl text-blue-500">
+          <Button onClick={() => handlePlay("y")} disabled={locked}>
+            Play!
+          </Button>
+        </div>
+      )}
 
       { ticketAmount && (
         <div className="flex w-full items-center justify-center space-x-4 pt-6 text-2xl text-blue-500">
