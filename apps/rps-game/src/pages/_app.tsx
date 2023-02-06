@@ -1,6 +1,5 @@
 import Head from 'next/head'
-import { FullScreenLayout, NavBar } from 'ui'
-import { SessionProvider, signIn, signOut } from 'next-auth/react'
+import { SessionProvider } from 'next-auth/react'
 import type { AppProps } from 'next/app'
 import {
   FclContext,
@@ -8,22 +7,10 @@ import {
   UserContext,
   RpsGameContext,
   TicketContext,
-  useFclContext,
 } from '../contexts'
 import '../styles/styles.css'
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
-  const { currentUser, connect, logout: disconnect } = useFclContext()
-
-  const navProps = {
-    session,
-    currentUser,
-    connect,
-    disconnect,
-    signIn,
-    signOut,
-  }
-
   return (
     <>
       <Head>
@@ -37,9 +24,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
               <GameAccountContext>
                 <UserContext>
                   <RpsGameContext>
-                    <FullScreenLayout nav={<NavBar navProps={navProps} />}>
-                      <Component {...pageProps} />
-                    </FullScreenLayout>
+                    <Component {...pageProps} />
                   </RpsGameContext>
                 </UserContext>
               </GameAccountContext>
