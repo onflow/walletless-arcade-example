@@ -8,17 +8,19 @@ interface Props {
   onClick?: () => void
 }
 
-export default function CustomButton(props: Props) {
+export default function CustomButton({
+  children,
+  textColor = 'white',
+  bgColor = 'blue-600',
+  hoverColor = 'blue-800',
+  onClick,
+}: Props) {
   return (
     <button
-      className={`bg-${props.bgColor || 'bg-white'} hover:bg-${
-        props.hoverColor || 'hover:bg-gray-100'
-      } text-${
-        props.textColor || 'text-gray-800'
-      } rounded border border-gray-400 py-2 px-4 font-semibold shadow`}
-      {...props}
+      className={`rounded border border-gray-400 bg-blue-600 py-2 px-4 font-semibold text-white shadow hover:bg-blue-800`}
+      onClick={onClick}
     >
-      {props.children}
+      {children}
     </button>
   )
 }

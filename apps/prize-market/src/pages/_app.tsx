@@ -1,24 +1,20 @@
 import Head from 'next/head'
-import { FullScreenLayout, NavBar } from 'ui'
 import type { AppProps } from 'next/app'
+import { FclContext } from '../contexts'
 import '../styles/globals.css'
 
-function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
-  const navProps = {
-    session,
-  }
-
+function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
   return (
     <>
       <Head>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="bg-primary-gray-50">
-        <FullScreenLayout nav={<NavBar navProps={navProps} />}>
+      <FclContext>
+        <div className="bg-primary-gray-50">
           <Component {...pageProps} />
-        </FullScreenLayout>
-      </div>
+        </div>
+      </FclContext>
     </>
   )
 }

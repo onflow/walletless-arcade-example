@@ -11,12 +11,12 @@ function NavDropDown({
   signIn,
   signOut,
 }: {
-  session: any
-  currentUser: any | undefined
-  connect: any
-  disconnect: any
-  signIn: any
-  signOut: any
+  session?: any
+  currentUser?: any | undefined
+  connect?: any
+  disconnect?: any
+  signIn?: any
+  signOut?: any
 }) {
   const [isOpen, setIsOpen] = useState(false)
   return (
@@ -101,6 +101,7 @@ interface NavProps {
   signIn?: any
   signOut?: any
 }
+
 export default function Navbar({
   navProps: { session, currentUser, connect, disconnect, signIn, signOut },
 }: {
@@ -158,16 +159,14 @@ export default function Navbar({
             </>
           )}
           <div className="px-4">
-            {!currentUser?.addr && (
-              <ButtonRef
-                onClick={!currentUser?.addr ? connect : disconnect}
-                pill={true}
-                variant={'primary'}
-                size={'small'}
-              >
-                {!currentUser?.addr ? 'Connect' : 'Disconnect'} Wallet
-              </ButtonRef>
-            )}
+            <ButtonRef
+              onClick={!currentUser?.addr ? connect : disconnect}
+              pill={true}
+              variant={'primary'}
+              size={'small'}
+            >
+              {!currentUser?.addr ? 'Connect' : 'Disconnect'} Wallet
+            </ButtonRef>
           </div>
         </ul>
       </div>
