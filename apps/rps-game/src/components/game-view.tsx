@@ -97,7 +97,7 @@ const GameView = () => {
       const isPlayerWinner = playerID === winningGamePlayer
 
       if (isPlayerWinner) {
-        setMessage('You won!')
+        setMessage('You won! You get 10 tickets! 🎟')
       } else if (winningNFTID && !isPlayerWinner) {
         setMessage(
           `You Played ${playerMoveString} and Lost against ${opponentMoveString}!`

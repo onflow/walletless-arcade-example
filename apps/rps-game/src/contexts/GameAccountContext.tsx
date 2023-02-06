@@ -97,8 +97,6 @@ export default function GameAccountContextProvider({ children }: Props) {
     let gameAccountAddress: string | null = null
     let parentAccountAddress: string | null = null
 
-    console.log("LOADING GAME ACCOUNT")
-
     const session = await getSession()
     if (session) {
       gameAccountPublicKey = session.gameAccountPublicKey
@@ -136,16 +134,9 @@ export default function GameAccountContextProvider({ children }: Props) {
 
   useEffect(() => {
     if (gameAccountPrivateKey && gameAccountPublicKey) {
-      console.log("SETTING IS LOADED")
       setIsLoaded(true)  
     }
   }, [gameAccountAddress, gameAccountPrivateKey, gameAccountPublicKey])
-
-  // useEffect(() => {
-  //   if (gameAccountPublicKey) {
-  //     getChildAccountAddressFromGameAdmin(gameAccountPublicKey)  
-  //   }
-  // }, [getChildAccountAddressFromGameAdmin, gameAccountPublicKey])
 
   const value = {
     gameAccountAddress,
