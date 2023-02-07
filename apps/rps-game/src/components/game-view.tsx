@@ -173,12 +173,12 @@ const GameView = () => {
           <span className="text-xl font-extrabold">{message}</span>
         </section>
       )}
-      <div className="mt-3 grid gap-3 pt-3 text-center md:grid-cols-3">
-        <section id="player">
-          <h1 className="text-2xl text-gray-700">PLAYER</h1>
-          <h2 className="text-3xl font-extrabold leading-normal text-gray-700 md:text-[3rem]">
+      <div className="grid gap-3 pt-3 md:grid-cols-3 lg:w-2/3">
+        <section>
+          <div className="text-2xl text-gray-700">PLAYER</div>
+          <div className="text-3xl font-extrabold leading-normal text-gray-700 md:text-[3rem]">
             {winLossRecord?.wins ?? 0}
-          </h2>
+          </div>
           <div>
             {playerMove === 'rock' && (
               <span className="text-9xl font-extrabold">🪨</span>
