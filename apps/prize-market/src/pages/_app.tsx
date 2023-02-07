@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import type { AppProps } from 'next/app'
-import { FclContext } from '../contexts'
+import { FclContext, TicketContext } from '../contexts'
 import '../styles/globals.css'
 
 function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
@@ -11,9 +11,11 @@ function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <FclContext>
-        <div className="bg-primary-gray-50">
-          <Component {...pageProps} />
-        </div>
+        <TicketContext>
+          <div className="bg-primary-gray-50">
+            <Component {...pageProps} />
+          </div>
+        </TicketContext>
       </FclContext>
     </>
   )

@@ -21,20 +21,22 @@ interface Props {
 }
 
 interface ITicketContext {
-  ticketAmount: string | null
+  totalTicketBalance: string | null
+  childTicketVaultAddress: string | null
   getTicketAmount: (
     address: string,
     isParentAccount: boolean
   ) => Promise<string | null>
   mintTickets: (destinationAddress: string, amount: string) => Promise<void>
   purchaseWithTickets: (
-    fundingChildAddress: string,
+    fundingAddress: string,
     minterAddress: string
   ) => Promise<void>
 }
 
 const initialState: ITicketContext = {
-  ticketAmount: null,
+  totalTicketBalance: null,
+  childTicketVaultAddress: null,
   getTicketAmount: function (
     address: string,
     isParentAccount: boolean
@@ -48,7 +50,7 @@ const initialState: ITicketContext = {
     throw new Error(`Function not implemented.`)
   },
   purchaseWithTickets: function (
-    fundingChildAddress: string,
+    fundingAddress: string,
     minterAddress: string
   ): Promise<void> {
     throw new Error(`Function not implemented.`)
@@ -60,18 +62,20 @@ export const TicketContext = createContext<ITicketContext>(initialState)
 export const useTicketContext = () => useContext(TicketContext)
 
 export default function TicketContextProvider({ children }: Props) {
+  const [totalTicketBalance, setTotalTicketBalance] = useState<null | string>(
+    null
+  )
+  const [childTicketVaultAddress, setChildTicketVaultAddress] = useState<
+    null | string
+  >(null)
   const { currentUser, executeScript, executeTransaction } = useFclContext()
-  const [ticketAmount, setTicketAmount] = useState<null | string>(null)
 
   const purchaseWithTickets = useCallback(
-    async (
-      fundingChildAddress: string,
-      minterAddress: string
-    ): Promise<void> => {
+    async (fundingAddress: string, minterAddress: string): Promise<void> => {
       await executeTransaction(
         MINT_RAINBOW_DUCK_PAYING_WITH_CHILD_VAULT,
         (arg: any, t: any) => [
-          arg(fundingChildAddress, t.Address),
+          arg(fundingAddress, t.Address),
           arg(minterAddress, t.Address),
         ],
         {
@@ -109,47 +113,51 @@ export default function TicketContextProvider({ children }: Props) {
     ): Promise<string | null> => {
       if (address) {
         try {
-          let balance: string = await executeScript(
+          const parentBalance: string = await executeScript(
             GET_BALANCE,
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (arg: any, t: any) => [arg(fcl.withPrefix(address), t.Address)]
           )
 
           if (isParentAccount) {
-            const childAccountsTicketBalances: Record<number, string> =
+            const childAccountsBalances: Record<number, string> =
               await executeScript(
                 GET_BALANCE_OF_ALL_CHILD_ACCOUNTS,
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 (arg: any, t: any) => [arg(fcl.withPrefix(address), t.Address)]
               )
 
+            const childTicketVaultAddress =
+              Object.keys(childAccountsBalances)[0] || null
+            setChildTicketVaultAddress(childTicketVaultAddress)
+
             const sumOfChildAccountBalances = (
-              childAccountsTicketBalances: Record<string, string>
+              childAccountsBalances: Record<string, string>
             ) =>
-              Object.values(childAccountsTicketBalances)
+              Object.values(childAccountsBalances)
                 .map(Number)
                 .reduce((a, b) => a + b, 0)
 
-            balance = Number(
-              Number(balance) +
-                Number(sumOfChildAccountBalances(childAccountsTicketBalances))
+            const summedBalance = Number(
+              Number(parentBalance) +
+                Number(sumOfChildAccountBalances(childAccountsBalances))
             ).toFixed(8)
-          }
 
-          setTicketAmount(balance)
-          return balance
+            setTotalTicketBalance(summedBalance)
+          }
         } catch (e) {
           return null
         }
       }
       return null
     },
-    [setTicketAmount, executeScript, currentUser]
+    [setTotalTicketBalance, executeScript]
   )
 
   const value = {
     currentUser,
-    ticketAmount,
+    childTicketVaultAddress,
+    totalTicketBalance,
     getTicketAmount,
     mintTickets,
     purchaseWithTickets,
