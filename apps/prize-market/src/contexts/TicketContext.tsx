@@ -68,6 +68,7 @@ export default function TicketContextProvider({ children }: Props) {
       fundingChildAddress: string,
       minterAddress: string
     ): Promise<void> => {
+      console.log('purchaseWithTickets', fundingChildAddress, minterAddress)
       await executeTransaction(
         MINT_RAINBOW_DUCK_PAYING_WITH_CHILD_VAULT,
         (arg: any, t: any) => [
@@ -129,6 +130,11 @@ export default function TicketContextProvider({ children }: Props) {
               Object.values(childAccountsTicketBalances)
                 .map(Number)
                 .reduce((a, b) => a + b, 0)
+
+            console.log(
+              'childAccountsTicketBalances',
+              childAccountsTicketBalances
+            )
 
             balance = Number(
               Number(balance) +

@@ -1,11 +1,14 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { FullScreenLayout, NavBar, Row, Col, CustomButton } from 'ui'
-import { useFclContext } from '../contexts'
+import { useFclContext, useTicketContext } from '../contexts'
 import { FlippyOnHover } from '../components'
+import { useEffect } from 'react'
 
 const Home: NextPage = () => {
   const { currentUser, connect, logout: disconnect } = useFclContext()
+  const { ticketAmount, purchaseWithTickets, getTicketAmount } =
+    useTicketContext()
 
   const navProps = {
     currentUser,
@@ -13,6 +16,17 @@ const Home: NextPage = () => {
     disconnect,
   }
 
+  useEffect(() => {
+    if (currentUser?.addr) {
+      getTicketAmount(currentUser.addr, true)
+    }
+  }, [ticketAmount, currentUser])
+
+  const buyNFT = async () => {
+    if (currentUser?.addr) {
+      await purchaseWithTickets('0x01cf0e2f2f715450', currentUser.addr)
+    }
+  }
   return (
     <>
       <Head>
@@ -28,7 +42,9 @@ const Home: NextPage = () => {
             </a>
           </h1>
 
-          <p className="mb-4 text-2xl text-blue-600">Ticket Balance: 100</p>
+          <p className="mb-4 text-2xl text-blue-600">
+            Ticket Balance: {ticketAmount ? ticketAmount : 0}
+          </p>
 
           <Row>
             <Col>
@@ -59,7 +75,7 @@ const Home: NextPage = () => {
                 textColor="white"
                 bgColor="blue-600"
                 hoverColor="blue-800"
-                onClick={() => console.log('clicked')}
+                onClick={buyNFT}
               >
                 Buy
               </CustomButton>
