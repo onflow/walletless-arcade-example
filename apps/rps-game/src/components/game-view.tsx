@@ -240,7 +240,7 @@ const GameView = () => {
           <FlashButton onClick={() => handlePlay("y")} disabled={locked}>
             Play!
           </FlashButton>
-        </Row>>
+        </Row>
       )}
 
       {ticketAmount && (
