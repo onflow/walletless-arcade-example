@@ -30,8 +30,6 @@ const GameView = () => {
 
   const { ticketAmount } = useTicketContext()
 
-  const { delay } = useUtils()
-
   console.log('RPS GAME STATE', {
     gameStatus,
     gameMatchID,
@@ -89,7 +87,9 @@ const GameView = () => {
       }
 
       if (winningNFTID === null) {
-        // tie
+        setMessage(
+          `You played ${playerMoveString} and tied ${opponentMoveString}!`
+        )
       }
 
       const isPlayerWinner = playerID === winningGamePlayer
@@ -98,7 +98,7 @@ const GameView = () => {
         setMessage('You won! You get 10 tickets! 🎟')
       } else if (winningNFTID && !isPlayerWinner) {
         setMessage(
-          `You Played ${playerMoveString} and Lost against ${opponentMoveString}!`
+          `You played ${playerMoveString} and lost against ${opponentMoveString}!`
         )
       }
     },
@@ -107,14 +107,13 @@ const GameView = () => {
 
   useEffect(() => {
     if (gameStatus === GameStatus.READY) {
-      // setupNewSinglePlayerMatch()
+      console.log('gameStatus READY', gameStatus)
     }
     if (gameStatus === GameStatus.PLAYING) {
-      console.log('gameStatus', gameStatus)
+      console.log('gameStatus PLAYING', gameStatus)
     }
     if (gameStatus === GameStatus.ENDED) {
       handleEndgame(gameResult)
-      // resetGame()
     }
   }, [
     gameResult,
@@ -134,24 +133,18 @@ const GameView = () => {
     if (command === 'y') {
       await resetGame()
       await setupNewSinglePlayerMatch()
-      toggleDisableButtons()
     }
   }
 
-  const handlePlay = async (command: string) => {
+  const handlePlay = async () => {
     if (gameStatus !== GameStatus.READY) return
 
-    if (command === 'y') {
-      await setupNewSinglePlayerMatch()
-      toggleDisableButtons()
-    }
+    await setupNewSinglePlayerMatch()
   }
 
   const handleMove = async (command: string) => {
-    console.log('handleMove', command)
     if (gameStatus !== GameStatus.PLAYING) return
-    toggleDisableButtons()
-    
+
     if (command === 'r') {
       setPlayerMove('rock')
       await submitBothSinglePlayerMoves(0)
@@ -215,7 +208,7 @@ const GameView = () => {
           </div>
         </section>
       </div>
-      { gameStatus === GameStatus.PLAYING && (
+      {gameStatus === GameStatus.PLAYING && (
         <Row>
           <FlashButton onClick={() => handleMove('r')} disabled={locked}>
             Rock
@@ -228,16 +221,16 @@ const GameView = () => {
           </FlashButton>
         </Row>
       )}
-      { gameStatus === GameStatus.ENDED && (
+      {gameStatus === GameStatus.ENDED && (
         <Row>
-          <FlashButton onClick={() => handlePlayAgain("y")} disabled={locked}>
+          <FlashButton onClick={() => handlePlayAgain('y')} disabled={locked}>
             Play Again!
           </FlashButton>
         </Row>
       )}
-      { gameStatus === GameStatus.READY && (
+      {gameStatus === GameStatus.READY && (
         <Row>
-          <FlashButton onClick={() => handlePlay("y")} disabled={locked}>
+          <FlashButton onClick={() => handlePlay()} disabled={locked}>
             Play!
           </FlashButton>
         </Row>
@@ -245,7 +238,9 @@ const GameView = () => {
 
       {ticketAmount && (
         <div className="flex w-full items-center justify-center space-x-4 pt-6 text-2xl text-blue-500">
-          <span className="text-xl font-extrabold">🎟 Tickets: {ticketAmount}</span>
+          <span className="text-xl font-extrabold">
+            🎟 Tickets: {ticketAmount}
+          </span>
         </div>
       )}
     </>
