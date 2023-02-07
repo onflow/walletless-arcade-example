@@ -16,6 +16,8 @@ import { FLOW } from '../constants'
 import flowJSON from '../../../../flow.json'
 import { loadFCLConfig } from "../utils/fcl-setup"
 
+loadFCLConfig()
+
 interface IFclContext {
   currentUser: fcl.CurrentUserObject | null | undefined
   connect: () => void
