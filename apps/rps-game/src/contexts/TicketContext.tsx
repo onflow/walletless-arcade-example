@@ -8,8 +8,13 @@ import {
 import type { ReactNode } from "react";
 import { useFclContext } from "./FclContext";
 import * as fcl from "@onflow/fcl";
+import MINT_RAINBOW_DUCK_PAYING_WITH_CHILD_VAULT from "../../cadence/transactions/arcade-prize/mint-rainbow-duck-paying-with-child-vault"
 import GET_BALANCE_OF_ALL_CHILD_ACCOUNTS from "../../cadence/scripts/ticket-token/get-balance-of-all-child-accounts"
 import GET_BALANCE from "../../cadence/scripts/ticket-token/get-balance"
+import {
+  userAuthorizationFunction,
+  adminAuthorizationFunction,
+} from '../utils/authz-functions'
 
 interface Props {
   children?: ReactNode;
@@ -18,7 +23,8 @@ interface Props {
 interface ITicketContext {
   ticketAmount: string | null;
   getTicketAmount: (address: string, isParentAccount: boolean) => Promise<string | null>;
-  mintTickets: (destinationAddress: string, amount: string) => Promise<void>
+  mintTickets: (destinationAddress: string, amount: string) => Promise<void>;
+  purchaseWithTickets: (fundingChildAddress: string, minterAddress: string) => Promise<void>;
 }
 
 const initialState: ITicketContext = {
@@ -29,6 +35,9 @@ const initialState: ITicketContext = {
   mintTickets: function (destinationAddress: string, amount: string): Promise<void> {
     throw new Error(`Function not implemented.`);
   },
+  purchaseWithTickets: function (fundingChildAddress: string, minterAddress: string): Promise<void> {
+    throw new Error(`Function not implemented.`);
+  },
 };
 
 export const TicketContext =
@@ -37,10 +46,24 @@ export const TicketContext =
 export const useTicketContext = () => useContext(TicketContext);
 
 export default function TicketContextProvider({ children }: Props) {
-  const { currentUser, executeScript } = useFclContext();
+  const { currentUser, executeScript, executeTransaction } = useFclContext();
   const [ticketAmount, setTicketAmount] = useState<null | string>(
     null
   );
+
+  const purchaseWithTickets = useCallback(async (fundingChildAddress: string, minterAddress: string): Promise<void> => {
+    await executeTransaction(
+      MINT_RAINBOW_DUCK_PAYING_WITH_CHILD_VAULT,
+      (arg: any, t: any) => [arg(fundingChildAddress, t.Address), arg(minterAddress, t.Address)],
+      {
+        limit: 9999,
+        payer: fcl.authz,
+        proposer: fcl.authz,
+        authorizations: [fcl.authz]
+      }
+    );
+  },
+  [])
 
   const mintTickets = useCallback(async (destinationAddress: string, amount: string): Promise<void> => {
     try {
@@ -80,8 +103,6 @@ export default function TicketContextProvider({ children }: Props) {
             ]
           );
 
-          console.log("childAccountsBalance", childAccountsBalance)
-
           balance = Number(Number(balance) + Number(childAccountsBalance)).toFixed(8)
         }
         // }
@@ -96,13 +117,14 @@ export default function TicketContextProvider({ children }: Props) {
   }, [
     setTicketAmount,
     executeScript,
-    currentUser
   ]);
 
   const value = {
+    currentUser,
     ticketAmount,
     getTicketAmount,
-    mintTickets
+    mintTickets,
+    purchaseWithTickets
   };
 
   return (
