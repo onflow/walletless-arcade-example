@@ -7,8 +7,12 @@ import { useEffect } from 'react'
 
 const Home: NextPage = () => {
   const { currentUser, connect, logout: disconnect } = useFclContext()
-  const { ticketAmount, purchaseWithTickets, getTicketAmount } =
-    useTicketContext()
+  const {
+    childTicketVaultAddress,
+    totalTicketBalance,
+    purchaseWithTickets,
+    getTicketAmount,
+  } = useTicketContext()
 
   const navProps = {
     currentUser,
@@ -20,13 +24,19 @@ const Home: NextPage = () => {
     if (currentUser?.addr) {
       getTicketAmount(currentUser.addr, true)
     }
-  }, [ticketAmount, currentUser])
+  }, [totalTicketBalance, currentUser, getTicketAmount])
 
   const buyNFT = async () => {
     if (currentUser?.addr) {
-      await purchaseWithTickets('0x01cf0e2f2f715450', currentUser.addr)
+      const fundingAddress = childTicketVaultAddress || currentUser.addr
+      await purchaseWithTickets(
+        fundingAddress,
+        process.env.NEXT_PUBLIC_ADMIN_ADDRESS || ''
+      )
+      getTicketAmount(currentUser.addr, true)
     }
   }
+
   return (
     <>
       <Head>
@@ -43,7 +53,7 @@ const Home: NextPage = () => {
           </h1>
 
           <p className="mb-4 text-2xl text-blue-600">
-            Ticket Balance: {ticketAmount ? ticketAmount : 0}
+            Ticket Balance: {totalTicketBalance ? totalTicketBalance : 0}
           </p>
 
           <Row>
@@ -53,7 +63,7 @@ const Home: NextPage = () => {
                 textColor="white"
                 bgColor="blue-600"
                 hoverColor="blue-800"
-                onClick={() => console.log('clicked')}
+                onClick={buyNFT}
               >
                 Buy
               </CustomButton>
@@ -64,7 +74,7 @@ const Home: NextPage = () => {
                 textColor="white"
                 bgColor="blue-600"
                 hoverColor="blue-800"
-                onClick={() => console.log('clicked')}
+                onClick={buyNFT}
               >
                 Buy
               </CustomButton>
