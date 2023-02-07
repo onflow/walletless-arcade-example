@@ -91,7 +91,6 @@ const initialState: State = {
   isGameInitializedStateLoading: false,
   setGamePiecePurchased: async function(isGamePiecePurchased: boolean): Promise<void> {
     // throw new Error("Function not implemented.");
-    console.log("here0")
     return undefined
   },
   setupNewSinglePlayerMatch: async function (): Promise<void> {
@@ -259,8 +258,6 @@ export default function RpsGameContextProvider({ children }: Props) {
   }, [])
 
   const checkGameClientInitialized = useCallback(async () => {
-
-    console.log("checkGameClientInitialized", isLoaded, gameAccountAddress, gameAccountPublicKey)
     if (!isLoaded) return;
 
     if (!isGameInitialized && !gameAccountAddress && gameAccountPublicKey) {
@@ -293,7 +290,6 @@ export default function RpsGameContextProvider({ children }: Props) {
         isGameInitialized: true,
       });
     } else if (!isGameInitialized && gameAccountAddress) {
-      console.log("Restoring game with game account: ", gameAccountAddress)
       dispatch({
         type: "SET_IS_GAME_INITIALIZED",
         isGameInitialized: true,
@@ -303,7 +299,6 @@ export default function RpsGameContextProvider({ children }: Props) {
   }, [currentUser?.addr, isGameInitialized, gameAccountAddress, gameAccountPublicKey, isLoaded]);
 
   const getGamePieceNFTID = useCallback(async () => {
-    console.log("getGamePieceNFTID", isGameInitialized, gameAccountAddress)
     if (isGameInitialized && gameAccountAddress) {
       const playerAddress = gameAccountAddress;
 
@@ -311,8 +306,6 @@ export default function RpsGameContextProvider({ children }: Props) {
         GET_COLLECTION_IDS,
         (arg: any, t: any) => [arg(playerAddress, t.Address)]
       );
-
-      console.log("getGamePieceNFTID res", res)
 
       if (!Array.isArray(res) || res.length <= 0) return
 
@@ -342,7 +335,6 @@ export default function RpsGameContextProvider({ children }: Props) {
   }, [isGameInitialized, gameAccountAddress]);
 
   const setupNewSinglePlayerMatch = useCallback(async () => {
-    console.log("setupNewSinglePlayerMatch", gamePieceNFTID, gameAccountPrivateKey, gameAccountAddress)
     if (gamePieceNFTID && gameAccountPrivateKey && gameAccountAddress) {
       const submittingNFTID = gamePieceNFTID;
       const matchTimeLimitInMinutes = 5;
@@ -381,7 +373,6 @@ export default function RpsGameContextProvider({ children }: Props) {
 
   const submitBothSinglePlayerMoves = useCallback(
     async (_move: number) => {
-      console.log("submitBothSinglePlayerMoves", gamePieceNFTID, gameMatchID, gameAccountPrivateKey, gameAccountAddress)
       if (gamePieceNFTID && gameMatchID && gameAccountPrivateKey && gameAccountAddress) {
         const matchID = gameMatchID;
         const move = _move; // 0 = rock, 1 = paper, 2 = scissors
@@ -403,7 +394,6 @@ export default function RpsGameContextProvider({ children }: Props) {
 
   const resolveMatchAndReturnNFTS = useCallback(
     async () => {
-      console.log("resolveMatchAndReturnNFTS", gameMatchID, gameAccountPrivateKey, gameAccountAddress)
       if (gameMatchID && gameAccountPrivateKey && gameAccountAddress) {
         const matchID = gameMatchID
 
@@ -471,7 +461,6 @@ export default function RpsGameContextProvider({ children }: Props) {
 
   const getWinLossRecord = useCallback(
     async () => {
-      console.log("Calling getWinLossRecord", isGameInitialized, gameAccountAddress, gamePieceNFTID)
       if (isGameInitialized && gameAccountAddress && gamePieceNFTID) {
         const playerAddress = gameAccountAddress;
         const nftID = gamePieceNFTID
@@ -480,8 +469,6 @@ export default function RpsGameContextProvider({ children }: Props) {
           GET_RPS_WIN_LOSS,
           (arg: any, t: any) => [arg(playerAddress, t.Address), arg(nftID, t.UInt64)]
         );
-
-        console.log("Get win loss: ", res)
   
         dispatch({
           type: "SET_WIN_LOSS_RECORD",
@@ -565,10 +552,7 @@ export default function RpsGameContextProvider({ children }: Props) {
         checkGameClientInitialized();
         return;
       case GameStatus.INITIALIZED:
-        console.log("Running initialization")
-        // const key = gameAccountPublicKey ?? "";
         getWinLossRecord();
-        // getChildAccountAddressFromGameAdmin(key);
         getGamePieceNFTID();
         getGamePlayerID();
         return;
