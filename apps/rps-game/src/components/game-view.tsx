@@ -95,29 +95,26 @@ const GameView = () => {
       const isPlayerWinner = playerID === winningGamePlayer
 
       if (isPlayerWinner) {
-        setMessage('You won!')
+        setMessage('You won! You get 10 tickets! 🎟')
       } else if (winningNFTID && !isPlayerWinner) {
         setMessage(
           `You Played ${playerMoveString} and Lost against ${opponentMoveString}!`
         )
       }
-      delay(3000).then(() => {
-        setMessage(`Shall we play again?`)
-      })
     },
-    [delay, gamePieceNFTID, gamePlayerID]
+    [gamePieceNFTID, gamePlayerID]
   )
 
   useEffect(() => {
     if (gameStatus === GameStatus.READY) {
-      setupNewSinglePlayerMatch()
+      // setupNewSinglePlayerMatch()
     }
     if (gameStatus === GameStatus.PLAYING) {
       console.log('gameStatus', gameStatus)
     }
     if (gameStatus === GameStatus.ENDED) {
       handleEndgame(gameResult)
-      resetGame()
+      // resetGame()
     }
   }, [
     gameResult,
@@ -131,12 +128,21 @@ const GameView = () => {
     setLocked(locked => !locked)
   }
 
-  const handleResetAnswer = async (command: string) => {
+  const handlePlayAgain = async (command: string) => {
     if (gameStatus !== GameStatus.ENDED) return
 
     if (command === 'y') {
       await resetGame()
+      await setupNewSinglePlayerMatch()
+      toggleDisableButtons()
+    }
+  }
 
+  const handlePlay = async (command: string) => {
+    if (gameStatus !== GameStatus.READY) return
+
+    if (command === 'y') {
+      await setupNewSinglePlayerMatch()
       toggleDisableButtons()
     }
   }
@@ -145,7 +151,7 @@ const GameView = () => {
     console.log('handleMove', command)
     if (gameStatus !== GameStatus.PLAYING) return
     toggleDisableButtons()
-
+    
     if (command === 'r') {
       setPlayerMove('rock')
       await submitBothSinglePlayerMoves(0)
@@ -209,23 +215,37 @@ const GameView = () => {
           </div>
         </section>
       </div>
-      <Row>
-        <FlashButton onClick={() => handleMove('r')} disabled={locked}>
-          Rock
-        </FlashButton>
-        <FlashButton onClick={() => handleMove('p')} disabled={locked}>
-          Paper
-        </FlashButton>
-        <FlashButton onClick={() => handleMove('s')} disabled={locked}>
-          Scissors
-        </FlashButton>
-      </Row>
+      { gameStatus === GameStatus.PLAYING && (
+        <Row>
+          <FlashButton onClick={() => handleMove('r')} disabled={locked}>
+            Rock
+          </FlashButton>
+          <FlashButton onClick={() => handleMove('p')} disabled={locked}>
+            Paper
+          </FlashButton>
+          <FlashButton onClick={() => handleMove('s')} disabled={locked}>
+            Scissors
+          </FlashButton>
+        </Row>
+      )}
+      { gameStatus === GameStatus.ENDED && (
+        <Row>
+          <FlashButton onClick={() => handlePlayAgain("y")} disabled={locked}>
+            Play Again!
+          </FlashButton>
+        </Row>
+      )}
+      { gameStatus === GameStatus.READY && (
+        <Row>
+          <FlashButton onClick={() => handlePlay("y")} disabled={locked}>
+            Play!
+          </FlashButton>
+        </Row>
+      )}
 
       {ticketAmount && (
         <div className="flex w-full items-center justify-center space-x-4 pt-6 text-2xl text-blue-500">
-          <span className="text-xl font-extrabold">
-            Tickets: {ticketAmount}
-          </span>
+          <span className="text-xl font-extrabold">🎟 Tickets: {ticketAmount}</span>
         </div>
       )}
     </>
