@@ -1,18 +1,27 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { Button } from '../components/button-v2'
+import { FullScreenLayout, NavBar, CustomButton } from 'ui'
 import { useSession, signIn, signOut } from 'next-auth/react'
-import { useRpsGameContext, useTicketContext } from '../contexts'
+import { useFclContext, useRpsGameContext, useTicketContext } from '../contexts'
 import purchaseNft from '../utils/purchase-nft'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
-import GameView from '../components/game-view'
+import { GameView } from '../components'
 
 const Home: NextPage = () => {
+  const { currentUser, connect, logout: disconnect } = useFclContext()
   const { data: session, status } = useSession()
   const router = useRouter()
 
-  console.log('router.query', router.query)
+  const navProps = {
+    session,
+    currentUser,
+    connect,
+    disconnect,
+    signIn,
+    signOut,
+  }
+
   const { purchase_success } = router.query
 
   const {
@@ -34,9 +43,7 @@ const Home: NextPage = () => {
     },
   } = useRpsGameContext()
 
-  const {
-    ticketAmount,
-  } = useTicketContext()
+  const { ticketAmount } = useTicketContext()
 
   console.log('isGamePiecePurchased', isGamePiecePurchased)
 
@@ -58,42 +65,41 @@ const Home: NextPage = () => {
     )
   }
   return (
-    <div className="flex flex-grow flex-col items-center justify-center py-2">
+    <>
       <Head>
         <title>Flow Game Arcade</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <main className="flex w-full flex-1 flex-col items-center justify-center px-20 text-center">
-        {!session && (
-          <h1 className="text-6xl font-bold">
-            Welcome to{' '}
-            <a className="text-blue-600" href="https://nextjs.org">
-              Flow Game Arcade!
-            </a>
-          </h1>
-        )}
-        <p className="mt-3 text-2xl">
+      <FullScreenLayout nav={<NavBar navProps={navProps} />} theme="blue">
+        <main className="flex w-full flex-col items-center justify-center text-center">
           {!session && (
-            <div className="mt-3">
-              <Button onClick={signIn}>Sign in</Button>
-            </div>
+            <h1 className="text-6xl font-bold">
+              Welcome to{' '}
+              <a className="text-blue-600" href="https://nextjs.org">
+                Flow Game Arcade!
+              </a>
+            </h1>
           )}
+          <div className="mt-3 text-2xl">
+            {!session && (
+              <div className="mt-3">
+                <CustomButton onClick={signIn}>Sign in</CustomButton>
+              </div>
+            )}
 
-          {session && !isGamePiecePurchased && (
-            <div className="mt-3">
-              <Button onClick={() => purchaseNft()}>Purchase Game Piece</Button>
-            </div>
-          )}
+            {session && !isGamePiecePurchased && (
+              <div className="mt-3">
+                <CustomButton onClick={() => purchaseNft()}>
+                  Purchase Game Piece
+                </CustomButton>
+              </div>
+            )}
 
-          {session && isGamePiecePurchased && (
-            <div className="mt-3">
-              <GameView />
-            </div>
-          )}
-        </p>
-      </main>
-    </div>
+            {session && isGamePiecePurchased && <GameView />}
+          </div>
+        </main>
+      </FullScreenLayout>
+    </>
   )
 }
 

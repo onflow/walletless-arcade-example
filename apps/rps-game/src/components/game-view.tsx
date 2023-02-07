@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
+import { FlashButton, Row } from 'ui'
 import { useRpsGameContext, GameStatus, useTicketContext } from '../contexts'
 import useUtils from '../utils'
-import { Button } from './button-v3'
 
 type PlayerMove = 'rock' | 'paper' | 'scissors' | undefined
 
@@ -9,7 +9,7 @@ const GameView = () => {
   const [locked, setLocked] = useState(false)
   const [playerMove, setPlayerMove] = useState<PlayerMove>(undefined)
   const [opponentMove, setOpponentMove] = useState<PlayerMove>(undefined)
-  const [message, setMessage] = useState<string>("")
+  const [message, setMessage] = useState<string>('')
 
   const {
     state: {
@@ -28,9 +28,7 @@ const GameView = () => {
     },
   } = useRpsGameContext()
 
-  const {
-    ticketAmount,
-  } = useTicketContext()
+  const { ticketAmount } = useTicketContext()
 
   const { delay } = useUtils()
 
@@ -118,7 +116,13 @@ const GameView = () => {
       handleEndgame(gameResult)
       // resetGame()
     }
-  }, [gameResult, gameStatus, handleEndgame, setupNewSinglePlayerMatch, resetGame])
+  }, [
+    gameResult,
+    gameStatus,
+    handleEndgame,
+    setupNewSinglePlayerMatch,
+    resetGame,
+  ])
 
   const toggleDisableButtons = () => {
     setLocked(locked => !locked)
@@ -144,6 +148,7 @@ const GameView = () => {
   }
 
   const handleMove = async (command: string) => {
+    console.log('handleMove', command)
     if (gameStatus !== GameStatus.PLAYING) return
     toggleDisableButtons()
     
@@ -163,7 +168,7 @@ const GameView = () => {
 
   return (
     <>
-      { message && (
+      {message && (
         <section className="flex w-full items-center justify-center space-x-4 pt-6 text-2xl text-blue-500">
           <span className="text-xl font-extrabold">{message}</span>
         </section>
@@ -186,17 +191,17 @@ const GameView = () => {
             )}
           </div>
         </section>
-        <section id="middle">
-          <h1 className="text-2xl text-gray-700">TIES</h1>
-          <h2 className="text-3xl font-extrabold leading-normal text-gray-700 md:text-[3rem]">
+        <section>
+          <div className="text-2xl text-gray-700">TIES</div>
+          <div className="text-3xl font-extrabold leading-normal text-gray-700 md:text-[3rem]">
             {winLossRecord?.ties ?? 0}
-          </h2>
+          </div>
         </section>
-        <section id="opponent">
-          <h1 className="text-2xl text-gray-700">OPPONENT</h1>
-          <h2 className="text-3xl font-extrabold leading-normal text-gray-700 md:text-[3rem]">
+        <section>
+          <div className="text-2xl text-gray-700">OPPONENT</div>
+          <div className="text-3xl font-extrabold leading-normal text-gray-700 md:text-[3rem]">
             {winLossRecord?.losses ?? 0}
-          </h2>
+          </div>
           <div>
             {opponentMove === 'rock' && (
               <span className="text-9xl font-extrabold">🪨</span>
@@ -211,34 +216,34 @@ const GameView = () => {
         </section>
       </div>
       { gameStatus === GameStatus.PLAYING && (
-        <div className="flex w-full items-center justify-center space-x-4 pt-6 text-2xl text-blue-500">
-          <Button onClick={() => handleMove('r')} disabled={locked}>
+        <Row>
+          <FlashButton onClick={() => handleMove('r')} disabled={locked}>
             Rock
-          </Button>
-          <Button onClick={() => handleMove('p')} disabled={locked}>
+          </FlashButton>
+          <FlashButton onClick={() => handleMove('p')} disabled={locked}>
             Paper
-          </Button>
-          <Button onClick={() => handleMove('s')} disabled={locked}>
+          </FlashButton>
+          <FlashButton onClick={() => handleMove('s')} disabled={locked}>
             Scissors
-          </Button>
-        </div>
+          </FlashButton>
+        </Row>
       )}
       { gameStatus === GameStatus.ENDED && (
-        <div className="flex w-full items-center justify-center space-x-4 pt-6 text-2xl text-blue-500">
-          <Button onClick={() => handlePlayAgain("y")} disabled={locked}>
+        <Row>
+          <FlashButton onClick={() => handlePlayAgain("y")} disabled={locked}>
             Play Again!
-          </Button>
-        </div>
+          </FlashButton>
+        </Row>
       )}
       { gameStatus === GameStatus.READY && (
-        <div className="flex w-full items-center justify-center space-x-4 pt-6 text-2xl text-blue-500">
-          <Button onClick={() => handlePlay("y")} disabled={locked}>
+        <Row>
+          <FlashButton onClick={() => handlePlay("y")} disabled={locked}>
             Play!
-          </Button>
-        </div>
+          </FlashButton>
+        </Row>>
       )}
 
-      { ticketAmount && (
+      {ticketAmount && (
         <div className="flex w-full items-center justify-center space-x-4 pt-6 text-2xl text-blue-500">
           <span className="text-xl font-extrabold">🎟 Tickets: {ticketAmount}</span>
         </div>
@@ -248,4 +253,3 @@ const GameView = () => {
 }
 
 export default GameView
- 

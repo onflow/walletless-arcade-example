@@ -1,8 +1,11 @@
-const { join } = require('path')
+/* eslint-disable @typescript-eslint/no-var-requires */
 const defaultTheme = require('tailwindcss/defaultTheme')
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [join(__dirname, '**/!(*.stories|*.spec).{ts,tsx,html}')],
+  content: [
+    'src/**/*.{js,ts,jsx,tsx}',
+    '../../packages/ui/**/*.{js,ts,jsx,tsx}',
+  ],
   theme: {
     fontSize: {
       '2xs': ['0.625rem', { lineHeight: '1rem' }],
