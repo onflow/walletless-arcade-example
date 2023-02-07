@@ -13,6 +13,12 @@ const Home: NextPage = () => {
     disconnect,
   }
 
+  console.log(
+    process.env.NEXT_PUBLIC_FLOW_NETWORK,
+    process.env.NEXT_PUBLIC_APP_NAME,
+    process.env.VERCEL_URL
+  )
+
   return (
     <>
       <Head>

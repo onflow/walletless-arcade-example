@@ -49,5 +49,7 @@ packages/database/.env.local
 # typescript
 *.tsbuildinfo
 
-#misc
+#flow
 flowdb
+testnet.private.json
+emulator.private.json
