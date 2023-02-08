@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { FlashButton, Row } from 'ui'
+import { FlashButton, Row, Modal } from 'ui'
 import { useRpsGameContext, GameStatus, useTicketContext } from '../contexts'
 
 type PlayerMove = 'rock' | 'paper' | 'scissors' | undefined
@@ -162,6 +162,7 @@ const GameView = () => {
 
   return (
     <div className="flex w-full flex-wrap">
+      <Modal />
       <div className="w-full">
         <div className="flex w-full items-center justify-center space-x-4 pt-6 text-2xl text-blue-500">
           <span> Wins: {winLossRecord?.wins ?? 0}</span>

@@ -45,6 +45,7 @@
   },
   "packageManager": "npm@8.15.0",
   "dependencies": {
+    "@headlessui/react": "^1.7.10",
     "@onflow/six-create-account": "^0.0.9"
   }
 }
