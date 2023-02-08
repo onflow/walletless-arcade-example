@@ -116,7 +116,7 @@ export default function Navbar({
       >
         <FlowLogo className="mr-4" />
         <header>
-          <b>flow</b> games demo
+          <b>Flow</b>Arcade
         </header>
       </a>
       <Hamburger onClick={() => setMenuOpen(true)} />

@@ -17,7 +17,7 @@ export default function CustomButton({
 }: Props) {
   return (
     <button
-      className={`rounded border border-gray-400 bg-blue-600 py-2 px-4 font-semibold text-white shadow hover:bg-blue-800`}
+      className={`rounded border border-gray-400 ${bgColor} py-2 px-4 font-semibold text-white shadow hover:bg-blue-800`}
       onClick={onClick}
     >
       {children}

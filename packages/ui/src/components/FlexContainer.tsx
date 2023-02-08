@@ -3,26 +3,16 @@ import type { ReactNode } from 'react'
 
 type FlexContainerProps = {
   children?: ReactNode
+  className?: string
   height?: number
   direction?: 'row' | 'col'
   justify?: 'start' | 'center' | 'end' | 'between' | 'around' | 'evenly'
   align?: 'start' | 'center' | 'end' | 'stretch' | 'baseline'
 }
 
-export default function FlexContainer({
+export default function FlexWrapper({
   children,
-  height = 24,
-  direction = 'row',
-  justify = 'evenly',
-  align = 'center',
+  className,
 }: FlexContainerProps) {
-  return (
-    <div className={styles.container}>
-      <div
-        className={`flex h-${height} flex-${direction} justify-${justify} align-${align}`}
-      >
-        {children}
-      </div>
-    </div>
-  )
+  return <div className={`flex ${className}`}>{children}</div>
 }
