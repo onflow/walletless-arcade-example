@@ -7,6 +7,9 @@ import purchaseNft from '../utils/purchase-nft'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { GameView } from '../components'
+import { FlexContainer } from 'ui'
+import MonsterLogo from '../../public/static/monster-logo.png'
+import Image from 'next/image'
 
 const Home: NextPage = () => {
   const { currentUser, connect, logout: disconnect } = useFclContext()
@@ -67,25 +70,50 @@ const Home: NextPage = () => {
       </Head>
       <FullScreenLayout nav={<NavBar navProps={navProps} />} theme="blue">
         {!session && (
-          <div className="flex w-full">
+          <FlexContainer className="w-full items-center justify-center">
             <div className="w-full">
-              <h1 className="text-center text-5xl font-bold text-blue-600">
-                Welcome to Flow Game Arcade!
+              <div className="align-center my-10 flex justify-center md:container md:mx-auto lg:my-14">
+                <Image src={MonsterLogo} alt="Monster Logo" />
+              </div>
+              <h1 className="text-primary-green text-center text-5xl font-bold">
+                Welcome to Monster Arcade!
               </h1>
               <div className="my-10 md:container md:mx-auto lg:my-14">
+                <h2 className="text-center text-3xl font-bold text-green-400">
+                  You’ll need to login or sign up to join in the fun.
+                </h2>
+              </div>
+              <div className="my-10 md:container md:mx-auto lg:my-14">
                 <Row>
-                  <CustomButton onClick={signIn}>Sign in</CustomButton>
+                  <CustomButton onClick={signIn} bgColor="bg-green-600">
+                    Sign in
+                  </CustomButton>
                 </Row>
               </div>
             </div>
-          </div>
+          </FlexContainer>
         )}
         {session && !isGamePiecePurchased && (
-          <div className="mt-3">
-            <CustomButton onClick={() => purchaseNft()}>
-              Purchase Game Piece
-            </CustomButton>
-          </div>
+          <FlexContainer className="w-full items-center justify-center">
+            <div className="w-full">
+              <h1 className="text-primary-green text-center text-4xl font-bold">
+                You need some monsters to start playing in the arcade.
+              </h1>
+              <h2 className="text-center text-3xl font-bold text-green-400">
+                Let’s go shopping for some monsters!
+              </h2>
+              <div className="my-10 md:container md:mx-auto lg:my-14">
+                <Row>
+                  <CustomButton
+                    onClick={() => purchaseNft()}
+                    bgColor="bg-green-600"
+                  >
+                    Buy Now
+                  </CustomButton>
+                </Row>
+              </div>
+            </div>
+          </FlexContainer>
         )}
 
         {session && isGamePiecePurchased && <GameView />}
