@@ -9,6 +9,7 @@ import type { ReactNode } from 'react'
 import { useFclContext } from './FclContext'
 import * as fcl from '@onflow/fcl'
 import MINT_RAINBOW_DUCK_PAYING_WITH_CHILD_VAULT from '../../cadence/transactions/arcade-prize/mint-rainbow-duck-paying-with-child-vault'
+import GET_ALL_NFT_DISPLAY_VIEWS from '../../cadence/scripts/arcade-prize/get-all-nft-display-views'
 import GET_BALANCE_OF_ALL_CHILD_ACCOUNTS from '../../cadence/scripts/ticket-token/get-balance-of-all-child-accounts'
 import GET_BALANCE from '../../cadence/scripts/ticket-token/get-balance'
 import {
@@ -23,6 +24,10 @@ interface Props {
 interface ITicketContext {
   totalTicketBalance: string | null
   childTicketVaultAddress: string | null
+  ownedPrizes: null | any[]
+  getOwnedPrizes: (
+    address: string
+  ) => Promise<void>
   getTicketAmount: (
     address: string,
     isParentAccount: boolean
@@ -37,6 +42,12 @@ interface ITicketContext {
 const initialState: ITicketContext = {
   totalTicketBalance: null,
   childTicketVaultAddress: null,
+  ownedPrizes: null,
+  getOwnedPrizes: function (
+    address: string,
+  ): Promise<void> {
+    throw new Error(`Function not implemented.`)
+  },
   getTicketAmount: function (
     address: string,
     isParentAccount: boolean
@@ -65,6 +76,7 @@ export default function TicketContextProvider({ children }: Props) {
   const [totalTicketBalance, setTotalTicketBalance] = useState<null | string>(
     null
   )
+  const [ownedPrizes, setOwnedPrizes] = useState<null | any[]> (null)
   const [childTicketVaultAddress, setChildTicketVaultAddress] = useState<
     null | string
   >(null)
@@ -75,8 +87,8 @@ export default function TicketContextProvider({ children }: Props) {
       await executeTransaction(
         MINT_RAINBOW_DUCK_PAYING_WITH_CHILD_VAULT,
         (arg: any, t: any) => [
-          arg(fundingAddress, t.Address),
-          arg(minterAddress, t.Address),
+          arg(fcl.withPrefix(fundingAddress), t.Address),
+          arg(fcl.withPrefix(minterAddress), t.Address),
         ],
         {
           limit: 9999,
@@ -87,6 +99,22 @@ export default function TicketContextProvider({ children }: Props) {
       )
     },
     []
+  )
+
+  const getOwnedPrizes = useCallback(
+    async (address: string): Promise<void> => {
+      try {
+        const _ownedPrizes: any[] = await executeScript(
+          GET_ALL_NFT_DISPLAY_VIEWS,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (arg: any, t: any) => [arg(fcl.withPrefix(address), t.Address)]
+        )
+        setOwnedPrizes(_ownedPrizes)
+      } catch(e) {
+        return 
+      }
+    },
+    [executeScript, setOwnedPrizes]
   )
 
   const mintTickets = useCallback(
@@ -158,7 +186,9 @@ export default function TicketContextProvider({ children }: Props) {
     currentUser,
     childTicketVaultAddress,
     totalTicketBalance,
+    ownedPrizes,
     getTicketAmount,
+    getOwnedPrizes,
     mintTickets,
     purchaseWithTickets,
   }
