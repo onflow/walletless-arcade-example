@@ -171,7 +171,7 @@ export default function TicketContextProvider({ children }: Props) {
                 Number(sumOfChildAccountBalances(childAccountsBalances))
             ).toFixed(0)
 
-            setTotalTicketBalance(summedBalance)
+            setTotalTicketBalance(Number(summedBalance).toFixed(0))
           }
         } catch (e) {
           return null
