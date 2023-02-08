@@ -86,7 +86,7 @@ const Home: NextPage = () => {
               <div className="my-10 md:container md:mx-auto lg:my-14">
                 <Row>
                   <CustomButton onClick={signIn} bgColor="bg-green-600">
-                    Sign in
+                    Login / Sign Up
                   </CustomButton>
                 </Row>
               </div>
