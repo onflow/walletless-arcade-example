@@ -133,10 +133,10 @@ export default function TicketContextProvider({ children }: Props) {
             balance = Number(
               Number(balance) +
                 Number(sumOfChildAccountBalances(childAccountsTicketBalances))
-            ).toFixed(8)
+            ).toFixed(0)
           }
 
-          setTicketAmount(balance)
+          setTicketAmount(Number(balance).toFixed(0))
           return balance
         } catch (e) {
           return null
