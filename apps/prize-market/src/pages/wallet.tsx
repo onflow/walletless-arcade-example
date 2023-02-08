@@ -1,6 +1,5 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import MonsterLogo from '../../public/static/market-logo.png'
 import Image from 'next/image'
 import {
   FullScreenLayout,
@@ -13,17 +12,12 @@ import {
 import { useFclContext, useTicketContext } from '../contexts'
 import { useEffect } from 'react'
 import { FlippyOnHover } from '../components'
+import MonsterLogo from '../../public/static/market-logo.png'
 
-const Home: NextPage = () => {
+const Wallet: NextPage = () => {
   const { currentUser, connect, logout: disconnect } = useFclContext()
-  const {
-    ownedPrizes,
-    getOwnedPrizes,
-    childTicketVaultAddress,
-    totalTicketBalance,
-    purchaseWithTickets,
-    getTicketAmount,
-  } = useTicketContext()
+  const { ownedPrizes, getOwnedPrizes, totalTicketBalance, getTicketAmount } =
+    useTicketContext()
 
   const navProps = {
     currentUser,
@@ -37,17 +31,6 @@ const Home: NextPage = () => {
       getOwnedPrizes(currentUser.addr)
     }
   }, [totalTicketBalance, currentUser, getTicketAmount, getOwnedPrizes])
-
-  const buyNFT = async () => {
-    if (currentUser?.addr) {
-      const fundingAddress = childTicketVaultAddress || currentUser.addr
-      await purchaseWithTickets(
-        fundingAddress,
-        process.env.NEXT_PUBLIC_ADMIN_ADDRESS || ''
-      )
-      getTicketAmount(currentUser.addr, true)
-    }
-  }
 
   return (
     <>
@@ -82,48 +65,24 @@ const Home: NextPage = () => {
           </FlexContainer>
         )}
         {currentUser?.addr && (
-          <div className="flex w-full flex-wrap">
-            <div className="w-full">
-              <div className="flex w-full items-center justify-center space-x-4 pt-6 text-2xl text-blue-500">
-                <span className="pt-6 text-4xl font-extrabold">
-                  🎟 Ticket Balance: {totalTicketBalance || 0}
-                </span>
-              </div>
-            </div>
-            <div className="w-full">
+          <div className="flex h-24 w-full flex-wrap">
+            <div className="w-full w-1/2">
               <Row>
                 <Col>
-                  <FlippyOnHover flipDirection="horizontal" />
-                  <CustomButton
-                    textColor="white"
-                    bgColor="bg-blue-600"
-                    hoverColor="blue-800"
-                    onClick={buyNFT}
-                  >
-                    Buy
-                  </CustomButton>
-                </Col>
-                <Col>
-                  <FlippyOnHover flipDirection="horizontal" />
-                  <CustomButton
-                    textColor="white"
-                    bgColor="bg-blue-600"
-                    hoverColor="blue-800"
-                    onClick={buyNFT}
-                  >
-                    Buy
-                  </CustomButton>
-                </Col>
-                <Col>
-                  <FlippyOnHover flipDirection="horizontal" />
-                  <CustomButton
-                    textColor="white"
-                    bgColor="bg-blue-600"
-                    hoverColor="blue-800"
-                    onClick={buyNFT}
-                  >
-                    Buy
-                  </CustomButton>
+                  <div className="mb-4 text-2xl text-blue-600">Owned NFTs:</div>
+                  {ownedPrizes ? (
+                    <Row>
+                      {ownedPrizes.map(prize => (
+                        <Col>
+                          <FlippyOnHover flipDirection="horizontal" />
+                        </Col>
+                      ))}
+                    </Row>
+                  ) : (
+                    <p className="mb-4 text-2xl text-blue-600">
+                      No owned prizes
+                    </p>
+                  )}
                 </Col>
               </Row>
             </div>
@@ -134,4 +93,4 @@ const Home: NextPage = () => {
   )
 }
 
-export default Home
+export default Wallet
