@@ -130,6 +130,8 @@ const GameView = () => {
     if (gameStatus !== GameStatus.ENDED) return
 
     if (command === 'y') {
+      setPlayerMove(undefined)
+      setOpponentMove(undefined)
       await resetGame()
       await setupNewSinglePlayerMatch()
     }
@@ -186,6 +188,9 @@ const GameView = () => {
             {playerMove === 'scissors' && (
               <span className="text-9xl font-extrabold">✂️</span>
             )}
+            {!playerMove && gameStatus === GameStatus.PLAYING && (
+              <span className="text-9xl font-extrabold">❓</span>
+            )}
           </div>
         </div>
         <div className="w-full w-1/2">
@@ -198,6 +203,9 @@ const GameView = () => {
             )}
             {opponentMove === 'scissors' && (
               <span className="text-9xl font-extrabold">✂️</span>
+            )}
+            {!playerMove && gameStatus === GameStatus.PLAYING && (
+              <span className="text-9xl font-extrabold">❓</span>
             )}
           </div>
         </div>
