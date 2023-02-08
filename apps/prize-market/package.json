@@ -13,6 +13,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.10",
     "@onflow/fcl": "^1.3.3-alpha.0",
     "next": "^13.1.5",
     "react": "18.2.0",
