@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { FlashButton, Row } from 'ui'
 import { useRpsGameContext, GameStatus, useTicketContext } from '../contexts'
-import useUtils from '../utils'
 
 type PlayerMove = 'rock' | 'paper' | 'scissors' | undefined
 
@@ -160,19 +159,24 @@ const GameView = () => {
   }
 
   return (
-    <>
-      {message && (
-        <section className="flex w-full items-center justify-center space-x-4 pt-6 text-2xl text-blue-500">
-          <span className="text-xl font-extrabold">{message}</span>
-        </section>
-      )}
-      <div className="grid gap-3 pt-3 md:grid-cols-3 lg:w-2/3">
-        <section>
-          <div className="text-2xl text-gray-700">PLAYER</div>
-          <div className="text-3xl font-extrabold leading-normal text-gray-700 md:text-[3rem]">
-            {winLossRecord?.wins ?? 0}
+    <div className="flex w-full flex-wrap">
+      <div className="w-full">
+        <div className="flex w-full items-center justify-center space-x-4 pt-6 text-2xl text-blue-500">
+          <span> Wins: {winLossRecord?.wins ?? 0}</span>
+          <span> Losses: {winLossRecord?.losses ?? 0}</span>
+          <span> Ties: {winLossRecord?.ties ?? 0}</span>
+        </div>
+        {ticketAmount && (
+          <div className="flex w-full items-center justify-center space-x-4 pt-6 text-2xl text-blue-500">
+            <span className="text-xl font-extrabold">
+              🎟 Tickets: {ticketAmount}
+            </span>
           </div>
-          <div>
+        )}
+      </div>
+      <div className="flex h-24 w-full flex-wrap">
+        <div className="w-full w-1/2">
+          <div className="text-grey-dark flex justify-center">
             {playerMove === 'rock' && (
               <span className="text-9xl font-extrabold">🪨</span>
             )}
@@ -183,19 +187,9 @@ const GameView = () => {
               <span className="text-9xl font-extrabold">✂️</span>
             )}
           </div>
-        </section>
-        <section>
-          <div className="text-2xl text-gray-700">TIES</div>
-          <div className="text-3xl font-extrabold leading-normal text-gray-700 md:text-[3rem]">
-            {winLossRecord?.ties ?? 0}
-          </div>
-        </section>
-        <section>
-          <div className="text-2xl text-gray-700">OPPONENT</div>
-          <div className="text-3xl font-extrabold leading-normal text-gray-700 md:text-[3rem]">
-            {winLossRecord?.losses ?? 0}
-          </div>
-          <div>
+        </div>
+        <div className="w-full w-1/2">
+          <div className="text-grey-dark flex justify-center">
             {opponentMove === 'rock' && (
               <span className="text-9xl font-extrabold">🪨</span>
             )}
@@ -206,8 +200,22 @@ const GameView = () => {
               <span className="text-9xl font-extrabold">✂️</span>
             )}
           </div>
-        </section>
+        </div>
       </div>
+
+      <div className="flex h-10 w-full flex-wrap">
+        {gameStatus !== 'READY' && (
+          <>
+            <div className="w-full w-1/2">
+              <div className="flex justify-center text-blue-500">Player</div>
+            </div>
+            <div className="w-full w-1/2">
+              <div className="flex justify-center text-red-500">Opponent</div>
+            </div>
+          </>
+        )}
+      </div>
+
       {gameStatus === GameStatus.PLAYING && (
         <Row>
           <FlashButton onClick={() => handleMove('r')} disabled={locked}>
@@ -235,15 +243,7 @@ const GameView = () => {
           </FlashButton>
         </Row>
       )}
-
-      {ticketAmount && (
-        <div className="flex w-full items-center justify-center space-x-4 pt-6 text-2xl text-blue-500">
-          <span className="text-xl font-extrabold">
-            🎟 Tickets: {ticketAmount}
-          </span>
-        </div>
-      )}
-    </>
+    </div>
   )
 }
 
