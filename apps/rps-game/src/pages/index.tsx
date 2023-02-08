@@ -1,8 +1,8 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { FullScreenLayout, NavBar, CustomButton } from 'ui'
+import { FullScreenLayout, Row, NavBar, CustomButton } from 'ui'
 import { useSession, signIn, signOut } from 'next-auth/react'
-import { useFclContext, useRpsGameContext, useTicketContext } from '../contexts'
+import { useFclContext, useRpsGameContext } from '../contexts'
 import purchaseNft from '../utils/purchase-nft'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
@@ -43,12 +43,6 @@ const Home: NextPage = () => {
     },
   } = useRpsGameContext()
 
-  const { ticketAmount } = useTicketContext()
-
-  console.log('isGamePiecePurchased', isGamePiecePurchased)
-
-  console.log('gameStatus', gameStatus)
-
   useEffect(() => {
     const fn = async () => {
       console.log('setGamePiecePurchased', purchase_success)
@@ -64,6 +58,7 @@ const Home: NextPage = () => {
       </div>
     )
   }
+
   return (
     <>
       <Head>
@@ -71,33 +66,29 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <FullScreenLayout nav={<NavBar navProps={navProps} />} theme="blue">
-        <main className="flex w-full flex-col items-center justify-center text-center">
-          {!session && (
-            <h1 className="text-6xl font-bold">
-              Welcome to{' '}
-              <a className="text-blue-600" href="https://nextjs.org">
-                Flow Game Arcade!
-              </a>
-            </h1>
-          )}
-          <div className="mt-3 text-2xl">
-            {!session && (
-              <div className="mt-3">
-                <CustomButton onClick={signIn}>Sign in</CustomButton>
+        {!session && (
+          <div className="flex w-full">
+            <div className="w-full">
+              <h1 className="text-center text-5xl font-bold text-blue-600">
+                Welcome to Flow Game Arcade!
+              </h1>
+              <div className="my-10 md:container md:mx-auto lg:my-14">
+                <Row>
+                  <CustomButton onClick={signIn}>Sign in</CustomButton>
+                </Row>
               </div>
-            )}
-
-            {session && !isGamePiecePurchased && (
-              <div className="mt-3">
-                <CustomButton onClick={() => purchaseNft()}>
-                  Purchase Game Piece
-                </CustomButton>
-              </div>
-            )}
-
-            {session && isGamePiecePurchased && <GameView />}
+            </div>
           </div>
-        </main>
+        )}
+        {session && !isGamePiecePurchased && (
+          <div className="mt-3">
+            <CustomButton onClick={() => purchaseNft()}>
+              Purchase Game Piece
+            </CustomButton>
+          </div>
+        )}
+
+        {session && isGamePiecePurchased && <GameView />}
       </FullScreenLayout>
     </>
   )
