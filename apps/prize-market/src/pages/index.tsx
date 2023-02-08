@@ -8,6 +8,8 @@ import { useEffect } from 'react'
 const Home: NextPage = () => {
   const { currentUser, connect, logout: disconnect } = useFclContext()
   const {
+    ownedPrizes,
+    getOwnedPrizes,
     childTicketVaultAddress,
     totalTicketBalance,
     purchaseWithTickets,
@@ -23,8 +25,9 @@ const Home: NextPage = () => {
   useEffect(() => {
     if (currentUser?.addr) {
       getTicketAmount(currentUser.addr, true)
+      getOwnedPrizes(currentUser.addr)
     }
-  }, [totalTicketBalance, currentUser, getTicketAmount])
+  }, [totalTicketBalance, currentUser, getTicketAmount, getOwnedPrizes])
 
   const buyNFT = async () => {
     if (currentUser?.addr) {
@@ -91,6 +94,26 @@ const Home: NextPage = () => {
               </CustomButton>
             </Col>
           </Row>
+
+          <p className="mb-4 text-2xl text-blue-600">
+            Owned NFTs:
+          </p>
+
+          { ownedPrizes ?
+            <Row>
+              {ownedPrizes.map(
+                (prize) => (
+                  <Col>
+                    <FlippyOnHover flipDirection="horizontal" />
+                  </Col>
+                )
+              )}
+            </Row>
+            : <p className="mb-4 text-2xl text-blue-600">
+            No owned prizes
+            </p>
+          }
+
         </main>
       </FullScreenLayout>
     </>
@@ -98,3 +121,4 @@ const Home: NextPage = () => {
 }
 
 export default Home
+ 
