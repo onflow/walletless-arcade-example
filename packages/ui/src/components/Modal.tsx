@@ -1,20 +1,10 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 
-export default function Modal() {
-  let [isOpen, setIsOpen] = useState(true)
-
-  function closeModal() {
-    setIsOpen(false)
-  }
-
-  function openModal() {
-    setIsOpen(true)
-  }
-
+export default function Modal({ isOpen, handleClose, handleOpen, dialog, buttonText, buttonFunc}: { isOpen: boolean, handleClose: Function, handleOpen: Function, dialog: string, buttonText: string, buttonFunc: Function}) {
   return (
     <>
-      <div className="fixed inset-0 flex items-center justify-center">
+      {/* <div className="fixed inset-0 flex items-center justify-center">
         <button
           type="button"
           onClick={openModal}
@@ -22,10 +12,10 @@ export default function Modal() {
         >
           Open dialog
         </button>
-      </div>
+      </div> */}
 
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={closeModal}>
+        <Dialog as="div" className="relative z-10" onClose={handleClose}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -54,12 +44,11 @@ export default function Modal() {
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
                   >
-                    Payment successful
+                    Flow Arcade
                   </Dialog.Title>
                   <div className="mt-2">
                     <p className="text-sm text-gray-500">
-                      Your payment has been successfully submitted. We’ve sent
-                      you an email with all of the details of your order.
+                      {dialog}
                     </p>
                   </div>
 
@@ -67,9 +56,9 @@ export default function Modal() {
                     <button
                       type="button"
                       className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                      onClick={closeModal}
+                      onClick={() => buttonFunc()}
                     >
-                      Got it, thanks!
+                      {buttonText}
                     </button>
                   </div>
                 </Dialog.Panel>

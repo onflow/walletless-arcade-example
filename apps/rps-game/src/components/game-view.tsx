@@ -126,15 +126,13 @@ const GameView = () => {
     setLocked(locked => !locked)
   }
 
-  const handlePlayAgain = async (command: string) => {
+  const handlePlayAgain = async () => {
     if (gameStatus !== GameStatus.ENDED) return
 
-    if (command === 'y') {
-      setPlayerMove(undefined)
-      setOpponentMove(undefined)
-      await resetGame()
-      await setupNewSinglePlayerMatch()
-    }
+    setPlayerMove(undefined)
+    setOpponentMove(undefined)
+    await resetGame()
+    await setupNewSinglePlayerMatch()
   }
 
   const handlePlay = async () => {
@@ -162,7 +160,25 @@ const GameView = () => {
 
   return (
     <div className="flex w-full flex-wrap">
-      <Modal />
+      <Modal 
+        isOpen={gameStatus === GameStatus.READY || gameStatus === GameStatus.ENDED}
+        handleClose={() => {}}
+        handleOpen={() => {}}
+        dialog={
+          gameStatus === GameStatus.READY ?
+          `Your payment has been successfully submitted. We’ve sent
+          you an email with all of the details of your order.`
+          : 
+          "Play Again?"
+        }
+        buttonText={"Play"}
+        buttonFunc={
+          gameStatus === GameStatus.READY ?
+          handlePlay
+          : 
+          handlePlayAgain
+        }
+      />
       <div className="w-full">
         <div className="flex w-full items-center justify-center space-x-4 pt-6 text-2xl text-blue-500">
           <span> Wins: {winLossRecord?.wins ?? 0}</span>
@@ -235,20 +251,6 @@ const GameView = () => {
           </FlashButton>
           <FlashButton onClick={() => handleMove('s')} disabled={locked}>
             Scissors
-          </FlashButton>
-        </Row>
-      )}
-      {gameStatus === GameStatus.ENDED && (
-        <Row>
-          <FlashButton onClick={() => handlePlayAgain('y')} disabled={locked}>
-            Play Again!
-          </FlashButton>
-        </Row>
-      )}
-      {gameStatus === GameStatus.READY && (
-        <Row>
-          <FlashButton onClick={() => handlePlay()} disabled={locked}>
-            Play!
           </FlashButton>
         </Row>
       )}
