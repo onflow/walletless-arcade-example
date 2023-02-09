@@ -69,7 +69,7 @@ const Wallet: NextPage = () => {
             <div className="w-full w-1/2">
               <Row>
                 <Col>
-                  <div className="mb-4 text-2xl text-blue-600">Owned NFTs:</div>
+                  <div className="mb-4 text-2xl font-bold text-blue-600">Owned NFTs</div>
                   {ownedPrizes ? (
                     <Row>
                       {ownedPrizes.map(prize => (
