@@ -65,7 +65,7 @@ const Wallet: NextPage = () => {
           </FlexContainer>
         )}
         {currentUser?.addr && (
-          <div className="flex h-24 w-full flex-wrap">
+          <div className="flex h-24 w-full flex-wrap justify-center">
             <div className="w-full w-1/2">
               <Row>
                 <Col>
