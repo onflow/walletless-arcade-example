@@ -65,11 +65,11 @@ const Wallet: NextPage = () => {
           </FlexContainer>
         )}
         {currentUser?.addr && (
-          <div className="flex h-24 w-full flex-wrap">
+          <div className="flex h-24 w-full flex-wrap justify-center">
             <div className="w-full w-1/2">
               <Row>
                 <Col>
-                  <div className="mb-4 text-2xl text-blue-600">Owned NFTs:</div>
+                  <div className="mb-4 text-2xl font-bold text-blue-600">Owned NFTs</div>
                   {ownedPrizes ? (
                     <Row>
                       {ownedPrizes.map(prize => (

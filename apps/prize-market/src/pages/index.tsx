@@ -141,6 +141,15 @@ const Home: NextPage = () => {
                 </Col>
               </Row>
             </div>
+            <div className="w-full">
+              <div className="flex w-full items-center justify-center space-x-4 pt-6 text-blue-500">
+                <span className="pt-6 font-extrabold">
+                  <CustomButton onClick={() => window.location.replace("/wallet")} bgColor="bg-blue-600">
+                    View Wallet
+                  </CustomButton>
+                </span>
+              </div>
+            </div>
           </div>
         )}
       </FullScreenLayout>
