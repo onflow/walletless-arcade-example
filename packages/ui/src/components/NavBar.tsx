@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import FlowLogo from '../components/FlowLogo'
 import ButtonRef from './ButtonRef'
-import Hamburger from './Hamburger'
 
 function NavDropDown({
   session,
@@ -69,30 +68,6 @@ function NavDropDown({
   )
 }
 
-function NavButton({
-  href,
-  title,
-  withBorder,
-}: {
-  href: string
-  title: string
-  withBorder: boolean
-}) {
-  const border = withBorder ? 'border-l' : ''
-  return (
-    <li className={`${border} border-primary-gray-100`}>
-      <a
-        className={
-          'text-primary-black inline-flex items-center whitespace-nowrap stroke-black px-4 hover:opacity-75'
-        }
-        href={href}
-      >
-        <span>{title}</span>
-      </a>
-    </li>
-  )
-}
-
 interface NavProps {
   session?: any
   currentUser?: any
@@ -107,7 +82,6 @@ export default function Navbar({
 }: {
   navProps: NavProps
 }) {
-  const [menuOpen, setMenuOpen] = useState(false)
   return (
     <nav className="text-primary-gray-400 border-primary-gray-100 z-40 flex min-h-[96px] items-center border-2 bg-white p-4 lg:px-8">
       <a
@@ -119,25 +93,7 @@ export default function Navbar({
           <b>Flow</b>Arcade
         </header>
       </a>
-      <Hamburger onClick={() => setMenuOpen(true)} />
-      {menuOpen && (
-        <div className="mt-1 flex flex-1 justify-end lg:hidden">
-          <ul className="flex flex-col space-y-4 pb-4 lg:hidden">
-            <button
-              className="text-primary-black flex flex-1 justify-end rounded hover:opacity-75"
-              onClick={() => setMenuOpen(false)}
-            >
-              x
-            </button>
-            <NavButton
-              title="Connect Flow Wallet"
-              href="#"
-              withBorder={false}
-            />
-          </ul>
-        </div>
-      )}
-      <div className="mt-1 flex hidden flex-1 justify-end lg:flex">
+      <div className="mt-1 flex flex-1 justify-end lg:flex">
         <ul className="flex items-center">
           {session && (
             <>
