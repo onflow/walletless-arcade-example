@@ -68,7 +68,7 @@ const Home: NextPage = () => {
         <title>Flow Game Arcade</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <FullScreenLayout nav={<NavBar navProps={navProps} />} theme="blue">
+      <FullScreenLayout nav={<NavBar navProps={navProps} />} theme="green">
         {!session && (
           <FlexContainer className="w-full items-center justify-center">
             <div className="w-full">
