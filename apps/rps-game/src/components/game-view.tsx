@@ -162,8 +162,8 @@ const GameView = () => {
     <div className="flex w-full flex-wrap">
       <Modal 
         isOpen={gameStatus === GameStatus.READY || gameStatus === GameStatus.ENDED}
-        handleClose={() => {}}
-        handleOpen={() => {}}
+        handleClose={() => null}
+        handleOpen={() => null}
         dialog={
           gameStatus === GameStatus.READY ?
           `Your payment has been successfully submitted. We’ve sent
