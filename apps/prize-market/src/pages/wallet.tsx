@@ -32,6 +32,14 @@ const Wallet: NextPage = () => {
     }
   }, [totalTicketBalance, currentUser, getTicketAmount, getOwnedPrizes])
 
+  if (!currentUser) {
+    return (
+      <div className="flex flex-grow flex-col items-center justify-center py-2">
+        <p>Loading...</p>
+      </div>
+    )
+  }
+
   return (
     <>
       <Head>
@@ -69,7 +77,9 @@ const Wallet: NextPage = () => {
             <div className="w-full w-1/2">
               <Row>
                 <Col>
-                  <div className="mb-4 text-2xl font-bold text-blue-600">Owned NFTs</div>
+                  <div className="mb-4 text-2xl font-bold text-blue-600">
+                    Owned NFTs
+                  </div>
                   {ownedPrizes ? (
                     <Row>
                       {ownedPrizes.map(prize => (

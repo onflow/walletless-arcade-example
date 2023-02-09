@@ -115,14 +115,16 @@ export default function Navbar({
             </>
           )}
           <div className="px-4">
-            <ButtonRef
-              onClick={!currentUser?.addr ? connect : disconnect}
-              pill={true}
-              variant={'primary'}
-              size={'small'}
-            >
-              {!currentUser?.addr ? 'Connect' : 'Disconnect'} Wallet
-            </ButtonRef>
+            {false && (
+              <ButtonRef
+                onClick={!currentUser?.addr ? connect : disconnect}
+                pill={true}
+                variant={'primary'}
+                size={'small'}
+              >
+                {!currentUser?.addr ? 'Connect' : 'Disconnect'} Wallet
+              </ButtonRef>
+            )}
           </div>
         </ul>
       </div>

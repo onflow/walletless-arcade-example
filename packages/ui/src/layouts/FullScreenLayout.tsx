@@ -17,7 +17,9 @@ export default function FullScreenLayout({
       <header>{nav}</header>
       <main className="flex flex-1 p-4 lg:p-10">{children}</main>
       <footer
-        className={`flex h-20 w-full items-center justify-center bg-${theme}-100 p-2`}
+        className={`flex h-20 w-full items-center justify-center ${
+          theme === 'green' ? 'bg-green-100' : 'bg-blue-100'
+        } p-2`}
       >
         <a
           className="flex items-center justify-center gap-2"
