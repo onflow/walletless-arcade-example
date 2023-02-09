@@ -62,7 +62,7 @@ const Home: NextPage = () => {
         buttonText={"View Purchase"}
         buttonFunc={() => {
           setIsModalOpen(false);
-          window.location = "/wallet";
+          window.location.replace("/wallet");
         }}
       />
       <Head>
