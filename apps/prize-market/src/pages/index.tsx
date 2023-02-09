@@ -9,12 +9,14 @@ import {
   CustomButton,
   FlexContainer,
   Col,
+  Modal,
 } from 'ui'
 import { useFclContext, useTicketContext } from '../contexts'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { FlippyOnHover } from '../components'
 
 const Home: NextPage = () => {
+  const [ isModalOpen, setIsModalOpen ] = useState<boolean>(false) 
   const { currentUser, connect, logout: disconnect } = useFclContext()
   const {
     ownedPrizes,
@@ -46,11 +48,23 @@ const Home: NextPage = () => {
         process.env.NEXT_PUBLIC_ADMIN_ADDRESS || ''
       )
       getTicketAmount(currentUser.addr, true)
+      setIsModalOpen(true)
     }
   }
 
   return (
     <>
+      <Modal 
+        isOpen={isModalOpen}
+        handleClose={() => null}
+        handleOpen={() => null}
+        dialog={"Purchase Successful! View your purchase."}
+        buttonText={"View Purchase"}
+        buttonFunc={() => {
+          setIsModalOpen(false);
+          window.location.replace("/wallet");
+        }}
+      />
       <Head>
         <title>Flow Prize Marketplace</title>
         <link rel="icon" href="/favicon.ico" />
