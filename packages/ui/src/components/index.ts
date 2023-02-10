@@ -12,4 +12,4 @@ export { default as FlowLogo } from './FlowLogo'
 export { default as Hamburger } from './Hamburger'
 export { default as NavBar } from './NavBar'
 export { default as Modal } from './Modal'
- 
+export { default as DevToggle } from './DevToggle'

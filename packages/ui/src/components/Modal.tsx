@@ -1,21 +1,29 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 
-export default function Modal({ isOpen, handleClose, handleOpen, dialog, buttonText, buttonFunc}: { isOpen: boolean, handleClose: Function, handleOpen: Function, dialog: string, buttonText: string, buttonFunc: Function}) {
+export default function Modal({
+  isOpen,
+  handleClose,
+  handleOpen,
+  dialog,
+  buttonText,
+  buttonFunc,
+}: {
+  isOpen: boolean
+  handleClose: Function
+  handleOpen: Function
+  dialog: string
+  buttonText: string
+  buttonFunc: Function
+}) {
   return (
     <>
-      {/* <div className="fixed inset-0 flex items-center justify-center">
-        <button
-          type="button"
-          onClick={openModal}
-          className="rounded-md bg-black bg-opacity-20 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
-        >
-          Open dialog
-        </button>
-      </div> */}
-
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={() => handleClose()}>
+        <Dialog
+          as="div"
+          className="relative z-10"
+          onClose={() => handleClose()}
+        >
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -47,9 +55,7 @@ export default function Modal({ isOpen, handleClose, handleOpen, dialog, buttonT
                     Flow Arcade
                   </Dialog.Title>
                   <div className="mt-2">
-                    <p className="text-sm text-gray-500">
-                      {dialog}
-                    </p>
+                    <p className="text-sm text-gray-500">{dialog}</p>
                   </div>
 
                   <div className="mt-4">
