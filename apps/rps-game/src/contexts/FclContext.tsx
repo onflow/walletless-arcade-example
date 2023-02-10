@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as fcl from '@onflow/fcl'
 import { ROUTES } from '../constants/index'
 import router from 'next/router'
@@ -14,7 +12,7 @@ import {
 import type { ReactNode } from 'react'
 import { FLOW } from '../constants'
 import flowJSON from '../../../../flow.json'
-import { loadFCLConfig } from "../utils/fcl-setup"
+import { loadFCLConfig } from '../utils/fcl-setup'
 
 loadFCLConfig()
 

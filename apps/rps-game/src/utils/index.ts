@@ -1,6 +1,5 @@
-import * as shared from "./shared";
-import * as fclUtils from "./fcl-utils";
+import * as shared from './shared'
 
 export default function useUtils() {
-  return { ...shared, ...fclUtils };
+  return { ...shared }
 }

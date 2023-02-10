@@ -16,7 +16,7 @@ import { useEffect, useState } from 'react'
 import { FlippyOnHover } from '../components'
 
 const Home: NextPage = () => {
-  const [ isModalOpen, setIsModalOpen ] = useState<boolean>(false) 
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const { currentUser, connect, logout: disconnect } = useFclContext()
   const {
     ownedPrizes,
@@ -54,15 +54,15 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <Modal 
+      <Modal
         isOpen={isModalOpen}
         handleClose={() => null}
         handleOpen={() => null}
-        dialog={"Purchase Successful! View your purchase."}
-        buttonText={"View Purchase"}
+        dialog={'Purchase Successful! View your purchase.'}
+        buttonText={'View Purchase'}
         buttonFunc={() => {
-          setIsModalOpen(false);
-          window.location.replace("/wallet");
+          setIsModalOpen(false)
+          window.location.replace('/wallet')
         }}
       />
       <Head>
@@ -144,7 +144,10 @@ const Home: NextPage = () => {
             <div className="w-full">
               <div className="flex w-full items-center justify-center space-x-4 pt-6 text-blue-500">
                 <span className="pt-6 font-extrabold">
-                  <CustomButton onClick={() => window.location.replace("/wallet")} bgColor="bg-blue-600">
+                  <CustomButton
+                    onClick={() => window.location.replace('/wallet')}
+                    bgColor="bg-blue-600"
+                  >
                     View Wallet
                   </CustomButton>
                 </span>
