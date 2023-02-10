@@ -111,7 +111,6 @@ export default function TicketContextProvider({ children }: Props) {
         try {
           let balance: string = await executeScript(
             GET_BALANCE,
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (arg: any, t: any) => [arg(fcl.withPrefix(address), t.Address)]
           )
 
@@ -119,7 +118,6 @@ export default function TicketContextProvider({ children }: Props) {
             const childAccountsTicketBalances: Record<number, string> =
               await executeScript(
                 GET_BALANCE_OF_ALL_CHILD_ACCOUNTS,
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 (arg: any, t: any) => [arg(fcl.withPrefix(address), t.Address)]
               )
 

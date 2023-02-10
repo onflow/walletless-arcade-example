@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 // Type definitions for @onflow/fcl 1.3.0
 // Project: https://github.com/onflow/fcl-js
 declare module '@onflow/six-create-account' {

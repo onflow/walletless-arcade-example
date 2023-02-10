@@ -4,8 +4,8 @@
     "src/**/*",
     "**/*.ts",
     "**/*.tsx",
-    "styles/global.css",
-    "next-env.d.ts"
+    "next-env.d.ts",
+    ".eslintrc.js"
   ],
   "exclude": ["node_modules", ".next", ".turbo"]
 }

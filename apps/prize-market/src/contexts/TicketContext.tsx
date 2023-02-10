@@ -25,9 +25,7 @@ interface ITicketContext {
   totalTicketBalance: string | null
   childTicketVaultAddress: string | null
   ownedPrizes: null | any[]
-  getOwnedPrizes: (
-    address: string
-  ) => Promise<void>
+  getOwnedPrizes: (address: string) => Promise<void>
   getTicketAmount: (
     address: string,
     isParentAccount: boolean
@@ -43,9 +41,7 @@ const initialState: ITicketContext = {
   totalTicketBalance: null,
   childTicketVaultAddress: null,
   ownedPrizes: null,
-  getOwnedPrizes: function (
-    address: string,
-  ): Promise<void> {
+  getOwnedPrizes: function (address: string): Promise<void> {
     throw new Error(`Function not implemented.`)
   },
   getTicketAmount: function (
@@ -76,7 +72,7 @@ export default function TicketContextProvider({ children }: Props) {
   const [totalTicketBalance, setTotalTicketBalance] = useState<null | string>(
     null
   )
-  const [ownedPrizes, setOwnedPrizes] = useState<null | any[]> (null)
+  const [ownedPrizes, setOwnedPrizes] = useState<null | any[]>(null)
   const [childTicketVaultAddress, setChildTicketVaultAddress] = useState<
     null | string
   >(null)
@@ -106,12 +102,11 @@ export default function TicketContextProvider({ children }: Props) {
       try {
         const _ownedPrizes: any[] = await executeScript(
           GET_ALL_NFT_DISPLAY_VIEWS,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           (arg: any, t: any) => [arg(fcl.withPrefix(address), t.Address)]
         )
         setOwnedPrizes(_ownedPrizes)
-      } catch(e) {
-        return 
+      } catch (e) {
+        return
       }
     },
     [executeScript, setOwnedPrizes]
@@ -143,7 +138,6 @@ export default function TicketContextProvider({ children }: Props) {
         try {
           const parentBalance: string = await executeScript(
             GET_BALANCE,
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (arg: any, t: any) => [arg(fcl.withPrefix(address), t.Address)]
           )
 
@@ -151,7 +145,6 @@ export default function TicketContextProvider({ children }: Props) {
             const childAccountsBalances: Record<number, string> =
               await executeScript(
                 GET_BALANCE_OF_ALL_CHILD_ACCOUNTS,
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 (arg: any, t: any) => [arg(fcl.withPrefix(address), t.Address)]
               )
 
