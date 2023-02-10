@@ -124,7 +124,7 @@ export default function Navbar({
             </>
           )}
           <div className="px-4">
-            <span className="text-primary-gray-400 mr-3">Magic Mode</span>
+            <span className="text-primary-gray-400 mr-3">🔥 Mode</span>
             {toggle}
             {false && (
               <ButtonRef
