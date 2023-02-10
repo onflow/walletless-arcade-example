@@ -75,10 +75,19 @@ interface NavProps {
   disconnect?: any
   signIn?: any
   signOut?: any
+  toggle?: any
 }
 
 export default function Navbar({
-  navProps: { session, currentUser, connect, disconnect, signIn, signOut },
+  navProps: {
+    session,
+    currentUser,
+    connect,
+    disconnect,
+    signIn,
+    signOut,
+    toggle,
+  },
 }: {
   navProps: NavProps
 }) {
@@ -115,6 +124,8 @@ export default function Navbar({
             </>
           )}
           <div className="px-4">
+            <span className="text-primary-gray-400 mr-3">🔥 Mode</span>
+            {toggle}
             {false && (
               <ButtonRef
                 onClick={!currentUser?.addr ? connect : disconnect}

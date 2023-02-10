@@ -1,13 +1,19 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { FullScreenLayout, Row, NavBar, CustomButton } from 'ui'
+import {
+  FullScreenLayout,
+  FlexContainer,
+  Row,
+  NavBar,
+  DevToggle,
+  CustomButton,
+} from 'ui'
 import { useSession, signIn, signOut } from 'next-auth/react'
 import { useFclContext, useRpsGameContext } from '../contexts'
 import purchaseNft from '../utils/purchase-nft'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { GameView } from '../components'
-import { FlexContainer } from 'ui'
 import MonsterLogo from '../../public/static/monster-logo.png'
 import Image from 'next/image'
 
@@ -23,6 +29,7 @@ const Home: NextPage = () => {
     disconnect,
     signIn,
     signOut,
+    toggle: <DevToggle />,
   }
 
   const { purchase_success } = router.query
@@ -48,7 +55,6 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     const fn = async () => {
-      console.log('setGamePiecePurchased', purchase_success)
       await setGamePiecePurchased(purchase_success === 'true')
     }
     fn()

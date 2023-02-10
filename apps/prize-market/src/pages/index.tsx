@@ -10,6 +10,7 @@ import {
   FlexContainer,
   Col,
   Modal,
+  DevToggle,
 } from 'ui'
 import { useFclContext, useTicketContext } from '../contexts'
 import { useEffect, useState } from 'react'
@@ -31,6 +32,7 @@ const Home: NextPage = () => {
     currentUser,
     connect,
     disconnect,
+    toggle: <DevToggle />,
   }
 
   useEffect(() => {
