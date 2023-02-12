@@ -29,21 +29,6 @@ const GameView = () => {
 
   const { ticketAmount } = useTicketContext()
 
-  console.log('RPS GAME STATE', {
-    gameStatus,
-    gameMatchID,
-    gamePieceNFTID,
-    gameResult,
-    isGameInitialized,
-    isGameInitializedStateLoading,
-    setupNewSinglePlayerMatch,
-    submitBothSinglePlayerMoves,
-    resolveMatchAndReturnNFTS,
-    resetGame,
-    gamePlayerID,
-    winLossRecord,
-  })
-
   const handleEndgame = useCallback(
     async function (gameResult: any) {
       const playerNFTID = gamePieceNFTID
@@ -105,22 +90,10 @@ const GameView = () => {
   )
 
   useEffect(() => {
-    if (gameStatus === GameStatus.READY) {
-      console.log('gameStatus READY', gameStatus)
-    }
-    if (gameStatus === GameStatus.PLAYING) {
-      console.log('gameStatus PLAYING', gameStatus)
-    }
     if (gameStatus === GameStatus.ENDED) {
       handleEndgame(gameResult)
     }
-  }, [
-    gameResult,
-    gameStatus,
-    handleEndgame,
-    setupNewSinglePlayerMatch,
-    resetGame,
-  ])
+  }, [gameResult, gameStatus, handleEndgame])
 
   const toggleDisableButtons = () => {
     setLocked(locked => !locked)
@@ -160,23 +133,21 @@ const GameView = () => {
 
   return (
     <div className="flex w-full flex-wrap">
-      <Modal 
-        isOpen={gameStatus === GameStatus.READY || gameStatus === GameStatus.ENDED}
+      <Modal
+        isOpen={
+          gameStatus === GameStatus.READY || gameStatus === GameStatus.ENDED
+        }
         handleClose={() => null}
         handleOpen={() => null}
         dialog={
-          gameStatus === GameStatus.READY ?
-          `Your payment has been successfully submitted. We’ve sent
+          gameStatus === GameStatus.READY
+            ? `Your payment has been successfully submitted. We’ve sent
           you an email with all of the details of your order.`
-          : 
-          "Play Again?"
+            : 'Play Again?'
         }
-        buttonText={"Play"}
+        buttonText={'Play'}
         buttonFunc={
-          gameStatus === GameStatus.READY ?
-          handlePlay
-          : 
-          handlePlayAgain
+          gameStatus === GameStatus.READY ? handlePlay : handlePlayAgain
         }
       />
       <div className="w-full">

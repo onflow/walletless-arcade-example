@@ -11,9 +11,6 @@ const createAccount = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   const keys = await generateKeys()
-  console.log('privateKey', keys.privateKey)
-  console.log('publicKey', keys.publicKey)
-
   const address = await createAccountUtil(keys.publicKey)
 
   res.status(200).json({
