@@ -1,3 +1,4 @@
 module.exports = {
-  ...require('eslint-config-custom/eslint-preset'),
+  root: true,
+  extends: ['custom'],
 }
