@@ -150,22 +150,20 @@ const GameView = () => {
           gameStatus === GameStatus.READY ? handlePlay : handlePlayAgain
         }
       />
-      <div className="w-full">
-        <div className="flex w-full items-center justify-center space-x-4 pt-6 text-2xl text-blue-500">
-          <span> Wins: {winLossRecord?.wins ?? 0}</span>
-          <span> Losses: {winLossRecord?.losses ?? 0}</span>
-          <span> Ties: {winLossRecord?.ties ?? 0}</span>
-        </div>
-        {ticketAmount && (
+      <div className="flex w-full">
+        {gameStatus !== 'READY' && (
           <div className="flex w-full items-center justify-center space-x-4 pt-6 text-2xl text-blue-500">
-            <span className="text-xl font-extrabold">
-              🎟 Tickets: {ticketAmount}
-            </span>
+            <div className="w-full w-1/2">
+              <div className="flex justify-center text-green-500">Player</div>
+            </div>
+            <div className="w-full w-1/2">
+              <div className="flex justify-center text-red-500">Opponent</div>
+            </div>
           </div>
         )}
       </div>
-      <div className="flex h-24 w-full flex-wrap">
-        <div className="w-full w-1/2">
+      <Row>
+        <div className="w-1/2">
           <div className="text-grey-dark flex justify-center">
             {playerMove === 'rock' && (
               <span className="text-9xl font-extrabold">🪨</span>
@@ -181,7 +179,7 @@ const GameView = () => {
             )}
           </div>
         </div>
-        <div className="w-full w-1/2">
+        <div className="w-1/2">
           <div className="text-grey-dark flex justify-center">
             {opponentMove === 'rock' && (
               <span className="text-9xl font-extrabold">🪨</span>
@@ -197,34 +195,37 @@ const GameView = () => {
             )}
           </div>
         </div>
-      </div>
+      </Row>
 
-      <div className="flex h-10 w-full flex-wrap">
-        {gameStatus !== 'READY' && (
+      <Row>
+        {gameStatus === GameStatus.PLAYING && (
           <>
-            <div className="w-full w-1/2">
-              <div className="flex justify-center text-blue-500">Player</div>
-            </div>
-            <div className="w-full w-1/2">
-              <div className="flex justify-center text-red-500">Opponent</div>
-            </div>
+            <FlashButton onClick={() => handleMove('r')} disabled={locked}>
+              Rock
+            </FlashButton>
+            <FlashButton onClick={() => handleMove('p')} disabled={locked}>
+              Paper
+            </FlashButton>
+            <FlashButton onClick={() => handleMove('s')} disabled={locked}>
+              Scissors
+            </FlashButton>
           </>
         )}
-      </div>
-
-      {gameStatus === GameStatus.PLAYING && (
-        <Row>
-          <FlashButton onClick={() => handleMove('r')} disabled={locked}>
-            Rock
-          </FlashButton>
-          <FlashButton onClick={() => handleMove('p')} disabled={locked}>
-            Paper
-          </FlashButton>
-          <FlashButton onClick={() => handleMove('s')} disabled={locked}>
-            Scissors
-          </FlashButton>
-        </Row>
-      )}
+      </Row>
+      <Row>
+        <div className="flex w-full items-center justify-center space-x-4 text-2xl font-extrabold text-blue-500">
+          <span> Wins: {winLossRecord?.wins ?? 0}</span>
+          <span> Losses: {winLossRecord?.losses ?? 0}</span>
+          <span> Ties: {winLossRecord?.ties ?? 0}</span>
+        </div>
+        {ticketAmount && (
+          <div className="flex w-full items-center justify-center space-x-4 text-2xl text-blue-500">
+            <span className="text-xl font-extrabold">
+              🎟 Tickets: {ticketAmount}
+            </span>
+          </div>
+        )}
+      </Row>
     </div>
   )
 }
