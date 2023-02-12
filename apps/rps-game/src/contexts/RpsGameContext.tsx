@@ -7,7 +7,7 @@ import {
   useMemo,
 } from 'react'
 import type { ReactNode, Dispatch, SetStateAction } from 'react'
-import { useFclContext } from './FclContext'
+import { useFclContext } from 'ui'
 import { useGameAccountContext } from './GameAccountContext'
 import { useTicketContext } from './TicketContext'
 import WALLETLESS_ONBOARDING_MINT_FROM_RESOURCE from '../../cadence/transactions/onboarding/walletless-onboarding-mint-from-resource'

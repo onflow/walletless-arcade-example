@@ -17,6 +17,7 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
+    "@onflow/fcl": "^1.3.3-alpha.0",
     "@headlessui/react": "^1.7.10"
   },
   "devDependencies": {

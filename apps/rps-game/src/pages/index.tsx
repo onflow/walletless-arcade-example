@@ -8,9 +8,10 @@ import {
   DevToggle,
   CustomButton,
   Modal,
+  useFclContext,
 } from 'ui'
 import { useSession, signIn, signOut } from 'next-auth/react'
-import { useFclContext, useRpsGameContext } from '../contexts'
+import { useRpsGameContext } from '../contexts'
 import purchaseNft from '../utils/purchase-nft'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
