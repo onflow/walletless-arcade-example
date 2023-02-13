@@ -28,7 +28,7 @@ export const useAppContext = () => {
 
 function getFireModeFromLocalStorage() {
   if (typeof window !== "undefined") {
-    const fromStorage = window.localStorage.getItem(LOCAL_STORAGE_FIRE_ENABLED)
+    const fromStorage = window.localStorage.getItem(LOCAL_STORAGE_FIRE_ENABLED) ?? ""
     if (typeof JSON.parse(fromStorage) === "boolean") {
       return JSON.parse(fromStorage)
     }
