@@ -76,8 +76,8 @@ export default function TicketContextProvider({ children }: Props) {
       await executeTransaction(
         MINT_RAINBOW_DUCK_PAYING_WITH_CHILD_VAULT,
         (arg: any, t: any) => [
-          arg(fundingChildAddress, t.Address),
-          arg(minterAddress, t.Address),
+          arg(fcl.withPrefix(fundingChildAddress), t.Address),
+          arg(fcl.withPrefix(minterAddress), t.Address),
         ],
         {
           limit: 9999,

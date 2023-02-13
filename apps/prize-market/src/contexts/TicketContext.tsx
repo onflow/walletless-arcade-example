@@ -146,9 +146,9 @@ export default function TicketContextProvider({ children }: Props) {
             setChildTicketVaultAddress(childTicketVaultAddress)
 
             const sumOfChildAccountBalances = (
-              childAccountsBalances: Record<string, string>
+              childAccountsTicketBalances: Record<string, string>
             ) =>
-              Object.values(childAccountsBalances)
+              Object.values(childAccountsTicketBalances)
                 .map(Number)
                 .reduce((a, b) => a + b, 0)
 

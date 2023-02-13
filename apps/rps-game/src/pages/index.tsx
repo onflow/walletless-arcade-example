@@ -5,7 +5,6 @@ import {
   FlexContainer,
   Row,
   NavBar,
-  DevToggle,
   CustomButton,
   Modal,
   useFclContext,
@@ -161,3 +160,4 @@ const Home: NextPage = () => {
 }
 
 export default Home
+ 
