@@ -1,13 +1,14 @@
 import { useState, useEffect, useCallback } from 'react'
-import { FlashButton, Row, Modal, useFclContext } from 'ui'
-import { useRpsGameContext, GameStatus, useTicketContext } from '../contexts'
+import { FlashButton, Row, Modal, useFclContext, useTicketContext } from 'ui'
+import { useRpsGameContext, GameStatus } from '../contexts'
 
 type PlayerMove = 'rock' | 'paper' | 'scissors' | undefined
 
 const GameView = () => {
   const { currentUser } = useFclContext()
 
-  const [goToMarketplaceModalOpen, setGoToMarketplaceOpen] = useState<boolean>(false)
+  const [goToMarketplaceModalOpen, setGoToMarketplaceOpen] =
+    useState<boolean>(false)
 
   const [locked, setLocked] = useState(false)
   const [playerMove, setPlayerMove] = useState<PlayerMove>(undefined)
@@ -31,7 +32,7 @@ const GameView = () => {
     },
   } = useRpsGameContext()
 
-  const { ticketAmount } = useTicketContext()
+  const { totalTicketBalance } = useTicketContext()
 
   const handleEndgame = useCallback(
     async function (gameResult: any) {
@@ -99,10 +100,6 @@ const GameView = () => {
     }
   }, [gameResult, gameStatus, handleEndgame])
 
-  const toggleDisableButtons = () => {
-    setLocked(locked => !locked)
-  }
-
   const handlePlayAgain = async () => {
     if (gameStatus !== GameStatus.ENDED) return
 
@@ -137,24 +134,28 @@ const GameView = () => {
 
   useEffect(() => {
     if (currentUser?.addr) {
-      setGoToMarketplaceOpen(true)  
+      setGoToMarketplaceOpen(true)
     }
   }, [currentUser?.addr])
 
   return (
     <div className="flex w-full flex-wrap">
-      <Modal 
+      <Modal
         isOpen={goToMarketplaceModalOpen}
         handleClose={() => setGoToMarketplaceOpen(false)}
         handleOpen={() => setGoToMarketplaceOpen(true)}
         dialog={`
           Now that you've connected your wallet, head to the marketplace to spend your tickets on an NFT prize!
         `}
-        buttonText={"Go to Marketplace"}
-        buttonFunc={() => window.location.replace(process.env.NEXT_PUBLIC_MARKETPLACE_URL || "")}
+        buttonText={'Go to Marketplace'}
+        buttonFunc={() =>
+          window.location.replace(process.env.NEXT_PUBLIC_MARKETPLACE_URL || '')
+        }
       />
-      <Modal 
-        isOpen={gameStatus === GameStatus.READY || gameStatus === GameStatus.ENDED}
+      <Modal
+        isOpen={
+          gameStatus === GameStatus.READY || gameStatus === GameStatus.ENDED
+        }
         handleClose={() => null}
         handleOpen={() => null}
         dialog={
@@ -236,10 +237,10 @@ const GameView = () => {
           <span> Losses: {winLossRecord?.losses ?? 0}</span>
           <span> Ties: {winLossRecord?.ties ?? 0}</span>
         </div>
-        {ticketAmount && (
+        {totalTicketBalance && (
           <div className="flex w-full items-center justify-center space-x-4 text-2xl text-blue-500">
             <span className="text-xl font-extrabold">
-              🎟 Tickets: {ticketAmount}
+              🎟 Tickets: {totalTicketBalance}
             </span>
           </div>
         )}

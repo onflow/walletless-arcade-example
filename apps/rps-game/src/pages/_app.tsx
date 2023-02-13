@@ -1,13 +1,8 @@
 import Head from 'next/head'
 import { SessionProvider } from 'next-auth/react'
 import type { AppProps } from 'next/app'
-import {
-  GameAccountContext,
-  UserContext,
-  RpsGameContext,
-  TicketContext,
-} from '../contexts'
-import { FclContext, AppContext } from 'ui'
+import { GameAccountContext, UserContext, RpsGameContext } from '../contexts'
+import { FclContext, AppContext, TicketContext } from 'ui'
 import '../styles/styles.css'
 import { loadFCLConfig } from '../utils/fcl-setup'
 

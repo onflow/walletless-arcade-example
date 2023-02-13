@@ -1,7 +1,6 @@
 import Head from 'next/head'
 import type { AppProps } from 'next/app'
-import { TicketContext } from '../contexts'
-import { FclContext, AppContext } from 'ui'
+import { AppContext, FclContext, TicketContext } from 'ui'
 import '../styles/globals.css'
 import { loadFCLConfig } from '../utils/fcl-setup'
 
