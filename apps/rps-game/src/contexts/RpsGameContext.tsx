@@ -688,6 +688,8 @@ export default function RpsGameContextProvider({ children }: Props) {
       }
     }
     fn()
+    const id = setInterval(fn, 5000)
+    return () => clearInterval(id)
   }, [gameAccountAddress, gameStatus])
 
   const providerProps = useMemo(
