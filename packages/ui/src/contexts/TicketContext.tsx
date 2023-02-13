@@ -1,21 +1,11 @@
-import {
-  useEffect,
-  useState,
-  useCallback,
-  useContext,
-  createContext,
-} from 'react'
-import type { ReactNode } from 'react'
-import { useFclContext } from 'ui'
+import { useState, useCallback, useContext, createContext } from 'react'
 import * as fcl from '@onflow/fcl'
+import { useFclContext } from './FclContext'
 import MINT_RAINBOW_DUCK_PAYING_WITH_CHILD_VAULT from '../../cadence/transactions/arcade-prize/mint-rainbow-duck-paying-with-child-vault'
 import GET_ALL_NFT_DISPLAY_VIEWS from '../../cadence/scripts/arcade-prize/get-all-nft-display-views'
 import GET_BALANCE_OF_ALL_CHILD_ACCOUNTS from '../../cadence/scripts/ticket-token/get-balance-of-all-child-accounts'
 import GET_BALANCE from '../../cadence/scripts/ticket-token/get-balance'
-import {
-  userAuthorizationFunction,
-  adminAuthorizationFunction,
-} from '../utils/authz-functions'
+import type { ReactNode } from 'react'
 
 interface Props {
   children?: ReactNode
@@ -32,7 +22,7 @@ interface ITicketContext {
   ) => Promise<string | null>
   mintTickets: (destinationAddress: string, amount: string) => Promise<void>
   purchaseWithTickets: (
-    fundingAddress: string,
+    fundingChildAddress: string,
     minterAddress: string
   ) => Promise<void>
 }
@@ -57,7 +47,7 @@ const initialState: ITicketContext = {
     throw new Error(`Function not implemented.`)
   },
   purchaseWithTickets: function (
-    fundingAddress: string,
+    fundingChildAddress: string,
     minterAddress: string
   ): Promise<void> {
     throw new Error(`Function not implemented.`)
@@ -69,6 +59,7 @@ export const TicketContext = createContext<ITicketContext>(initialState)
 export const useTicketContext = () => useContext(TicketContext)
 
 export default function TicketContextProvider({ children }: Props) {
+  const { currentUser, executeScript, executeTransaction } = useFclContext()
   const [totalTicketBalance, setTotalTicketBalance] = useState<null | string>(
     null
   )
@@ -76,14 +67,16 @@ export default function TicketContextProvider({ children }: Props) {
   const [childTicketVaultAddress, setChildTicketVaultAddress] = useState<
     null | string
   >(null)
-  const { currentUser, executeScript, executeTransaction } = useFclContext()
 
   const purchaseWithTickets = useCallback(
-    async (fundingAddress: string, minterAddress: string): Promise<void> => {
+    async (
+      fundingChildAddress: string,
+      minterAddress: string
+    ): Promise<void> => {
       await executeTransaction(
         MINT_RAINBOW_DUCK_PAYING_WITH_CHILD_VAULT,
         (arg: any, t: any) => [
-          arg(fcl.withPrefix(fundingAddress), t.Address),
+          arg(fcl.withPrefix(fundingChildAddress), t.Address),
           arg(fcl.withPrefix(minterAddress), t.Address),
         ],
         {
@@ -136,36 +129,37 @@ export default function TicketContextProvider({ children }: Props) {
     ): Promise<string | null> => {
       if (address) {
         try {
-          const parentBalance: string = await executeScript(
+          let balance: string = await executeScript(
             GET_BALANCE,
             (arg: any, t: any) => [arg(fcl.withPrefix(address), t.Address)]
           )
 
           if (isParentAccount) {
-            const childAccountsBalances: Record<number, string> =
+            const childAccountsTicketBalances: Record<number, string> =
               await executeScript(
                 GET_BALANCE_OF_ALL_CHILD_ACCOUNTS,
                 (arg: any, t: any) => [arg(fcl.withPrefix(address), t.Address)]
               )
 
             const childTicketVaultAddress =
-              Object.keys(childAccountsBalances)[0] || null
+              Object.keys(childAccountsTicketBalances)[0] || null
             setChildTicketVaultAddress(childTicketVaultAddress)
 
             const sumOfChildAccountBalances = (
-              childAccountsBalances: Record<string, string>
+              childAccountsTicketBalances: Record<string, string>
             ) =>
-              Object.values(childAccountsBalances)
+              Object.values(childAccountsTicketBalances)
                 .map(Number)
                 .reduce((a, b) => a + b, 0)
 
-            const summedBalance = Number(
-              Number(parentBalance) +
-                Number(sumOfChildAccountBalances(childAccountsBalances))
+            balance = Number(
+              Number(balance) +
+                Number(sumOfChildAccountBalances(childAccountsTicketBalances))
             ).toFixed(0)
-
-            setTotalTicketBalance(Number(summedBalance).toFixed(0))
           }
+
+          setTotalTicketBalance(Number(balance).toFixed(0))
+          return balance
         } catch (e) {
           return null
         }
@@ -190,3 +184,4 @@ export default function TicketContextProvider({ children }: Props) {
     <TicketContext.Provider value={value}>{children}</TicketContext.Provider>
   )
 }
+ 

@@ -9,8 +9,8 @@ import {
   FlexContainer,
   Col,
   useFclContext,
+  useTicketContext,
 } from 'ui'
-import { useTicketContext } from '../contexts'
 import { useEffect } from 'react'
 import { FlippyOnHover } from '../components'
 import MonsterLogo from '../../public/static/market-logo.png'

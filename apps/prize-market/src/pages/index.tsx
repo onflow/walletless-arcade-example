@@ -12,8 +12,8 @@ import {
   Modal,
   useFclContext,
   useAppContext,
+  useTicketContext,
 } from 'ui'
-import { useTicketContext } from '../contexts'
 import { useEffect, useState } from 'react'
 import { FlippyOnHover } from '../components'
 
@@ -47,9 +47,9 @@ const Home: NextPage = () => {
 
   const buyNFT = async () => {
     if (currentUser?.addr) {
-      const fundingAddress = childTicketVaultAddress || currentUser.addr
+      const fundingChildAddress = childTicketVaultAddress || currentUser.addr
       await purchaseWithTickets(
-        fundingAddress,
+        fundingChildAddress,
         process.env.NEXT_PUBLIC_ADMIN_ADDRESS || ''
       )
       getTicketAmount(currentUser.addr, true)

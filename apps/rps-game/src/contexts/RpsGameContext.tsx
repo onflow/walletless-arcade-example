@@ -7,9 +7,8 @@ import {
   useMemo,
 } from 'react'
 import type { ReactNode, Dispatch, SetStateAction } from 'react'
-import { useFclContext } from 'ui'
+import { useFclContext, useTicketContext } from 'ui'
 import { useGameAccountContext } from './GameAccountContext'
-import { useTicketContext } from './TicketContext'
 import WALLETLESS_ONBOARDING_MINT_FROM_RESOURCE from '../../cadence/transactions/onboarding/walletless-onboarding-mint-from-resource'
 import SETUP_NEW_SINGLE_PLAYER_MATCH from '../../cadence/transactions/rock-paper-scissors-game/game-player/setup-new-singleplayer-match'
 import GET_GAME_PLAYER_ID from '../../cadence/scripts/rock-paper-scissors-game/get-game-player-id'
@@ -265,7 +264,8 @@ export default function RpsGameContextProvider({ children }: Props) {
     getTransactionStatusOnSealed,
   } = useFclContext()
 
-  const { ticketAmount, getTicketAmount, mintTickets } = useTicketContext()
+  const { totalTicketBalance, getTicketAmount, mintTickets } =
+    useTicketContext()
 
   const {
     gameAccountAddress,
