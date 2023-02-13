@@ -133,10 +133,18 @@ const GameView = () => {
 
   return (
     <div className="flex w-full flex-wrap">
-      <Modal
-        isOpen={
-          gameStatus === GameStatus.READY || gameStatus === GameStatus.ENDED
-        }
+      <Modal 
+        isOpen={goToMarketplaceModalOpen}
+        handleClose={() => setGoToMarketplaceOpen(false)}
+        handleOpen={() => setGoToMarketplaceOpen(true)}
+        dialog={`
+          Now that you've connected your wallet, head to the marketplace to spend your tickets on an NFT prize!
+        `}
+        buttonText={"Go to Marketplace"}
+        buttonFunc={() => window.location.replace(process.env.NEXT_PUBLIC_MARKETPLACE_URL || "")}
+      />
+      <Modal 
+        isOpen={gameStatus === GameStatus.READY || gameStatus === GameStatus.ENDED}
         handleClose={() => null}
         handleOpen={() => null}
         dialog={
