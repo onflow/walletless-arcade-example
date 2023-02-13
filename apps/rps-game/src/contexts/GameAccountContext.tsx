@@ -7,7 +7,7 @@ import {
 } from 'react'
 import * as fcl from '@onflow/fcl'
 import type { ReactNode } from 'react'
-import { useFclContext } from './FclContext'
+import { useFclContext } from 'ui'
 import { generateKeys } from '../utils/crypto'
 import { getSession, setSession } from '../utils/session'
 import GET_CHILD_ADDRESS_FROM_PUBLIC_KEY_ON_CREATOR from '../../cadence/scripts/child-account/get-child-address-from-public-key-on-creator'

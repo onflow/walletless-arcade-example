@@ -8,9 +8,11 @@ import {
   DevToggle,
   CustomButton,
   Modal,
+  useFclContext,
+  useAppContext,
 } from 'ui'
 import { useSession, signIn, signOut } from 'next-auth/react'
-import { useFclContext, useRpsGameContext } from '../contexts'
+import { useRpsGameContext } from '../contexts'
 import purchaseNft from '../utils/purchase-nft'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
@@ -20,6 +22,7 @@ import Image from 'next/image'
 import { useState } from 'react'
 
 const Home: NextPage = () => {
+  const { enabled } = useAppContext()
   const { currentUser, connect, logout: disconnect } = useFclContext()
   const { data: session, status } = useSession()
   const router = useRouter()
@@ -35,7 +38,6 @@ const Home: NextPage = () => {
     disconnect,
     signIn,
     signOut,
-    toggle: <DevToggle />,
   }
 
   const { purchase_success } = router.query

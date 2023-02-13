@@ -2,13 +2,16 @@ import Head from 'next/head'
 import { SessionProvider } from 'next-auth/react'
 import type { AppProps } from 'next/app'
 import {
-  FclContext,
   GameAccountContext,
   UserContext,
   RpsGameContext,
   TicketContext,
 } from '../contexts'
+import { FclContext, AppContext } from 'ui'
 import '../styles/styles.css'
+import { loadFCLConfig } from '../utils/fcl-setup'
+
+loadFCLConfig()
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
@@ -19,17 +22,19 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
       </Head>
       <div className="bg-primary-gray-50">
         <SessionProvider session={session}>
-          <FclContext>
-            <TicketContext>
-              <GameAccountContext>
-                <UserContext>
-                  <RpsGameContext>
-                    <Component {...pageProps} />
-                  </RpsGameContext>
-                </UserContext>
-              </GameAccountContext>
-            </TicketContext>
-          </FclContext>
+          <AppContext>
+            <FclContext>
+              <TicketContext>
+                <GameAccountContext>
+                  <UserContext>
+                    <RpsGameContext>
+                      <Component {...pageProps} />
+                    </RpsGameContext>
+                  </UserContext>
+                </GameAccountContext>
+              </TicketContext>
+            </FclContext>
+          </AppContext>
         </SessionProvider>
       </div>
     </>

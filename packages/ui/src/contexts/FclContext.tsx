@@ -1,6 +1,4 @@
 import * as fcl from '@onflow/fcl'
-import { ROUTES } from '../constants/index'
-import router from 'next/router'
 import {
   createContext,
   useCallback,
@@ -9,12 +7,8 @@ import {
   useMemo,
   useState,
 } from 'react'
-import type { ReactNode } from 'react'
-import { FLOW } from '../constants'
-import flowJSON from '../../../../flow.json'
-import { loadFCLConfig } from '../utils/fcl-setup'
 
-loadFCLConfig()
+import type { ReactNode } from 'react'
 
 interface IFclContext {
   currentUser: fcl.CurrentUserObject | null | undefined
@@ -62,13 +56,8 @@ export default function FclContextProvider({
   const [transactionError, setTransactionError] = useState('')
   const [transactionEvents, setTransactionEvents] = useState(null)
   const [txId, setTxId] = useState<string | null>(null)
-  const [client] = useState(null)
 
   useEffect(() => fcl.currentUser.subscribe(setCurrentUser), [])
-
-  useEffect(() => {
-    loadFCLConfig()
-  }, [client])
 
   const connect = useCallback(() => {
     fcl.authenticate()
@@ -76,7 +65,6 @@ export default function FclContextProvider({
 
   const logout = useCallback(async () => {
     await fcl.unauthenticate()
-    router.push(ROUTES.HOME)
   }, [])
 
   const getTransactionStatusOnSealed = useCallback(

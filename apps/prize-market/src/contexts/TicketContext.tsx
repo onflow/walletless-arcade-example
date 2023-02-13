@@ -6,7 +6,7 @@ import {
   createContext,
 } from 'react'
 import type { ReactNode } from 'react'
-import { useFclContext } from './FclContext'
+import { useFclContext } from 'ui'
 import * as fcl from '@onflow/fcl'
 import MINT_RAINBOW_DUCK_PAYING_WITH_CHILD_VAULT from '../../cadence/transactions/arcade-prize/mint-rainbow-duck-paying-with-child-vault'
 import GET_ALL_NFT_DISPLAY_VIEWS from '../../cadence/scripts/arcade-prize/get-all-nft-display-views'
