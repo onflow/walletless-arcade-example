@@ -13,7 +13,9 @@
     "NEXT_PUBLIC_ADMIN_ADDRESS",
     "NEXT_PUBLIC_ADMIN_KEY_INDEX",
     "ADMIN_PRIVATE_KEY_HEX",
-    "VERCEL_URL"
+    "VERCEL_URL",
+    "NEXT_PUBLIC_MARKETPLACE_URL",
+    "NEXT_PUBLIC_GAME_URL"
   ],
   "pipeline": {
     "build": {
