@@ -12,8 +12,8 @@ import {
   Modal,
   useFclContext,
   useAppContext,
+  useTicketContext,
 } from 'ui'
-import { useTicketContext } from '../contexts'
 import { useEffect, useState } from 'react'
 import { FlippyOnHover } from '../components'
 
