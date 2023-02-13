@@ -85,7 +85,7 @@ const GameView = () => {
       const isPlayerWinner = playerID === winningGamePlayer
 
       if (isPlayerWinner) {
-        setMessage('You won! You get 10 tickets! 🎟')
+        setMessage('You won! You get 10 tickets 🎟! Connect your wallet now to redeem your tickets for use on the market, go to Settings > Connect Wallet')
       } else if (winningNFTID && !isPlayerWinner) {
         setMessage(
           `You played ${playerMoveString} and lost against ${opponentMoveString}!`
@@ -162,7 +162,7 @@ const GameView = () => {
         `}
         buttonText={'Go to Marketplace'}
         buttonFunc={() =>
-          window.location.replace(process.env.NEXT_PUBLIC_MARKETPLACE_URL || '')
+          window.open(process.env.NEXT_PUBLIC_MARKETPLACE_URL || '')
         }
       />
       <Modal 
