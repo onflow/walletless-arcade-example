@@ -3,7 +3,7 @@ import { FLOW } from '../constants'
 import flowJSON from '../../../../flow.json'
 
 const iconUrl =
-  process.env.NEXT_PUBLIC_FLOW_NETWORK === 'emulator'
+  process.env.NEXT_PUBLIC_FLOW_NETWORK === 'local'
     ? 'http://localhost:' +
       process.env.NEXT_PUBLIC_PORT +
       '/static/flow-icon-bw-green.svg'
