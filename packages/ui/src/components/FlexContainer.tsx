@@ -1,4 +1,3 @@
-import { styles } from '../utils'
 import type { ReactNode } from 'react'
 
 type FlexContainerProps = {
@@ -10,7 +9,7 @@ type FlexContainerProps = {
   align?: 'start' | 'center' | 'end' | 'stretch' | 'baseline'
 }
 
-export default function FlexWrapper({
+export default function FlexContainer({
   children,
   className,
 }: FlexContainerProps) {

@@ -17,15 +17,16 @@ import { useEffect } from 'react'
 import { GameView } from '../components'
 import MonsterLogo from '../../public/static/monster-logo.png'
 import Image from 'next/image'
-import { useState } from "react"
+import { useState } from 'react'
 
 const Home: NextPage = () => {
   const { currentUser, connect, logout: disconnect } = useFclContext()
   const { data: session, status } = useSession()
   const router = useRouter()
 
-  const [ isInitialModalOpen, setIsInitialModalOpen ] = useState<boolean>(true)
-  const [ isPrePurchaseModalOpen, setIsPrepurchaseModalOpen ] = useState<boolean>(true)
+  const [isInitialModalOpen, setIsInitialModalOpen] = useState<boolean>(true)
+  const [isPrePurchaseModalOpen, setIsPrepurchaseModalOpen] =
+    useState<boolean>(true)
 
   const navProps = {
     session,
@@ -82,7 +83,7 @@ const Home: NextPage = () => {
       <FullScreenLayout nav={<NavBar navProps={navProps} />} theme="green">
         {!session && (
           <FlexContainer className="w-full items-center justify-center">
-            <Modal 
+            <Modal
               isOpen={isInitialModalOpen}
               handleClose={() => setIsInitialModalOpen(false)}
               handleOpen={() => setIsInitialModalOpen(true)}
@@ -91,12 +92,12 @@ const Home: NextPage = () => {
                 This is a demo of Flow's Walletless Onboarding mechanisms.
                 The first step is to login using Google Auth.
               `}
-              buttonText={"Lets start!"}
+              buttonText={'Lets start!'}
               buttonFunc={() => setIsInitialModalOpen(false)}
             />
             <div className="w-full">
               <div className="align-center my-10 flex justify-center md:container md:mx-auto lg:my-14">
-                <Image src={MonsterLogo} alt="Monster Logo" />
+                <Image src={MonsterLogo} alt="Monster Logo" priority />
               </div>
               <h1 className="text-primary-green text-center text-5xl font-bold">
                 Welcome to Monster Arcade!
@@ -118,7 +119,7 @@ const Home: NextPage = () => {
         )}
         {session && !isGamePiecePurchased && (
           <FlexContainer className="w-full items-center justify-center">
-            <Modal 
+            <Modal
               isOpen={isPrePurchaseModalOpen}
               handleClose={() => setIsPrepurchaseModalOpen(false)}
               handleOpen={() => setIsPrepurchaseModalOpen(true)}
@@ -127,7 +128,7 @@ const Home: NextPage = () => {
                 In the background, the app has already created a Flow account for you.
                 Once you purchase the game piece NFT it will be deposited to the new Flow account.
               `}
-              buttonText={"Lets purchase!"}
+              buttonText={'Lets purchase!'}
               buttonFunc={() => setIsPrepurchaseModalOpen(false)}
             />
             <div className="w-full">

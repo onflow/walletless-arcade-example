@@ -62,7 +62,6 @@ export function userAuthorizationFunction(
   keyIndex: string,
   address: string
 ) {
-  console.log('userAuthorizationFunction', address)
   return async function (account: any) {
     // authorization function need to return an account
 

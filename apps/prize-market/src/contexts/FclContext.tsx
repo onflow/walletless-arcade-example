@@ -63,9 +63,6 @@ export default function FclContextProvider({
 
   useEffect(() => {
     loadFCLConfig()
-
-    // @ts-ignore
-    window.fcl = fcl
   }, [client])
 
   const connect = useCallback(() => {

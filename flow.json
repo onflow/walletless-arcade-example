@@ -104,6 +104,14 @@
         "RockPaperScissorsGame",
         "TicketToken"
       ]
+    },
+    "testnet": {
+      "testnet-account": [
+        "ArcadePrize",
+        "ChildAccount",
+        "RockPaperScissorsGame",
+        "TicketToken"
+      ]
     }
   }
 }
