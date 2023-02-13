@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { FlashButton, Row, Modal } from 'ui'
-import { useRpsGameContext, GameStatus, useTicketContext, useFclContext } from '../contexts'
+import { useFclContext } from "ui"
+import { useRpsGameContext, GameStatus, useTicketContext } from '../contexts'
 
 type PlayerMove = 'rock' | 'paper' | 'scissors' | undefined
 
