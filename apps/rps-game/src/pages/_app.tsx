@@ -7,7 +7,7 @@ import {
   RpsGameContext,
   TicketContext,
 } from '../contexts'
-import { FclContext } from 'ui'
+import { FclContext, AppContext } from 'ui'
 import '../styles/styles.css'
 import { loadFCLConfig } from '../utils/fcl-setup'
 
@@ -22,17 +22,19 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
       </Head>
       <div className="bg-primary-gray-50">
         <SessionProvider session={session}>
-          <FclContext>
-            <TicketContext>
-              <GameAccountContext>
-                <UserContext>
-                  <RpsGameContext>
-                    <Component {...pageProps} />
-                  </RpsGameContext>
-                </UserContext>
-              </GameAccountContext>
-            </TicketContext>
-          </FclContext>
+          <AppContext>
+            <FclContext>
+              <TicketContext>
+                <GameAccountContext>
+                  <UserContext>
+                    <RpsGameContext>
+                      <Component {...pageProps} />
+                    </RpsGameContext>
+                  </UserContext>
+                </GameAccountContext>
+              </TicketContext>
+            </FclContext>
+          </AppContext>
         </SessionProvider>
       </div>
     </>

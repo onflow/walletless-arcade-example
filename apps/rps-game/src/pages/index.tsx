@@ -9,6 +9,7 @@ import {
   CustomButton,
   Modal,
   useFclContext,
+  useAppContext,
 } from 'ui'
 import { useSession, signIn, signOut } from 'next-auth/react'
 import { useRpsGameContext } from '../contexts'
@@ -21,6 +22,7 @@ import Image from 'next/image'
 import { useState } from 'react'
 
 const Home: NextPage = () => {
+  const { enabled, toggleEnabled } = useAppContext()
   const { currentUser, connect, logout: disconnect } = useFclContext()
   const { data: session, status } = useSession()
   const router = useRouter()
@@ -36,7 +38,7 @@ const Home: NextPage = () => {
     disconnect,
     signIn,
     signOut,
-    toggle: <DevToggle />,
+    toggle: <DevToggle enabled={enabled} toggleEnabled={toggleEnabled} />,
   }
 
   const { purchase_success } = router.query

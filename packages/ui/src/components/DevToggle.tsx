@@ -1,13 +1,14 @@
-import { useState } from 'react'
 import { Switch } from '@headlessui/react'
 
-export default function DevToggle() {
-  const [enabled, setEnabled] = useState(false)
-
+interface IDevToggle {
+  enabled: boolean
+  toggleEnabled: () => void
+}
+export default function DevToggle({ enabled, toggleEnabled }: IDevToggle) {
   return (
     <Switch
       checked={enabled}
-      onChange={setEnabled}
+      onChange={toggleEnabled}
       className={`${
         enabled ? 'bg-blue-600' : 'bg-gray-200'
       } relative inline-flex h-6 w-11 items-center rounded-full`}
