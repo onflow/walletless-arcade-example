@@ -265,7 +265,8 @@ export default function RpsGameContextProvider({ children }: Props) {
     getTransactionStatusOnSealed,
   } = useFclContext()
 
-  const { ticketAmount, getTicketAmount, mintTickets } = useTicketContext()
+  const { totalTicketBalance, getTicketAmount, mintTickets } =
+    useTicketContext()
 
   const {
     gameAccountAddress,

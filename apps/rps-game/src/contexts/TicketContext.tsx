@@ -1,27 +1,21 @@
-import {
-  useEffect,
-  useState,
-  useCallback,
-  useContext,
-  createContext,
-} from 'react'
-import type { ReactNode } from 'react'
-import { useFclContext } from 'ui'
+import { useState, useCallback, useContext, createContext } from 'react'
 import * as fcl from '@onflow/fcl'
+import { useFclContext } from 'ui'
 import MINT_RAINBOW_DUCK_PAYING_WITH_CHILD_VAULT from '../../cadence/transactions/arcade-prize/mint-rainbow-duck-paying-with-child-vault'
+import GET_ALL_NFT_DISPLAY_VIEWS from '../../cadence/scripts/arcade-prize/get-all-nft-display-views'
 import GET_BALANCE_OF_ALL_CHILD_ACCOUNTS from '../../cadence/scripts/ticket-token/get-balance-of-all-child-accounts'
 import GET_BALANCE from '../../cadence/scripts/ticket-token/get-balance'
-import {
-  userAuthorizationFunction,
-  adminAuthorizationFunction,
-} from '../utils/authz-functions'
+import type { ReactNode } from 'react'
 
 interface Props {
   children?: ReactNode
 }
 
 interface ITicketContext {
-  ticketAmount: string | null
+  totalTicketBalance: string | null
+  childTicketVaultAddress: string | null
+  ownedPrizes: null | any[]
+  getOwnedPrizes: (address: string) => Promise<void>
   getTicketAmount: (
     address: string,
     isParentAccount: boolean
@@ -34,7 +28,12 @@ interface ITicketContext {
 }
 
 const initialState: ITicketContext = {
-  ticketAmount: null,
+  totalTicketBalance: null,
+  childTicketVaultAddress: null,
+  ownedPrizes: null,
+  getOwnedPrizes: function (address: string): Promise<void> {
+    throw new Error(`Function not implemented.`)
+  },
   getTicketAmount: function (
     address: string,
     isParentAccount: boolean
@@ -61,7 +60,13 @@ export const useTicketContext = () => useContext(TicketContext)
 
 export default function TicketContextProvider({ children }: Props) {
   const { currentUser, executeScript, executeTransaction } = useFclContext()
-  const [ticketAmount, setTicketAmount] = useState<null | string>(null)
+  const [totalTicketBalance, setTotalTicketBalance] = useState<null | string>(
+    null
+  )
+  const [ownedPrizes, setOwnedPrizes] = useState<null | any[]>(null)
+  const [childTicketVaultAddress, setChildTicketVaultAddress] = useState<
+    null | string
+  >(null)
 
   const purchaseWithTickets = useCallback(
     async (
@@ -83,6 +88,21 @@ export default function TicketContextProvider({ children }: Props) {
       )
     },
     []
+  )
+
+  const getOwnedPrizes = useCallback(
+    async (address: string): Promise<void> => {
+      try {
+        const _ownedPrizes: any[] = await executeScript(
+          GET_ALL_NFT_DISPLAY_VIEWS,
+          (arg: any, t: any) => [arg(fcl.withPrefix(address), t.Address)]
+        )
+        setOwnedPrizes(_ownedPrizes)
+      } catch (e) {
+        return
+      }
+    },
+    [executeScript, setOwnedPrizes]
   )
 
   const mintTickets = useCallback(
@@ -121,6 +141,10 @@ export default function TicketContextProvider({ children }: Props) {
                 (arg: any, t: any) => [arg(fcl.withPrefix(address), t.Address)]
               )
 
+            const childTicketVaultAddress =
+              Object.keys(childAccountsTicketBalances)[0] || null
+            setChildTicketVaultAddress(childTicketVaultAddress)
+
             const sumOfChildAccountBalances = (
               childAccountsTicketBalances: Record<string, string>
             ) =>
@@ -134,7 +158,7 @@ export default function TicketContextProvider({ children }: Props) {
             ).toFixed(0)
           }
 
-          setTicketAmount(Number(balance).toFixed(0))
+          setTotalTicketBalance(Number(balance).toFixed(0))
           return balance
         } catch (e) {
           return null
@@ -142,13 +166,16 @@ export default function TicketContextProvider({ children }: Props) {
       }
       return null
     },
-    [setTicketAmount, executeScript, currentUser]
+    [setTotalTicketBalance, executeScript]
   )
 
   const value = {
     currentUser,
-    ticketAmount,
+    childTicketVaultAddress,
+    totalTicketBalance,
+    ownedPrizes,
     getTicketAmount,
+    getOwnedPrizes,
     mintTickets,
     purchaseWithTickets,
   }
