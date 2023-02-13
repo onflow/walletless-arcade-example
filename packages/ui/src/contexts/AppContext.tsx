@@ -2,11 +2,14 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from 'react'
 
 import type { ReactNode } from 'react'
+
+const LOCAL_STORAGE_FIRE_ENABLED = "LOCAL_STORAGE_FIRE_ENABLED"
 
 interface IAppContext {
   enabled: boolean
@@ -23,15 +26,30 @@ export const useAppContext = () => {
   return context
 }
 
+function getFireModeFromLocalStorage() {
+  if (typeof window !== "undefined") {
+    const fromStorage = window.localStorage.getItem(LOCAL_STORAGE_FIRE_ENABLED)
+    if (typeof JSON.parse(fromStorage) === "boolean") {
+      return JSON.parse(fromStorage)
+    }
+  }
+  return false
+}
+
 export default function AppContextProvider({
   children,
 }: {
   children: ReactNode
 }) {
-  const [enabled, setEnabled] = useState<boolean>(false)
+  const [enabled, setEnabled] = useState<boolean>(getFireModeFromLocalStorage())
 
   const toggleEnabled = useCallback(() => {
-    setEnabled(enabled => !enabled)
+    setEnabled(enabled => {
+      if (typeof window !== "undefined") {
+        window.localStorage.setItem(LOCAL_STORAGE_FIRE_ENABLED, JSON.stringify(!enabled))
+      }
+      return !enabled
+    })
   }, [])
 
   const providerProps = useMemo(

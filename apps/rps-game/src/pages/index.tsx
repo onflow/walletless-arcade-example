@@ -85,7 +85,7 @@ const Home: NextPage = () => {
         {!session && (
           <FlexContainer className="w-full items-center justify-center">
             <Modal
-              isOpen={isInitialModalOpen && enabled}
+              isOpen={isInitialModalOpen && !enabled}
               handleClose={() => setIsInitialModalOpen(false)}
               handleOpen={() => setIsInitialModalOpen(true)}
               dialog={`
