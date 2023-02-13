@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback } from 'react'
-import { FlashButton, Row, Modal, useFclContext, useTicketContext } from 'ui'
+import { FlashButton, Row, Modal, useFclContext, useTicketContext, useAppContext } from 'ui'
 import { useRpsGameContext, GameStatus } from '../contexts'
 
 type PlayerMove = 'rock' | 'paper' | 'scissors' | undefined
 
 const GameView = () => {
+  const { enabled } = useAppContext()
   const { currentUser } = useFclContext()
 
   const [goToMarketplaceModalOpen, setGoToMarketplaceOpen] =
@@ -140,8 +141,8 @@ const GameView = () => {
 
   return (
     <div className="flex w-full flex-wrap">
-      <Modal
-        isOpen={goToMarketplaceModalOpen}
+      <Modal 
+        isOpen={goToMarketplaceModalOpen && enabled}
         handleClose={() => setGoToMarketplaceOpen(false)}
         handleOpen={() => setGoToMarketplaceOpen(true)}
         dialog={`
