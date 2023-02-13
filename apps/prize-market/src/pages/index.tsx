@@ -18,7 +18,9 @@ import { useEffect, useState } from 'react'
 import { FlippyOnHover } from '../components'
 
 const Home: NextPage = () => {
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+  const [isPurchaseSuccessModalOpen, setIsPurchaseSuccessModalOpen] = useState<boolean>(false)
+  const [isInitialModalOpen, setIsInitialModalOpen] = useState<boolean>(true)
+
   const { enabled } = useAppContext()
   const { currentUser, connect, logout: disconnect } = useFclContext()
   const {
@@ -51,20 +53,31 @@ const Home: NextPage = () => {
         process.env.NEXT_PUBLIC_ADMIN_ADDRESS || ''
       )
       getTicketAmount(currentUser.addr, true)
-      setIsModalOpen(true)
+      setIsPurchaseSuccessModalOpen(true)
     }
   }
 
   return (
     <>
       <Modal
-        isOpen={isModalOpen}
+        isOpen={isInitialModalOpen}
+        handleClose={() => null}
+        handleOpen={() => null}
+        dialog={`
+          Welcome to the Prize Marketplace. Connect your wallet, and all the tickets you earned in the Rock Paper Scissors game will appear.
+          You can spend those tickets on an NFT Prize!
+        `}
+        buttonText={'Lets go!'}
+        buttonFunc={() => setIsInitialModalOpen(false)}
+      />
+      <Modal
+        isOpen={isPurchaseSuccessModalOpen}
         handleClose={() => null}
         handleOpen={() => null}
         dialog={'Purchase Successful! View your purchase.'}
         buttonText={'View Purchase'}
         buttonFunc={() => {
-          setIsModalOpen(false)
+          setIsPurchaseSuccessModalOpen(false)
           window.location.replace('/wallet')
         }}
       />
