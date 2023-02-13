@@ -1,6 +1,8 @@
 import { useState } from 'react'
-import FlowLogo from '../components/FlowLogo'
+import FlowLogo from './FlowLogo'
 import ButtonRef from './ButtonRef'
+import DevToggle from './DevToggle'
+import { useAppContext } from '../contexts'
 
 function NavDropDown({
   session,
@@ -75,22 +77,15 @@ interface NavProps {
   disconnect?: any
   signIn?: any
   signOut?: any
-  toggle?: any
 }
 
 export default function Navbar({
-  navProps: {
-    session,
-    currentUser,
-    connect,
-    disconnect,
-    signIn,
-    signOut,
-    toggle,
-  },
+  navProps: { session, currentUser, connect, disconnect, signIn, signOut },
 }: {
   navProps: NavProps
 }) {
+  const { enabled, toggleEnabled } = useAppContext()
+
   return (
     <nav className="text-primary-gray-400 border-primary-gray-100 z-40 flex min-h-[96px] items-center border-2 bg-white p-4 lg:px-8">
       <a
@@ -125,7 +120,7 @@ export default function Navbar({
           )}
           <div className="px-4">
             <span className="text-primary-gray-400 mr-3">🔥 Mode</span>
-            {toggle}
+            <DevToggle enabled={enabled} toggleEnabled={toggleEnabled} />
             {false && (
               <ButtonRef
                 onClick={!currentUser?.addr ? connect : disconnect}

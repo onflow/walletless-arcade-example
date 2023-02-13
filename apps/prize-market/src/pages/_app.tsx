@@ -1,7 +1,11 @@
 import Head from 'next/head'
 import type { AppProps } from 'next/app'
-import { FclContext, TicketContext } from '../contexts'
+import { TicketContext } from '../contexts'
+import { FclContext, AppContext } from 'ui'
 import '../styles/globals.css'
+import { loadFCLConfig } from '../utils/fcl-setup'
+
+loadFCLConfig()
 
 function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
   return (
@@ -10,13 +14,15 @@ function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <FclContext>
-        <TicketContext>
-          <div className="bg-primary-gray-50">
-            <Component {...pageProps} />
-          </div>
-        </TicketContext>
-      </FclContext>
+      <AppContext>
+        <FclContext>
+          <TicketContext>
+            <div className="bg-primary-gray-50">
+              <Component {...pageProps} />
+            </div>
+          </TicketContext>
+        </FclContext>
+      </AppContext>
     </>
   )
 }
