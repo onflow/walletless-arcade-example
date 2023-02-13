@@ -8,8 +8,9 @@ const GameView = () => {
   const { enabled } = useAppContext()
   const { currentUser } = useFclContext()
 
-  const [goToMarketplaceModalOpen, setGoToMarketplaceOpen] =
-    useState<boolean>(false)
+  const [purchaseSuccessModalOpen, setPurchaseSuccessModalOpen] = useState<boolean>(true)
+  const [goToMarketplaceModalOpen, setGoToMarketplaceOpen] = useState<boolean>(false)
+  const [playModalOpen, setPlayModalOpen] = useState<boolean>(false)
 
   const [locked, setLocked] = useState(false)
   const [playerMove, setPlayerMove] = useState<PlayerMove>(undefined)
@@ -85,7 +86,7 @@ const GameView = () => {
       const isPlayerWinner = playerID === winningGamePlayer
 
       if (isPlayerWinner) {
-        setMessage('You won! You get 10 tickets! 🎟')
+        setMessage('You won! You get 10 tickets 🎟! Connect your wallet now to redeem your tickets for use on the market, go to Settings > Connect Wallet')
       } else if (winningNFTID && !isPlayerWinner) {
         setMessage(
           `You played ${playerMoveString} and lost against ${opponentMoveString}!`
@@ -101,8 +102,18 @@ const GameView = () => {
     }
   }, [gameResult, gameStatus, handleEndgame])
 
+  useEffect(() => {
+    setPlayModalOpen(gameStatus === GameStatus.ENDED)
+  }, [gameStatus])
+
+  const toggleDisableButtons = () => {
+    setLocked(locked => !locked)
+  }
+
   const handlePlayAgain = async () => {
     if (gameStatus !== GameStatus.ENDED) return
+    setPlayModalOpen(false)
+    setPurchaseSuccessModalOpen(false)
 
     setPlayerMove(undefined)
     setOpponentMove(undefined)
@@ -112,6 +123,8 @@ const GameView = () => {
 
   const handlePlay = async () => {
     if (gameStatus !== GameStatus.READY) return
+    setPlayModalOpen(false)
+    setPurchaseSuccessModalOpen(false)
 
     await setupNewSinglePlayerMatch()
   }
@@ -150,25 +163,25 @@ const GameView = () => {
         `}
         buttonText={'Go to Marketplace'}
         buttonFunc={() =>
-          window.location.replace(process.env.NEXT_PUBLIC_MARKETPLACE_URL || '')
+          window.open(process.env.NEXT_PUBLIC_MARKETPLACE_URL || '')
         }
       />
-      <Modal
-        isOpen={
-          gameStatus === GameStatus.READY || gameStatus === GameStatus.ENDED
-        }
-        handleClose={() => null}
+      <Modal 
+        isOpen={purchaseSuccessModalOpen}
+        handleClose={() => setPurchaseSuccessModalOpen(false)}
         handleOpen={() => null}
-        dialog={
-          gameStatus === GameStatus.READY
-            ? `Your payment has been successfully submitted. We’ve sent
-          you an email with all of the details of your order.`
-            : 'Play Again?'
-        }
-        buttonText={'Play'}
-        buttonFunc={
-          gameStatus === GameStatus.READY ? handlePlay : handlePlayAgain
-        }
+        dialog={`Your payment has been successfully submitted. We’ve sent
+        you an email with all of the details of your order.`}
+        buttonText={"Let's play!"}
+        buttonFunc={gameStatus === GameStatus.READY ? handlePlay : () => setPurchaseSuccessModalOpen(false)}
+      />
+      <Modal 
+        isOpen={playModalOpen}
+        handleClose={() => setPlayModalOpen(false)}
+        handleOpen={() => null}
+        dialog={message}
+        buttonText={'Continue'}
+        buttonFunc={() => setPlayModalOpen(false)}
       />
       <div className="flex w-full">
         {gameStatus !== 'READY' && (
@@ -228,6 +241,13 @@ const GameView = () => {
             </FlashButton>
             <FlashButton onClick={() => handleMove('s')} disabled={locked}>
               Scissors
+            </FlashButton>
+          </>
+        )}
+         {(gameStatus === GameStatus.READY || gameStatus === GameStatus.ENDED )&& (
+          <>
+            <FlashButton onClick={gameStatus === GameStatus.READY ? handlePlay : handlePlayAgain} disabled={locked}>
+              Play
             </FlashButton>
           </>
         )}
