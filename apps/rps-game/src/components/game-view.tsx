@@ -165,8 +165,8 @@ const GameView = () => {
 
   return (
     <div className="flex w-full flex-wrap">
-      <Modal
-        isOpen={goToMarketplaceModalOpen && enabled}
+      <Modal 
+        isOpen={goToMarketplaceModalOpen && !enabled}
         handleClose={() => setGoToMarketplaceOpen(false)}
         handleOpen={() => setGoToMarketplaceOpen(true)}
         dialog={`
@@ -177,8 +177,8 @@ const GameView = () => {
           window.open(process.env.NEXT_PUBLIC_MARKETPLACE_URL || '')
         }
       />
-      <Modal
-        isOpen={purchaseSuccessModalOpen}
+      <Modal 
+        isOpen={purchaseSuccessModalOpen && !enabled}
         handleClose={() => setPurchaseSuccessModalOpen(false)}
         handleOpen={() => null}
         dialog={`Your payment has been successfully submitted. We’ve sent
@@ -190,8 +190,8 @@ const GameView = () => {
             : () => setPurchaseSuccessModalOpen(false)
         }
       />
-      <Modal
-        isOpen={playModalOpen}
+      <Modal 
+        isOpen={playModalOpen && !enabled}
         handleClose={() => setPlayModalOpen(false)}
         handleOpen={() => null}
         dialog={message}

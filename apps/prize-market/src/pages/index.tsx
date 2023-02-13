@@ -60,7 +60,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Modal
-        isOpen={isInitialModalOpen && enabled}
+        isOpen={isInitialModalOpen && !enabled}
         handleClose={() => null}
         handleOpen={() => null}
         dialog={`
@@ -71,7 +71,7 @@ const Home: NextPage = () => {
         buttonFunc={() => setIsInitialModalOpen(false)}
       />
       <Modal
-        isOpen={isPurchaseSuccessModalOpen && enabled}
+        isOpen={isPurchaseSuccessModalOpen && !enabled}
         handleClose={() => null}
         handleOpen={() => null}
         dialog={'Purchase Successful! View your purchase.'}
