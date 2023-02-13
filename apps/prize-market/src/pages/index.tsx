@@ -10,8 +10,8 @@ import {
   FlexContainer,
   Col,
   Modal,
-  DevToggle,
   useFclContext,
+  useAppContext,
 } from 'ui'
 import { useTicketContext } from '../contexts'
 import { useEffect, useState } from 'react'
@@ -19,6 +19,7 @@ import { FlippyOnHover } from '../components'
 
 const Home: NextPage = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+  const { enabled } = useAppContext()
   const { currentUser, connect, logout: disconnect } = useFclContext()
   const {
     ownedPrizes,
@@ -33,7 +34,6 @@ const Home: NextPage = () => {
     currentUser,
     connect,
     disconnect,
-    toggle: <DevToggle />,
   }
 
   useEffect(() => {
