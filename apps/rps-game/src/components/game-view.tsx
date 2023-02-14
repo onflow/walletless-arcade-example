@@ -7,7 +7,10 @@ import {
   useFclContext,
   useTicketContext,
 } from 'shared'
+import MonsterLogo from "../../public/static/monster-logo.png"
+import MarketLogo from "../../public/static/market-logo.png"
 import { useRpsGameContext, GameStatus } from '../contexts'
+import Image from "next/image"
 
 type PlayerMove = 'rock' | 'paper' | 'scissors' | undefined
 
@@ -189,10 +192,17 @@ const GameView = () => {
         </div>
 
         <div className="flex min-h-full items-center justify-center">
-          <div className="tile flex h-24 w-24 items-center justify-center bg-green-500" />
+          <div className="flex flex-col min-h-full items-center justify-center m-4">
+            <Image width={200} height={200} alt="user monster" src={MonsterLogo.src} className="tile flex h-24 w-24 items-center justify-center bg-green-500" />  
+            <code className="mt-4">You</code>
+          </div>
+          
+          <code className="m-4">{"vs"}</code>
 
-          <code className="m-4">vs.</code>
-          <div className="tile flex h-24 w-24 items-center justify-center bg-pink-500" />
+          <div className="flex flex-col min-h-full items-center justify-center m-4">
+            <Image width={200} height={200} alt="opponent monster" src={MarketLogo.src} className="tile flex h-24 w-24 items-center justify-center bg-pink-500" />
+            <code className="mt-4">Opponent</code>
+          </div>
         </div>
 
         <div className="flex h-60 items-center justify-center rounded-md border border-pink-500 border-opacity-100 md:h-96">
