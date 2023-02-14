@@ -84,11 +84,17 @@ const Wallet: NextPage = () => {
                   </div>
                   {ownedPrizes ? (
                     <Row>
-                      {ownedPrizes.map(prize => (
+                      {Object.values(ownedPrizes).map(accountOwnedPrizes => accountOwnedPrizes.map((prize: any) => (
                         <Col>
-                          <FlippyOnHover flipDirection="horizontal" />
+                          <FlippyOnHover 
+                            image={prize.thumbnail}
+                            cardTitle={prize.name}
+                            cardContents={prize.collectionName}
+                            cardBackContents={prize.description}
+                            flipDirection="horizontal" 
+                          />
                         </Col>
-                      ))}
+                      )))}
                     </Row>
                   ) : (
                     <p className="mb-4 text-2xl text-blue-600">
