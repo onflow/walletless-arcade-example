@@ -9,7 +9,7 @@ import {
   Modal,
   useFclContext,
   useAppContext,
-} from 'ui'
+} from 'shared'
 import { useSession, signIn, signOut } from 'next-auth/react'
 import { useRpsGameContext } from '../contexts'
 import purchaseNft from '../utils/purchase-nft'

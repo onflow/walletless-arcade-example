@@ -13,7 +13,7 @@ import {
   useFclContext,
   useAppContext,
   useTicketContext,
-} from 'ui'
+} from 'shared'
 import { useEffect, useState } from 'react'
 import { FlippyOnHover } from '../components'
 

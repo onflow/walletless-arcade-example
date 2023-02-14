@@ -7,7 +7,7 @@ import {
   useMemo,
 } from 'react'
 import type { ReactNode, Dispatch, SetStateAction } from 'react'
-import { useFclContext, useTicketContext } from 'ui'
+import { useFclContext, useTicketContext } from 'shared'
 import { useGameAccountContext } from './GameAccountContext'
 import WALLETLESS_ONBOARDING_MINT_FROM_RESOURCE from '../../cadence/transactions/onboarding/walletless-onboarding-mint-from-resource'
 import SETUP_NEW_SINGLE_PLAYER_MATCH from '../../cadence/transactions/rock-paper-scissors-game/game-player/setup-new-singleplayer-match'

@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
   reactStrictMode: true,
-  transpilePackages: ['ui'],
+  transpilePackages: ['shared'],
   images: {
     remotePatterns: [
       {
@@ -19,3 +19,4 @@ module.exports = {
     ],
   },
 }
+ 

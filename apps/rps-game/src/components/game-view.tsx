@@ -1,5 +1,12 @@
 import { useState, useEffect, useCallback } from 'react'
-import { FlashButton, Row, Modal, useFclContext, useTicketContext, useAppContext } from 'ui'
+import {
+  FlashButton,
+  Row,
+  Modal,
+  useAppContext,
+  useFclContext,
+  useTicketContext,
+} from 'shared'
 import { useRpsGameContext, GameStatus } from '../contexts'
 
 type PlayerMove = 'rock' | 'paper' | 'scissors' | undefined
@@ -8,8 +15,10 @@ const GameView = () => {
   const { enabled } = useAppContext()
   const { currentUser } = useFclContext()
 
-  const [purchaseSuccessModalOpen, setPurchaseSuccessModalOpen] = useState<boolean>(true)
-  const [goToMarketplaceModalOpen, setGoToMarketplaceOpen] = useState<boolean>(false)
+  const [purchaseSuccessModalOpen, setPurchaseSuccessModalOpen] =
+    useState<boolean>(true)
+  const [goToMarketplaceModalOpen, setGoToMarketplaceOpen] =
+    useState<boolean>(false)
   const [playModalOpen, setPlayModalOpen] = useState<boolean>(false)
 
   const [locked, setLocked] = useState(false)
@@ -86,7 +95,9 @@ const GameView = () => {
       const isPlayerWinner = playerID === winningGamePlayer
 
       if (isPlayerWinner) {
-        setMessage('You won! You get 10 tickets 🎟! Connect your wallet now to redeem your tickets for use on the market, go to Settings > Connect Wallet')
+        setMessage(
+          'You won! You get 10 tickets 🎟! Connect your wallet now to redeem your tickets for use on the market, go to Settings > Connect Wallet'
+        )
       } else if (winningNFTID && !isPlayerWinner) {
         setMessage(
           `You played ${playerMoveString} and lost against ${opponentMoveString}!`
@@ -173,7 +184,11 @@ const GameView = () => {
         dialog={`Your payment has been successfully submitted. We’ve sent
         you an email with all of the details of your order.`}
         buttonText={"Let's play!"}
-        buttonFunc={gameStatus === GameStatus.READY ? handlePlay : () => setPurchaseSuccessModalOpen(false)}
+        buttonFunc={
+          gameStatus === GameStatus.READY
+            ? handlePlay
+            : () => setPurchaseSuccessModalOpen(false)
+        }
       />
       <Modal 
         isOpen={playModalOpen && !enabled}
@@ -244,9 +259,15 @@ const GameView = () => {
             </FlashButton>
           </>
         )}
-         {(gameStatus === GameStatus.READY || gameStatus === GameStatus.ENDED )&& (
+        {(gameStatus === GameStatus.READY ||
+          gameStatus === GameStatus.ENDED) && (
           <>
-            <FlashButton onClick={gameStatus === GameStatus.READY ? handlePlay : handlePlayAgain} disabled={locked}>
+            <FlashButton
+              onClick={
+                gameStatus === GameStatus.READY ? handlePlay : handlePlayAgain
+              }
+              disabled={locked}
+            >
               Play
             </FlashButton>
           </>

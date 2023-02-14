@@ -29,7 +29,7 @@
     "sass": "^1.57.1",
     "secp256k1": "^5.0.0",
     "stripe": "^11.7.0",
-    "ui": "*"
+    "shared": "*"
   },
   "devDependencies": {
     "@types/node": "18.11.3",

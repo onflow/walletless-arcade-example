@@ -5,7 +5,7 @@ import {
   useEffect,
   useState,
 } from 'react'
-import { useFclContext } from 'ui'
+import { useFclContext } from 'shared'
 import type { ReactNode } from 'react'
 import * as fcl from '@onflow/fcl'
 import IS_GAME_PIECE_NFT_COLLECTION_CONFIGURED from '../../cadence/scripts/monster-maker/is-monster-maker-collection-configured'

@@ -10,7 +10,7 @@ import {
   Col,
   useFclContext,
   useTicketContext,
-} from 'ui'
+} from 'shared'
 import { useEffect } from 'react'
 import { FlippyOnHover } from '../components'
 import MonsterLogo from '../../public/static/market-logo.png'
