@@ -1,20 +1,22 @@
 import { Dialog, Transition } from '@headlessui/react'
-import { Fragment, useState } from 'react'
+import { Fragment } from 'react'
 
 export default function Modal({
   isOpen,
   handleClose,
   handleOpen,
+  title = 'Modal Title',
   dialog,
   buttonText,
   buttonFunc,
 }: {
   isOpen: boolean
-  handleClose: Function
-  handleOpen: Function
+  handleClose: () => void
+  handleOpen?: () => void
+  title?: string
   dialog: string
   buttonText: string
-  buttonFunc: Function
+  buttonFunc: () => void
 }) {
   return (
     <>
@@ -52,7 +54,7 @@ export default function Modal({
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
                   >
-                    Flow Arcade
+                    {title}
                   </Dialog.Title>
                   <div className="mt-2">
                     <p className="text-sm text-gray-500">{dialog}</p>
