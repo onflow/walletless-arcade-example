@@ -16,15 +16,15 @@ const FlippyStyle = {
 const FlippyOnHover = ({
   flipDirection = 'vertical',
   image = Prize,
-  cardTitle = "",
+  cardTitle = "Rainbow Duck",
   cardContents = "10 Tickets",
-  cardBackContents = ""
+  cardBackContents = "The happiest rainbow duck friend, prized for its vibrant feathers!"
 }: {
-  flipDirection: string,
-  image: string | StaticImageData,
-  cardTitle: string,
-  cardContents: string,
-  cardBackContents: string,
+  flipDirection?: string,
+  image?: string | StaticImageData,
+  cardTitle?: string,
+  cardContents?: string,
+  cardBackContents?: string,
 }) => (
   <Flippy flipOnHover={true} flipDirection={flipDirection} style={FlippyStyle}>
     <DefaultCardContents image={image} cardTitle={cardTitle} cardBackContents={cardBackContents}>{cardContents}</DefaultCardContents>
