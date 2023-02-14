@@ -19,7 +19,8 @@ import { FlippyOnHover } from '../components'
 
 const Home: NextPage = () => {
   const [isPurchaseSuccessModalOpen, setIsPurchaseSuccessModalOpen] = useState<boolean>(false)
-  const [isInitialModalOpen, setIsInitialModalOpen] = useState<boolean>(true)
+  const [isWalletConnectedModal, setIsWalletConnectedModal] = useState<boolean>(false)
+  const [isInitialModalOpen, setIsInitialModalOpen] = useState<boolean>(false)
 
   const { enabled } = useAppContext()
   const { currentUser, connect, logout: disconnect } = useFclContext()
@@ -34,6 +35,7 @@ const Home: NextPage = () => {
 
   const navProps = {
     currentUser,
+    showCurrentUserAddress: true,
     connect,
     disconnect,
   }
@@ -44,6 +46,14 @@ const Home: NextPage = () => {
       getOwnedPrizes(currentUser.addr)
     }
   }, [totalTicketBalance, currentUser, getTicketAmount, getOwnedPrizes])
+
+  useEffect(() => {
+    if (currentUser?.addr) {
+      setIsWalletConnectedModal(true)
+    } else {
+      setIsInitialModalOpen(true) 
+    }
+  }, [currentUser?.addr])
 
   const buyNFT = async () => {
     if (currentUser?.addr) {
@@ -69,6 +79,16 @@ const Home: NextPage = () => {
         `}
         buttonText={'Lets go!'}
         buttonFunc={() => setIsInitialModalOpen(false)}
+      />
+      <Modal
+        isOpen={isWalletConnectedModal && !enabled}
+        handleClose={() => null}
+        handleOpen={() => null}
+        dialog={`
+          Now that you've connected your wallet, your balance reflects the tickets you collected in the monster arcade game account.
+        `}
+        buttonText={'Lets Purchase!'}
+        buttonFunc={() => setIsWalletConnectedModal(false)}
       />
       <Modal
         isOpen={isPurchaseSuccessModalOpen && !enabled}
