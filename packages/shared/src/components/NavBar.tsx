@@ -7,6 +7,7 @@ import { useAppContext } from '../contexts'
 function NavDropDown({
   session,
   currentUser,
+  showCurrentUserAddress = true,
   connect,
   disconnect,
   signIn,
@@ -14,6 +15,7 @@ function NavDropDown({
 }: {
   session?: any
   currentUser?: any | undefined
+  showCurrentUserAddress: boolean
   connect?: any
   disconnect?: any
   signIn?: any
@@ -45,7 +47,7 @@ function NavDropDown({
                 onClick={disconnect}
                 className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
               >
-                {currentUser?.addr}
+                Disconnect Wallet
               </div>
             ) : (
               <div
@@ -56,14 +58,16 @@ function NavDropDown({
               </div>
             )}
           </div>
-          <div className="shadow-xs rounded-md bg-white px-2 py-2">
-            <div
-              onClick={() => signOut()}
-              className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
-            >
-              Logout
+          {session && (
+            <div className="shadow-xs rounded-md bg-white px-2 py-2">
+              <div
+                onClick={signOut}
+                className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
+              >
+                Logout
+              </div>
             </div>
-          </div>
+          )}
         </div>
       )}
     </div>
@@ -73,6 +77,7 @@ function NavDropDown({
 interface NavProps {
   session?: any
   currentUser?: any
+  showCurrentUserAddress: boolean
   connect?: any
   disconnect?: any
   signIn?: any
@@ -80,7 +85,7 @@ interface NavProps {
 }
 
 export default function Navbar({
-  navProps: { session, currentUser, connect, disconnect, signIn, signOut },
+  navProps: { session, currentUser, showCurrentUserAddress = true, connect, disconnect, signIn, signOut },
 }: {
   navProps: NavProps
 }) {
@@ -99,17 +104,24 @@ export default function Navbar({
       </a>
       <div className="mt-1 flex flex-1 justify-end lg:flex">
         <ul className="flex items-center">
-          {session && (
+          {(currentUser?.addr && showCurrentUserAddress) && (
+            <>
+              <div className="px-4">{currentUser?.addr}</div>
+              <div className="border-primary-gray-100 h-1/2 border-l"></div>
+            </>
+          )}
+          {session?.user?.email && (
             <>
               <div className="px-4">{session?.user?.email}</div>
               <div className="border-primary-gray-100 h-1/2 border-l"></div>
             </>
           )}
-          {session && currentUser && (
+          {(session || currentUser?.addr) && (
             <>
               <NavDropDown
                 session={session}
                 currentUser={currentUser}
+                showCurrentUserAddress={showCurrentUserAddress}
                 connect={connect}
                 disconnect={disconnect}
                 signIn={signIn}
