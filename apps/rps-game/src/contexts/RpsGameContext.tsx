@@ -22,6 +22,9 @@ import {
 import RESOLVE_MATCH_AND_RETURN_NFTS from '../../cadence/transactions/rock-paper-scissors-game/game-player/resolve-match-and-return-nfts'
 import * as fcl from '@onflow/fcl'
 
+const LOCAL_STORAGE_GAME_MATCH_ID = "LOCAL_STORAGE_GAME_MATCH_ID"
+const LOCAL_STORAGE_GAME_PIECE_ID = "LOCAL_STORAGE_GAME_PIECE_ID"
+
 interface Props {
   children?: ReactNode
 }
@@ -79,9 +82,21 @@ interface State {
 const initialState: State = {
   gameStatus: GameStatus.UNPURCHASED,
   isGamePiecePurchased: false,
-  gameMatchID: null,
+  gameMatchID: (() => {
+    if (typeof window !== "undefined") {
+      const gameMatchId = window.localStorage.getItem(LOCAL_STORAGE_GAME_MATCH_ID);
+      if (typeof gameMatchId === "string") return gameMatchId
+    }
+    return null
+  })(),
   gamePlayerID: null,
-  gamePieceNFTID: null,
+  gamePieceNFTID: (() => {
+    if (typeof window !== "undefined") {
+      const gamePieceNFTID = window.localStorage.getItem(LOCAL_STORAGE_GAME_PIECE_ID);
+      if (typeof gamePieceNFTID === "string") return gamePieceNFTID
+    }
+    return null
+  })(),
   gameResult: null,
   winLossRecord: null,
   isGameInitialized: false,
@@ -125,12 +140,30 @@ function reducer(state: State, action: Action): State {
     case 'SET_GAME_PIECE_PURCHASED':
       return { ...state, isGamePiecePurchased: action.isGamePiecePurchased }
     case 'SET_GAME_PIECE_NFT_ID':
+      if (typeof window !== "undefined" && action.gamePieceNFTID) {
+        window.localStorage.setItem(LOCAL_STORAGE_GAME_PIECE_ID, action.gamePieceNFTID);
+      }
       return { ...state, gamePieceNFTID: action.gamePieceNFTID }
     case 'SET_GAME_PLAYER_ID':
       return { ...state, gamePlayerID: action.gamePlayerID }
     case 'SET_GAME_MATCH_ID':
+      if (typeof window !== "undefined" && action.gameMatchID) {
+        window.localStorage.setItem(LOCAL_STORAGE_GAME_MATCH_ID, action.gameMatchID);
+      }
       return { ...state, gameMatchID: action.gameMatchID }
     case 'SET_GAME_STATUS':
+      if (action.gameStatus === GameStatus.ENDED && typeof window !== "undefined") {
+        window.localStorage.removeItem(LOCAL_STORAGE_GAME_MATCH_ID);
+        window.localStorage.removeItem(LOCAL_STORAGE_GAME_PIECE_ID);
+      }
+      if (action.gameStatus === GameStatus.PLAYING && typeof window !== "undefined") {
+        if (state.gameMatchID) {
+          window.localStorage.setItem(LOCAL_STORAGE_GAME_MATCH_ID, state.gameMatchID);
+        }
+        if (state.gamePieceNFTID) {
+          window.localStorage.setItem(LOCAL_STORAGE_GAME_PIECE_ID, state.gamePieceNFTID);
+        }
+      }
       return {
         ...state,
         gameStatus: action.gameStatus,
@@ -157,6 +190,10 @@ function reducer(state: State, action: Action): State {
         resetGame: action.resetGame,
       }
     case 'RESET_GAME':
+      if (typeof window !== "undefined") {
+        window.localStorage.removeItem(LOCAL_STORAGE_GAME_MATCH_ID);
+        window.localStorage.removeItem(LOCAL_STORAGE_GAME_PIECE_ID);
+      }
       return {
         ...state,
         gameMatchID: null,
@@ -657,8 +694,8 @@ export default function RpsGameContextProvider({ children }: Props) {
         checkGameClientInitialized()
         return
       case GameStatus.INITIALIZED:
-        getWinLossRecord()
         getGamePieceNFTID()
+        getWinLossRecord()
         getGamePlayerID()
         return
       case GameStatus.ENDED:
