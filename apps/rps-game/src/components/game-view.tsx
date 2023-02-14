@@ -164,86 +164,52 @@ const GameView = () => {
   }, [currentUser?.addr])
 
   return (
-    <div className="flex w-full flex-wrap">
-      <Modal 
-        isOpen={goToMarketplaceModalOpen && !enabled}
-        handleClose={() => setGoToMarketplaceOpen(false)}
-        handleOpen={() => setGoToMarketplaceOpen(true)}
-        dialog={`
-          Now that you've connected your wallet, head to the marketplace to spend your tickets on an NFT prize!
-        `}
-        buttonText={'Go to Marketplace'}
-        buttonFunc={() =>
-          window.open(process.env.NEXT_PUBLIC_MARKETPLACE_URL || '')
-        }
-      />
-      <Modal 
-        isOpen={purchaseSuccessModalOpen && !enabled}
-        handleClose={() => setPurchaseSuccessModalOpen(false)}
-        handleOpen={() => null}
-        dialog={`Your payment has been successfully submitted. We’ve sent
-        you an email with all of the details of your order.`}
-        buttonText={"Let's play!"}
-        buttonFunc={
-          gameStatus === GameStatus.READY
-            ? handlePlay
-            : () => setPurchaseSuccessModalOpen(false)
-        }
-      />
-      <Modal 
-        isOpen={playModalOpen && !enabled}
-        handleClose={() => setPlayModalOpen(false)}
-        handleOpen={() => null}
-        dialog={message}
-        buttonText={'Continue'}
-        buttonFunc={() => setPlayModalOpen(false)}
-      />
-      <div className="flex w-full">
-        {gameStatus !== 'READY' && (
-          <div className="flex w-full items-center justify-center space-x-4 pt-6 text-2xl text-blue-500">
-            <div className="w-full w-1/2">
-              <div className="flex justify-center text-green-500">Player</div>
-            </div>
-            <div className="w-full w-1/2">
-              <div className="flex justify-center text-red-500">Opponent</div>
-            </div>
-          </div>
-        )}
+    <div className="container m-auto">
+      {totalTicketBalance && (
+        <div className="mb-12 flex w-full justify-center text-2xl text-green-500 md:mb-24">
+          <span className="text-xl font-extrabold">
+            🎟 Tickets: {totalTicketBalance}
+          </span>
+        </div>
+      )}
+      <div className="container m-auto grid grid-cols-1 gap-4 md:my-10 md:grid-cols-3">
+        <div className="flex h-60 items-center justify-center rounded-md border border-green-500 border-opacity-100 md:h-96">
+          {playerMove === 'rock' && (
+            <span className="text-9xl font-extrabold">🪨</span>
+          )}
+          {playerMove === 'paper' && (
+            <span className="text-9xl font-extrabold">📄</span>
+          )}
+          {playerMove === 'scissors' && (
+            <span className="text-9xl font-extrabold">✂️</span>
+          )}
+          {!playerMove && gameStatus === GameStatus.PLAYING && (
+            <span className="text-9xl font-extrabold">❓</span>
+          )}
+        </div>
+
+        <div className="flex min-h-full items-center justify-center">
+          <div className="tile flex h-24 w-24 items-center justify-center bg-green-500" />
+
+          <code className="m-4">vs.</code>
+          <div className="tile flex h-24 w-24 items-center justify-center bg-pink-500" />
+        </div>
+
+        <div className="flex h-60 items-center justify-center rounded-md border border-pink-500 border-opacity-100 md:h-96">
+          {opponentMove === 'rock' && (
+            <span className="text-9xl font-extrabold">🪨</span>
+          )}
+          {opponentMove === 'paper' && (
+            <span className="text-9xl font-extrabold">📄</span>
+          )}
+          {opponentMove === 'scissors' && (
+            <span className="text-9xl font-extrabold">✂️</span>
+          )}
+          {!playerMove && gameStatus === GameStatus.PLAYING && (
+            <span className="text-9xl font-extrabold">❓</span>
+          )}
+        </div>
       </div>
-      <Row>
-        <div className="w-1/2">
-          <div className="text-grey-dark flex justify-center">
-            {playerMove === 'rock' && (
-              <span className="text-9xl font-extrabold">🪨</span>
-            )}
-            {playerMove === 'paper' && (
-              <span className="text-9xl font-extrabold">📄</span>
-            )}
-            {playerMove === 'scissors' && (
-              <span className="text-9xl font-extrabold">✂️</span>
-            )}
-            {!playerMove && gameStatus === GameStatus.PLAYING && (
-              <span className="text-9xl font-extrabold">❓</span>
-            )}
-          </div>
-        </div>
-        <div className="w-1/2">
-          <div className="text-grey-dark flex justify-center">
-            {opponentMove === 'rock' && (
-              <span className="text-9xl font-extrabold">🪨</span>
-            )}
-            {opponentMove === 'paper' && (
-              <span className="text-9xl font-extrabold">📄</span>
-            )}
-            {opponentMove === 'scissors' && (
-              <span className="text-9xl font-extrabold">✂️</span>
-            )}
-            {!playerMove && gameStatus === GameStatus.PLAYING && (
-              <span className="text-9xl font-extrabold">❓</span>
-            )}
-          </div>
-        </div>
-      </Row>
 
       <Row>
         {gameStatus === GameStatus.PLAYING && (
@@ -261,32 +227,56 @@ const GameView = () => {
         )}
         {(gameStatus === GameStatus.READY ||
           gameStatus === GameStatus.ENDED) && (
-          <>
-            <FlashButton
-              onClick={
-                gameStatus === GameStatus.READY ? handlePlay : handlePlayAgain
-              }
-              disabled={locked}
-            >
-              Play
-            </FlashButton>
-          </>
+          <FlashButton
+            onClick={
+              gameStatus === GameStatus.READY ? handlePlay : handlePlayAgain
+            }
+            disabled={locked}
+          >
+            {gameStatus === GameStatus.READY ? ' Play ' : 'Play Again'}
+          </FlashButton>
         )}
       </Row>
-      <Row>
-        <div className="flex w-full items-center justify-center space-x-4 text-2xl font-extrabold text-blue-500">
+      <div className="mt-12 flex w-full flex-row items-center justify-center md:mt-24">
+        <div className="flex w-full items-center justify-center space-x-4 text-2xl font-extrabold text-green-500">
           <span> Wins: {winLossRecord?.wins ?? 0}</span>
           <span> Losses: {winLossRecord?.losses ?? 0}</span>
           <span> Ties: {winLossRecord?.ties ?? 0}</span>
         </div>
-        {totalTicketBalance && (
-          <div className="flex w-full items-center justify-center space-x-4 text-2xl text-blue-500">
-            <span className="text-xl font-extrabold">
-              🎟 Tickets: {totalTicketBalance}
-            </span>
-          </div>
-        )}
-      </Row>
+      </div>
+      <Modal
+        isOpen={goToMarketplaceModalOpen && !enabled}
+        handleClose={() => setGoToMarketplaceOpen(false)}
+        handleOpen={() => setGoToMarketplaceOpen(true)}
+        dialog={`
+          Now that you've connected your wallet, head to the marketplace to spend your tickets on an NFT prize!
+        `}
+        buttonText={'Go to Marketplace'}
+        buttonFunc={() =>
+          window.open(process.env.NEXT_PUBLIC_MARKETPLACE_URL || '')
+        }
+      />
+      <Modal
+        isOpen={purchaseSuccessModalOpen && !enabled}
+        handleClose={() => setPurchaseSuccessModalOpen(false)}
+        handleOpen={() => null}
+        dialog={`Your payment has been successfully submitted. We’ve sent
+        you an email with all of the details of your order.`}
+        buttonText={"Let's play!"}
+        buttonFunc={
+          gameStatus === GameStatus.READY
+            ? handlePlay
+            : () => setPurchaseSuccessModalOpen(false)
+        }
+      />
+      <Modal
+        isOpen={playModalOpen && !enabled}
+        handleClose={() => setPlayModalOpen(false)}
+        handleOpen={() => null}
+        dialog={message}
+        buttonText={'Continue'}
+        buttonFunc={() => setPlayModalOpen(false)}
+      />
     </div>
   )
 }
