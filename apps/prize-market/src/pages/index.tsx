@@ -18,8 +18,10 @@ import { useEffect, useState } from 'react'
 import { FlippyOnHover } from '../components'
 
 const Home: NextPage = () => {
-  const [isPurchaseSuccessModalOpen, setIsPurchaseSuccessModalOpen] = useState<boolean>(false)
-  const [isWalletConnectedModal, setIsWalletConnectedModal] = useState<boolean>(false)
+  const [isPurchaseSuccessModalOpen, setIsPurchaseSuccessModalOpen] =
+    useState<boolean>(false)
+  const [isWalletConnectedModal, setIsWalletConnectedModal] =
+    useState<boolean>(false)
   const [isInitialModalOpen, setIsInitialModalOpen] = useState<boolean>(false)
 
   const { enabled } = useAppContext()
@@ -51,7 +53,7 @@ const Home: NextPage = () => {
     if (currentUser?.addr) {
       setIsWalletConnectedModal(true)
     } else {
-      setIsInitialModalOpen(true) 
+      setIsInitialModalOpen(true)
     }
   }, [currentUser?.addr])
 
@@ -94,7 +96,11 @@ const Home: NextPage = () => {
         isOpen={isPurchaseSuccessModalOpen && !enabled}
         handleClose={() => null}
         handleOpen={() => null}
-        dialog={'Purchase Successful! View your purchase.'}
+        title={'Purchase Successful!'}
+        dialog={`
+         You used tickets from your linked game account to purchase an NFT
+         without needing to withdraw them!
+         The Rainbow Ducky NFT was minted to you main account.`}
         buttonText={'View Purchase'}
         buttonFunc={() => {
           setIsPurchaseSuccessModalOpen(false)

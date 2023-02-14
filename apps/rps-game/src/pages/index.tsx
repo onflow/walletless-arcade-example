@@ -43,22 +43,7 @@ const Home: NextPage = () => {
   const { purchase_success } = router.query
 
   const {
-    state: {
-      gameStatus,
-      gameMatchID,
-      gamePieceNFTID,
-      gameResult,
-      isGameInitialized,
-      isGameInitializedStateLoading,
-      setupNewSinglePlayerMatch,
-      submitBothSinglePlayerMoves,
-      resolveMatchAndReturnNFTS,
-      resetGame,
-      gamePlayerID,
-      winLossRecord,
-      isGamePiecePurchased,
-      setGamePiecePurchased,
-    },
+    state: { isGamePiecePurchased, setGamePiecePurchased },
   } = useRpsGameContext()
 
   useEffect(() => {
@@ -89,8 +74,8 @@ const Home: NextPage = () => {
               isOpen={isInitialModalOpen && !enabled}
               handleClose={() => setIsInitialModalOpen(false)}
               handleOpen={() => setIsInitialModalOpen(true)}
+              title={'Welcome to Flow Arcade'}
               dialog={`
-                Welcome to Flow Arcade.
                 This is a demo of Flow's Walletless Onboarding mechanisms.
                 The first step is to login using Google Auth.
               `}
@@ -125,12 +110,14 @@ const Home: NextPage = () => {
               isOpen={isPrePurchaseModalOpen}
               handleClose={() => setIsPrepurchaseModalOpen(false)}
               handleOpen={() => setIsPrepurchaseModalOpen(true)}
+              title={'What’s Happening?'}
               dialog={`
-                Now that you're logged in, next we need to purchase a game piece NFT to play.
-                In the background, the app has already created a Flow account for you.
-                Once you purchase the game piece NFT it will be deposited to the new Flow account.
+                When you logged in, the app created a Flow account for you in the background. 
+                The address of the custodial account is <LINK> and can be found in Settings.
+                To play the game, you'll need to purchase a game piece NFT.  
+                Once you purchase, the NFT will be deposited into the in-app custodial Flow account.
               `}
-              buttonText={'Lets purchase!'}
+              buttonText={'Close'}
               buttonFunc={() => setIsPrepurchaseModalOpen(false)}
             />
             <div className="w-full">
@@ -161,4 +148,3 @@ const Home: NextPage = () => {
 }
 
 export default Home
- 

@@ -32,8 +32,6 @@ const GameView = () => {
       gameMatchID,
       gamePieceNFTID,
       gameResult,
-      isGameInitialized,
-      isGameInitializedStateLoading,
       setupNewSinglePlayerMatch,
       submitBothSinglePlayerMoves,
       resolveMatchAndReturnNFTS,
@@ -96,7 +94,7 @@ const GameView = () => {
 
       if (isPlayerWinner) {
         setMessage(
-          'You won! You get 10 tickets 🎟! Connect your wallet now to redeem your tickets for use on the market, go to Settings > Connect Wallet'
+          `For each win, the game deposits 10 tickets in the form of Fungible Tokens into the in-app custodial Flow account <LINK to FlowView>`
         )
       } else if (winningNFTID && !isPlayerWinner) {
         setMessage(
@@ -183,9 +181,11 @@ const GameView = () => {
           {playerMove === 'scissors' && (
             <span className="text-9xl font-extrabold">✂️</span>
           )}
-          {!playerMove && gameStatus === GameStatus.PLAYING && (
-            <span className="text-9xl font-extrabold">❓</span>
-          )}
+          {!playerMove &&
+            (gameStatus === GameStatus.READY ||
+              gameStatus === GameStatus.PLAYING) && (
+              <span className="text-9xl font-extrabold">❓</span>
+            )}
         </div>
 
         <div className="flex min-h-full items-center justify-center">
@@ -205,37 +205,26 @@ const GameView = () => {
           {opponentMove === 'scissors' && (
             <span className="text-9xl font-extrabold">✂️</span>
           )}
-          {!playerMove && gameStatus === GameStatus.PLAYING && (
-            <span className="text-9xl font-extrabold">❓</span>
-          )}
+          {!playerMove &&
+            (gameStatus === GameStatus.READY ||
+              gameStatus === GameStatus.PLAYING) && (
+              <span className="text-9xl font-extrabold">❓</span>
+            )}
         </div>
       </div>
 
       <Row>
-        {gameStatus === GameStatus.PLAYING && (
-          <>
-            <FlashButton onClick={() => handleMove('r')} disabled={locked}>
-              Rock
-            </FlashButton>
-            <FlashButton onClick={() => handleMove('p')} disabled={locked}>
-              Paper
-            </FlashButton>
-            <FlashButton onClick={() => handleMove('s')} disabled={locked}>
-              Scissors
-            </FlashButton>
-          </>
-        )}
-        {(gameStatus === GameStatus.READY ||
-          gameStatus === GameStatus.ENDED) && (
-          <FlashButton
-            onClick={
-              gameStatus === GameStatus.READY ? handlePlay : handlePlayAgain
-            }
-            disabled={locked}
-          >
-            {gameStatus === GameStatus.READY ? ' Play ' : 'Play Again'}
+        <>
+          <FlashButton onClick={() => handleMove('r')} disabled={locked}>
+            Rock
           </FlashButton>
-        )}
+          <FlashButton onClick={() => handleMove('p')} disabled={locked}>
+            Paper
+          </FlashButton>
+          <FlashButton onClick={() => handleMove('s')} disabled={locked}>
+            Scissors
+          </FlashButton>
+        </>
       </Row>
       <div className="mt-12 flex w-full flex-row items-center justify-center md:mt-24">
         <div className="flex w-full items-center justify-center space-x-4 text-2xl font-extrabold text-green-500">
@@ -248,8 +237,11 @@ const GameView = () => {
         isOpen={goToMarketplaceModalOpen && !enabled}
         handleClose={() => setGoToMarketplaceOpen(false)}
         handleOpen={() => setGoToMarketplaceOpen(true)}
+        title={"What's Happening?"}
         dialog={`
-          Now that you've connected your wallet, head to the marketplace to spend your tickets on an NFT prize!
+          When you connected your wallet, the in-app custodial Flow account delegated control to your wallet, 
+          establishing hybrid custody of your NFTs and FTs while they continue to reside in the in-app custodial 
+          Flow account <LINK to Flowview GameAccount>.
         `}
         buttonText={'Go to Marketplace'}
         buttonFunc={() =>
@@ -257,12 +249,14 @@ const GameView = () => {
         }
       />
       <Modal
-        isOpen={purchaseSuccessModalOpen && !enabled}
+        isOpen={purchaseSuccessModalOpen && !gameMatchID && !enabled}
         handleClose={() => setPurchaseSuccessModalOpen(false)}
-        handleOpen={() => null}
-        dialog={`Your payment has been successfully submitted. We’ve sent
-        you an email with all of the details of your order.`}
-        buttonText={"Let's play!"}
+        title={"What's Happening?"}
+        dialog={`
+          After submitting your payment, a game piece NFT was minted and deposited into the in-app custodial 
+          Flow account (link here). You can use this NFT to play the game and win tickets.
+        `}
+        buttonText={'Play Now!'}
         buttonFunc={
           gameStatus === GameStatus.READY
             ? handlePlay
@@ -270,12 +264,21 @@ const GameView = () => {
         }
       />
       <Modal
-        isOpen={playModalOpen && !enabled}
-        handleClose={() => setPlayModalOpen(false)}
+        isOpen={playModalOpen}
+        handleClose={
+          gameStatus === GameStatus.ENDED
+            ? handlePlayAgain
+            : () => setPlayModalOpen(false)
+        }
         handleOpen={() => null}
+        title={'Good Game!'}
         dialog={message}
-        buttonText={'Continue'}
-        buttonFunc={() => setPlayModalOpen(false)}
+        buttonText={'Play Again!'}
+        buttonFunc={
+          gameStatus === GameStatus.ENDED
+            ? handlePlayAgain
+            : () => setPlayModalOpen(false)
+        }
       />
     </div>
   )
