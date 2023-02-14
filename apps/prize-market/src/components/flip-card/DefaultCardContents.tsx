@@ -6,10 +6,12 @@ import FrontSide from './FrontSide'
 
 interface IProps {
   children?: ReactNode
-  image: StaticImageData
+  image: string | StaticImageData,
+  cardTitle: string,
+  cardBackContents: string
 }
 
-const DefaultCardContents = ({ children, image }: IProps) => (
+const DefaultCardContents = ({ children, image, cardTitle, cardBackContents }: IProps) => (
   <>
     <FrontSide
       style={{
@@ -30,7 +32,7 @@ const DefaultCardContents = ({ children, image }: IProps) => (
         sizes="100vw"
         style={{ maxWidth: '100%', maxHeight: '100%' }}
       />
-      <div className="mt-2">Rare Rainbow Ducky</div>
+      <div className="mt-2">{cardTitle}</div>
 
       <span
         style={{
@@ -54,7 +56,7 @@ const DefaultCardContents = ({ children, image }: IProps) => (
       }}
       cardType="back"
     >
-      Rainbow Ducky
+      {cardBackContents}
       <span className="mt-12">
         <svg
           width="41"

@@ -1,6 +1,7 @@
 import Flippy from './Flippy'
 import DefaultCardContents from './DefaultCardContents'
 import Prize from '../../../public/static/rainbowduck.png'
+import { StaticImageData } from 'next/image'
 
 const FlippyStyle = {
   width: '200px',
@@ -14,11 +15,19 @@ const FlippyStyle = {
 
 const FlippyOnHover = ({
   flipDirection = 'vertical',
+  image = Prize,
+  cardTitle = "",
+  cardContents = "10 Tickets",
+  cardBackContents = ""
 }: {
   flipDirection: string
+  image: string | StaticImageData,
+  cardTitle: string,
+  cardContents: string,
+  cardBackContents: string,
 }) => (
   <Flippy flipOnHover={true} flipDirection={flipDirection} style={FlippyStyle}>
-    <DefaultCardContents image={Prize}>10 Tickets</DefaultCardContents>
+    <DefaultCardContents image={image} cardTitle={cardTitle} cardBackContents={cardBackContents}>{cardContents}</DefaultCardContents>
   </Flippy>
 )
 
