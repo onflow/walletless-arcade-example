@@ -20,7 +20,7 @@ const FlippyOnHover = ({
   cardContents = "10 Tickets",
   cardBackContents = ""
 }: {
-  flipDirection: string
+  flipDirection: string,
   image: string | StaticImageData,
   cardTitle: string,
   cardContents: string,
