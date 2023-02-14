@@ -22,6 +22,7 @@ const Wallet: NextPage = () => {
 
   const navProps = {
     currentUser,
+    showCurrentUserAddress: true,
     connect,
     disconnect,
   }

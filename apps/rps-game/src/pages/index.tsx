@@ -33,6 +33,7 @@ const Home: NextPage = () => {
   const navProps = {
     session,
     currentUser,
+    showCurrentUserAddress: !enabled,
     connect,
     disconnect,
     signIn,
