@@ -1,14 +1,14 @@
 import FungibleToken from "../../contracts/utility/FungibleToken.cdc"
 import NonFungibleToken from "../../contracts/utility/NonFungibleToken.cdc"
 import MetadataViews from "../../contracts/utility/MetadataViews.cdc"
-import MonsterMaker from "../../contracts/MonsterMaker.cdc"
+import GamePieceNFT from "../../contracts/GamePieceNFT.cdc"
 import RockPaperScissorsGame from "../../contracts/RockPaperScissorsGame.cdc"
 import ChildAccount from "../../contracts/ChildAccount.cdc"
 import TicketToken from "../../contracts/TicketToken.cdc"
 
 // TODO: Update summary comment
 /// This transaction sets a user's main account up with the following
-///   - MonsterMaker.Collection
+///   - GamePieceNFT.Collection
 ///   - ChildAccount.ChildAccountManager with ChildAccountController for new child account
 /// And configures the new account with resources & Capabilities to play RockPaperScissorsGame Matches
 /// This transaction assumes that the child accounts has already been created & has published 
@@ -39,8 +39,8 @@ transaction(
         monsterLeg: Int
     ) {
 
-    let minterRef: &MonsterMaker.NFTMinter
-    let collectionRef: &MonsterMaker.Collection
+    let minterRef: &GamePieceNFT.Minter
+    let collectionRef: &GamePieceNFT.Collection{NonFungibleToken.CollectionPublic}
     let managerRef: &ChildAccount.ChildAccountManager
     let childAccountCap: Capability<&AuthAccount>
     let info: ChildAccount.ChildAccountInfo
@@ -76,42 +76,39 @@ transaction(
                 ChildAccount.AuthAccountCapabilityPath
             ) ?? panic("Problem linking AuthAccount Capability for ".concat(child.address.toString()))
 
-        /* --- Set up MonsterMaker.Collection --- */
+        /* --- Set up GamePieceNFT.Collection --- */
         //
         // Create a new empty collection & save it to the child account
-        child.save(<-MonsterMaker.createEmptyCollection(), to: MonsterMaker.CollectionStoragePath)
+        child.save(<-GamePieceNFT.createEmptyCollection(), to: GamePieceNFT.CollectionStoragePath)
         // create a public capability for the collection
-        child.link<&{
-            NonFungibleToken.Receiver,
-            NonFungibleToken.CollectionPublic,
-            MonsterMaker.MonsterMakerCollectionPublic,
-            MetadataViews.ResolverCollection
-        }>(
-            MonsterMaker.CollectionPublicPath,
-            target: MonsterMaker.CollectionStoragePath
+        child.link<
+            &GamePieceNFT.Collection{NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, GamePieceNFT.GamePieceNFTCollectionPublic, MetadataViews.ResolverCollection}
+        >(
+            GamePieceNFT.CollectionPublicPath,
+            target: GamePieceNFT.CollectionStoragePath
         )
         // Link the Provider Capability in private storage
-        child.link<&{
-            NonFungibleToken.Provider
-        }>(
-            MonsterMaker.ProviderPrivatePath,
-            target: MonsterMaker.CollectionStoragePath
+        child.link<
+            &GamePieceNFT.Collection{NonFungibleToken.Provider}
+        >(
+            GamePieceNFT.ProviderPrivatePath,
+            target: GamePieceNFT.CollectionStoragePath
         )
         // Grab Collection related references & Capabilities
-        self.collectionRef = child.borrow<&MonsterMaker.Collection>(from: MonsterMaker.CollectionStoragePath)!
-        
-        /* --- Make sure child account has a MonsterMaker.NFT to play with --- */
-        //
-        // Borrow a reference to the NFTMinter Capability in minter account's storage
-        // NOTE: This assumes a Capability is stored, and not the base resource - this would occurr
-        // if the signing minter was granted the NFTMinter Capability for a base resource located in
-        // another account
-        let minterCapRef = client.borrow<
-                &Capability<&MonsterMaker.NFTMinter>
+        self.collectionRef = child.borrow<
+                &GamePieceNFT.Collection{NonFungibleToken.CollectionPublic}
             >(
-                from: MonsterMaker.MinterStoragePath
-            ) ?? panic("Couldn't borrow reference to NFTMinter Capability in storage at ".concat(MonsterMaker.MinterStoragePath.toString()))
-        self.minterRef = minterCapRef.borrow() ?? panic("Couldn't borrow reference to NFTMinter from Capability")
+                from: GamePieceNFT.CollectionStoragePath
+            )!
+        
+        /* --- Make sure child account has a GamePieceNFT.NFT to play with --- */
+        //
+        // Borrow a reference to the Minter Capability in minter account's storage
+        self.minterRef = signer.borrow<
+                &GamePieceNFT.Minter
+            >(
+                from: GamePieceNFT.MinterStoragePath
+            ) ?? panic("Couldn't borrow reference to Minter Capability in storage at ".concat(GamePieceNFT.MinterStoragePath.toString()))
 
         /* --- Set user up with GamePlayer in child account --- */
         //
@@ -126,7 +123,7 @@ transaction(
             RockPaperScissorsGame.GamePlayerPublicPath,
             target: RockPaperScissorsGame.GamePlayerStoragePath
         )
-        // Link GamePlayerID Capability
+        // Link GamePlayerID & DelegatedGamePlayer Capability
         child.link<&{
             RockPaperScissorsGame.DelegatedGamePlayer,
             RockPaperScissorsGame.GamePlayerID
@@ -152,43 +149,39 @@ transaction(
             target: TicketToken.VaultStoragePath
         )
 
-        /** --- Setup parent's MonsterMaker.Collection --- */
+        /** --- Setup parent's GamePieceNFT.Collection --- */
         //
-        // Set up MonsterMaker.Collection if it doesn't exist
-        if parent.borrow<&MonsterMaker.Collection>(from: MonsterMaker.CollectionStoragePath) == nil {
+        // Set up GamePieceNFT.Collection if it doesn't exist
+        if parent.borrow<&GamePieceNFT.Collection>(from: GamePieceNFT.CollectionStoragePath) == nil {
             // Create a new empty collection
-            let collection <- MonsterMaker.createEmptyCollection()
+            let collection <- GamePieceNFT.createEmptyCollection()
             // save it to the account
-            parent.save(<-collection, to: MonsterMaker.CollectionStoragePath)
+            parent.save(<-collection, to: GamePieceNFT.CollectionStoragePath)
         }
         // Check for public capabilities
-        if !parent.getCapability<&{
-                NonFungibleToken.Receiver,
-                NonFungibleToken.CollectionPublic,
-                MonsterMaker.MonsterMakerCollectionPublic,
-                MetadataViews.ResolverCollection
-            }>(
-                MonsterMaker.CollectionPublicPath
+        if !parent.getCapability<
+                &GamePieceNFT.Collection{NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, GamePieceNFT.GamePieceNFTCollectionPublic, MetadataViews.ResolverCollection}
+            >(
+                GamePieceNFT.CollectionPublicPath
             ).check() {
             // create a public capability for the collection
-            parent.link<&{
-                NonFungibleToken.Receiver,
-                NonFungibleToken.CollectionPublic,
-                MonsterMaker.MonsterMakerCollectionPublic,
-                MetadataViews.ResolverCollection
-            }>(
-                MonsterMaker.CollectionPublicPath,
-                target: MonsterMaker.CollectionStoragePath
+            parent.unlink(GamePieceNFT.CollectionPublicPath)
+            parent.link<
+                &GamePieceNFT.Collection{NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, GamePieceNFT.GamePieceNFTCollectionPublic, MetadataViews.ResolverCollection}
+            >(
+                GamePieceNFT.CollectionPublicPath,
+                target: GamePieceNFT.CollectionStoragePath
             )
         }
         // Check for private capabilities
-        if !parent.getCapability<&{NonFungibleToken.Provider}>(MonsterMaker.ProviderPrivatePath).check() {
+        if !parent.getCapability<&GamePieceNFT.Collection{NonFungibleToken.Provider}>(GamePieceNFT.ProviderPrivatePath).check() {
             // Link the Provider Capability in private storage
-            parent.link<&{
-                NonFungibleToken.Provider
-            }>(
-                MonsterMaker.ProviderPrivatePath,
-                target: MonsterMaker.CollectionStoragePath
+            parent.unlink(GamePieceNFT.ProviderPrivatePath)
+            parent.link<
+                &GamePieceNFT.Collection{NonFungibleToken.Provider}
+            >(
+                GamePieceNFT.ProviderPrivatePath,
+                target: GamePieceNFT.CollectionStoragePath
             )
         }
 
@@ -252,19 +245,16 @@ transaction(
 
     execute {
         // Build the MonsterComponent struct from given arguments
-        let componentValue = MonsterMaker.MonsterComponent(
+        let componentValue = GamePieceNFT.MonsterComponent(
                 background: monsterBackground,
                 head: monsterHead,
                 torso: monsterTorso,
                 leg: monsterLeg
             )
-        // TODO: Add royalty feature to MM using beneficiaries, cuts, and descriptions. At the moment, we don't provide royalties with KI, so this will be an empty list.
-        let royalties: [MetadataViews.Royalty] = []
         // Mint NFT to child account's Collection
         self.minterRef.mintNFT(
             recipient: self.collectionRef,
-            component: componentValue,
-            royalties: royalties
+            component: componentValue
         )
         // Add the child account to the ChildAccountManager so its AuthAccountCapability can be maintained
         self.managerRef.addAsChildAccount(childAccountCap: self.childAccountCap, childAccountInfo: self.info)

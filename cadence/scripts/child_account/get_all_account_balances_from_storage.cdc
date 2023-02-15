@@ -42,7 +42,7 @@ pub struct VaultInfo {
     }
 }
 
-/// Returns an array of StoragePaths where @FungibleToken.Vaults are stored
+/// Returns a dictionary of VaultInfo indexed on the Type of Vault
 pub fun getAllVaultInfoInAddressStorage(_ address: Address): {Type: VaultInfo} {
     // Get the account
     let account: AuthAccount = getAuthAccount(address)

@@ -5,4 +5,3 @@ transaction(matchID: UInt64) {
         RockPaperScissorsGame.submitAutomatedPlayerMove(matchID: matchID)
     }
 }
- 

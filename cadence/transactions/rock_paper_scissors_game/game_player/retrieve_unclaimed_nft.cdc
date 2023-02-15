@@ -1,6 +1,6 @@
 import NonFungibleToken from "../../../contracts/utility/NonFungibleToken.cdc"
 import RockPaperScissorsGame from "../../../contracts/RockPaperScissorsGame.cdc"
-import MonsterMaker from "../../../contracts/MonsterMaker.cdc"
+import GamePieceNFT from "../../../contracts/GamePieceNFT.cdc"
 
 /// ReturnsNFTs from escrow to their owners' Receiver which
 /// is stored in the Match resource itself
@@ -31,7 +31,7 @@ transaction(matchID: UInt64) {
         self.receiverCap = acct.getCapability<
             &{NonFungibleToken.Receiver}
             >(
-                MonsterMaker.CollectionPublicPath
+                GamePieceNFT.CollectionPublicPath
             )
     }
 

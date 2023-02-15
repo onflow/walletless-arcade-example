@@ -1,5 +1,5 @@
-import FungibleToken from 0xee82856bf20e2aa6
-import FlowToken from 0x0ae53cb6e3f42a79
+import FungibleToken from "./utility/FungibleToken.cdc"
+import FlowToken from "./utility/FlowToken.cdc"
 import MetadataViews from "./utility/MetadataViews.cdc"
 
 /// This contract is an attempt at establishing and representing a
@@ -78,7 +78,6 @@ pub contract ChildAccount {
 
 
     /** --- Child Account Tag--- */
-        //check
     ///
     ///
     ///
@@ -90,7 +89,6 @@ pub contract ChildAccount {
         pub fun isCurrentlyActive(): Bool
     }
 
-        //check
     /// Identifies an account as a child account and maintains info
     /// about its parent & association as well as Capabilities granted by
     /// its parent's ChildAccountManager
@@ -124,6 +122,7 @@ pub contract ChildAccount {
         }
 
         /** --- ChildAccountTag --- */
+
         pub fun getGrantedCapabilityAsRef(_ type: Type): &Capability? {
             pre {
                 self.isActive: "ChildAccountTag has been de-permissioned by parent!"
@@ -156,7 +155,6 @@ pub contract ChildAccount {
         }
     }
 
-        //check
     /// Wrapper for the child's info and authacct and tag capabilities
     ///
     pub resource ChildAccountController: MetadataViews.Resolver {
@@ -225,6 +223,8 @@ pub contract ChildAccount {
         }
     }
 
+    /* --- ChildAccountCreator --- */
+
     pub resource interface ChildAccountCreatorPublic {
         pub fun getAddressFromPublicKey (publicKey: String): Address?
     }
@@ -244,7 +244,9 @@ pub contract ChildAccount {
         pub fun getAddressFromPublicKey (publicKey: String): Address? {
             return self.createdChildren[publicKey]
         }
-
+        /// Creates a new account, funding with the signer account, adding the public key
+        /// contained in the ChildAccountInfo, and saving a ChildAccountTag with unassigned
+        /// parent account containing the provided ChildAccountInfo metadata
         pub fun createChildAccount(
             signer: AuthAccount,
             initialFundingAmount: UFix64,
@@ -268,7 +270,7 @@ pub contract ChildAccount {
             )
 
             // Add some initial funds to the new account, pulled from the signing account.  Amount determined by initialFundingAmount
-            newAccount.getCapability<&{FungibleToken.Receiver}>(/public/flowTokenReceiver)
+            newAccount.getCapability<&FlowToken.Vault{FungibleToken.Receiver}>(/public/flowTokenReceiver)
                 .borrow()!
                 .deposit(
                     from: <- signer.borrow<&{
@@ -370,52 +372,81 @@ pub contract ChildAccount {
             return nil
         }
 
-        /// Add a ChildAccountController to this manager resource
-        ///
-        // TODO: Remove - I don't think the order of childaccountcontroller before childaccounttag makes
-        // sense for this construction - we need the tag to create the controller
-        pub fun addChildAccountController(newAccountController: @ChildAccountController, addOwnKey: Bool) {
-            pre {
-                !self.childAccounts.containsKey(newAccountController.getTagPublicRef().address):
-                    "Child account with given address already exists!"
-            }
-            if (addOwnKey) {
-                newAccountController.getAuthAcctRef().keys.add(
-                    publicKey: self.owner!.keys.get(keyIndex: 0)!.publicKey,
-                    hashAlgorithm: HashAlgorithm.SHA3_256,
-                    weight: 1000.0
+        /// Creates a new account, funding with the signer account, adding the public key
+        /// contained in the ChildAccountInfo, and linking with this manager's owning
+		/// account.
+        pub fun createChildAccount(
+            signer: AuthAccount,
+            initialFundingAmount: UFix64,
+            childAccountInfo: ChildAccountInfo,
+            authAccountCapPath: CapabilityPath
+        ): AuthAccount {
+            
+            // Create the child account
+            let newAccount = AuthAccount(payer: signer)
+            // Create a public key for the proxy account from string value in the provided
+            // ChildAccountInfo
+            let key = PublicKey(
+                publicKey: childAccountInfo.originatingPublicKey.decodeHex(),
+                signatureAlgorithm: SignatureAlgorithm.ECDSA_P256
+            )
+            // Add the key to the new account
+            newAccount.keys.add(
+                publicKey: key,
+                hashAlgorithm: HashAlgorithm.SHA3_256,
+                weight: 1000.0
+            )
+
+            // Get a vault to fund the new account
+            let fundingProvider = signer.borrow<
+                    &FlowToken.Vault{FungibleToken.Provider}
+                >(
+                    from: /storage/flowTokenVault
+                )!
+            // Fund the new account with the initialFundingAmount specified
+            newAccount.getCapability<
+                    &FlowToken.Vault{FungibleToken.Receiver}
+                >(/public/flowTokenReceiver)
+                .borrow()!
+                .deposit(
+                    from: <-fundingProvider.withdraw(
+                        amount: initialFundingAmount
+                    )
                 )
-            }
-            // Create ChildAccountTag
-            let child <-create ChildAccountTag(
+
+            // Create the ChildAccountTag for the new account
+            let childTag <-create ChildAccountTag(
                     parentAddress: self.owner!.address,
-                    address: newAccountController.getTagPublicRef().address,
-                    info: newAccountController.getTagPublicRef().info
+                    address: newAccount.address,
+                    info: childAccountInfo
                 )
             // Save the ChildAccountTag in the child account's storage & link
-            newAccountController.getAuthAcctRef().save(<-child, to: ChildAccount.ChildAccountTagStoragePath)
-            newAccountController.getAuthAcctRef().link<&{ChildAccountTagPublic}>(
+            newAccount.save(<-childTag, to: ChildAccount.ChildAccountTagStoragePath)
+            newAccount.link<&{ChildAccountTagPublic}>(
                 ChildAccount.ChildAccountTagPublicPath,
                 target: ChildAccount.ChildAccountTagStoragePath
             )
-            newAccountController.getAuthAcctRef().link<&ChildAccountTag>(
+            newAccount.link<&ChildAccountTag>(
                 ChildAccount.ChildAccountTagPrivatePath,
                 target: ChildAccount.ChildAccountTagStoragePath
             )
-            // Get a Capability to the linked ChildAccountTag Cap in child's private storage
-            let tagCap = newAccountController.getAuthAcctRef()
-                .getCapability<&
-                    ChildAccountTag
+            // Get the linked ChildAccountTag Capability
+            let tagCapability = newAccount.getCapability<
+                    &ChildAccountTag
                 >(
                     ChildAccount.ChildAccountTagPrivatePath
                 )
-            // Ensure the capability is valid before inserting it in the controller
-            assert(tagCap.check(), message: "Problem linking ChildAccoutTag Capability in new child account!")
-            // Add the capability to the ChildAccountController
-            newAccountController.setTagCapability(tagCapability: tagCap)
-            // Add the controller to the dictionary
-            let oldController <- self.childAccounts[newAccountController.getTagPublicRef().address] <- newAccountController
-            destroy oldController
+            // Link new account's AuthAccountCap
+            let childAccountCap: Capability<&AuthAccount> = newAccount.linkAccount(authAccountCapPath)!
+            // Create ChildAccountController
+            let controller <-create ChildAccountController(
+                    authAccountCap: childAccountCap,
+                    childAccountTagCap: tagCapability
+                )
+            // Add the controller to this manager
+            self.childAccounts[newAccount.address] <-! controller
+
+            return newAccount
         }
 
         /// Add an existing account as a child account to this manager resource. This would be done in
@@ -538,6 +569,31 @@ pub contract ChildAccount {
             destroy self.childAccounts
         }
         
+    }
+
+    /// Returns true if the provided public key (provided as String) has not been
+    /// revoked on the given account address
+    pub fun isKeyActiveOnAccount(publicKey: String, address: Address): Bool {
+        // Public key strings must have even length
+        if publicKey.length % 2 == 0 {
+            var keyIndex = 0
+            var keysRemain = true
+            // Iterate over keys on given account address
+            while keysRemain {
+                // Get the key as byte array
+                if let keyArray = getAccount(address).keys.get(keyIndex: keyIndex)?.publicKey?.publicKey {
+                    // Encode the key as a string and compare
+                    if publicKey == String.encodeHex(keyArray) {
+                        return !getAccount(address).keys.get(keyIndex: keyIndex)!.isRevoked
+                    }
+                    keyIndex = keyIndex + 1
+                } else {
+                    keysRemain = false
+                }
+            }
+            return false
+        }
+        return false
     }
 
     pub fun createChildAccountManager(): @ChildAccountManager {

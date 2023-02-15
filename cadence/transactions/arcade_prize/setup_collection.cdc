@@ -2,7 +2,7 @@ import NonFungibleToken from "../../contracts/utility/NonFungibleToken.cdc"
 import MetadataViews from "../../contracts/utility/MetadataViews.cdc"
 import ArcadePrize from "../../contracts/ArcadePrize.cdc"
 
-/// Transaction to setup GamePieceNFT collection in the signer's account
+/// Transaction to setup ArcadePrize collection in the signer's account
 transaction {
 
     prepare(signer: AuthAccount) {

@@ -1,15 +1,15 @@
 import NonFungibleToken from "../../contracts/utility/NonFungibleToken.cdc"
 import MetadataViews from "../../contracts/utility/MetadataViews.cdc"
-import MonsterMaker from "../../contracts/MonsterMaker.cdc"
+import GamePieceNFT from "../../contracts/GamePieceNFT.cdc"
 
-/// Returns an array of Display structs containing MonsterMaker.NFT metadata
+/// Returns an array of Display structs containing GamePieceNFT.NFT metadata
 /// for all NFTs in the specified Address's collection
 ///
 pub fun main(address: Address): [MetadataViews.Display] {
     let collectionRef = getAccount(address).getCapability<
-            &MonsterMaker.Collection{MetadataViews.ResolverCollection}
+            &GamePieceNFT.Collection{MetadataViews.ResolverCollection}
         >(
-            MonsterMaker.CollectionPublicPath
+            GamePieceNFT.CollectionPublicPath
         ).borrow()
         ?? panic("Could not borrow capability from public collection")
     
