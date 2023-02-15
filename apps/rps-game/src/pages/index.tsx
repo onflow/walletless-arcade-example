@@ -115,21 +115,9 @@ const Home: NextPage = () => {
               title={'What’s Happening?'}
               DialogContent={() => (
                 <div>
-                  {`When you logged in, the app created a Flow account for you in
-                  the background. The address of the custodial account is `}
-                  {gameAccountAddress} (
-                  <a
-                    className="text-blue-600"
-                    href={`https://${process.env.NEXT_PUBLIC_FLOWVIEW_NETWORK}.flowview.app/account/${gameAccountAddress}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    View account on flowview
-                  </a>
-                  )
-                  {` and can be found in Settings. To play the game, you'll need
-                  to purchase a game piece NFT. Once you purchase, the NFT will
-                  be deposited into the in-app custodial Flow account.`}
+                  {`Now that you're logged in, you're ready to purchase a game piece NFT so you can play the game!
+                  Once purchased, the app will create a Flow account in the background, and deposit
+                  your game piece to it.`}
                 </div>
               )}
               buttonText={'Close'}
