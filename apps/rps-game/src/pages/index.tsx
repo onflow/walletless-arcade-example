@@ -76,10 +76,12 @@ const Home: NextPage = () => {
               isOpen={isInitialModalOpen && !enabled}
               handleClose={() => setIsInitialModalOpen(false)}
               title={'Welcome to Flow Arcade'}
-              dialog={`
-                This is a demo of Flow's Walletless Onboarding mechanisms.
-                The first step is to login using Google Auth.
-              `}
+              DialogContent={() => (
+                <div>
+                  {`This is a demo of Flow's Walletless Onboarding mechanisms. The
+                  first step is to login using Google Auth.`}
+                </div>
+              )}
               buttonText={'Lets start!'}
               buttonFunc={() => setIsInitialModalOpen(false)}
             />
@@ -111,12 +113,13 @@ const Home: NextPage = () => {
               isOpen={isPrePurchaseModalOpen}
               handleClose={() => setIsPrepurchaseModalOpen(false)}
               title={'What’s Happening?'}
-              dialog={`
-                When you logged in, the app created a Flow account for you in the background. 
-                The address of the custodial account is ${gameAccountAddress} and can be found in Settings.
-                To play the game, you'll need to purchase a game piece NFT.  
-                Once you purchase, the NFT will be deposited into the in-app custodial Flow account.
-              `}
+              DialogContent={() => (
+                <div>
+                  {`Now that you're logged in, you're ready to purchase a game piece NFT so you can play the game!
+                  Once purchased, the app will create a Flow account in the background, and deposit
+                  your game piece to it.`}
+                </div>
+              )}
               buttonText={'Close'}
               buttonFunc={() => setIsPrepurchaseModalOpen(false)}
             />

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import {
   FlashButton,
   Row,
@@ -31,7 +31,7 @@ const GameView = () => {
   const [locked, setLocked] = useState(false)
   const [playerMove, setPlayerMove] = useState<PlayerMove>(undefined)
   const [opponentMove, setOpponentMove] = useState<PlayerMove>(undefined)
-  const [message, setMessage] = useState<string>('')
+  const [message, setMessage] = useState<React.FC>(() => null)
 
   const {
     state: {
@@ -94,25 +94,49 @@ const GameView = () => {
       }
 
       if (winningNFTID === null) {
-        setMessage(
-          `You played ${playerMoveString} and tied ${opponentMoveString}!`
-        )
+        const newMessage = function () {
+          return (
+            <div>
+              {`You played ${playerMoveString} and tied ${opponentMoveString}!`}
+            </div>
+          )
+        }
+        setMessage(() => newMessage)
       }
 
       const isPlayerWinner = playerID === winningGamePlayer
 
       if (isPlayerWinner) {
-        setMessage(
-          `For each win, the game deposits 10 tickets in the form of Fungible Tokens into an in-app custodial Flow account.
-          You can find it here ${gameAccountAddress}.
-          Head to settings and connect a wallet to link this account. Once linked you'll
-          have full control over the tickets and other assets held here.
-          `
-        )
+        const newMessage = function () {
+          return (
+            <div>
+              {`For each win, the game deposits 10 tickets in the form of Fungible
+            Tokens into an in-app custodial Flow account. You can find it here 
+            ${gameAccountAddress} (`}
+              <a
+                className="text-blue-600"
+                href={`https://${process.env.NEXT_PUBLIC_FLOWVIEW_NETWORK}.flowview.app/account/${gameAccountAddress}/fungible_token`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {'View account on flowview'}
+              </a>
+              {`). Head to settings and connect a wallet to link
+            this account. Once linked you'll have full control over the tickets
+            and other assets held here. `}
+            </div>
+          )
+        }
+        setMessage(() => newMessage)
       } else if (winningNFTID && !isPlayerWinner) {
-        setMessage(
-          `You played ${playerMoveString} and lost against ${opponentMoveString}!`
-        )
+        const newMessage = function () {
+          return (
+            <div>
+              {`You played ${playerMoveString} and lost against ${opponentMoveString}!`}
+            </div>
+          )
+        }
+        setMessage(() => newMessage)
       }
     },
     [gamePieceNFTID, gamePlayerID]
@@ -173,6 +197,8 @@ const GameView = () => {
       setGoToMarketplaceOpen(true)
     }
   }, [currentUser?.addr])
+
+  console.log('message', message)
 
   return (
     <div className="container m-auto">
@@ -269,11 +295,23 @@ const GameView = () => {
         isOpen={goToMarketplaceModalOpen && !enabled}
         handleClose={() => setGoToMarketplaceOpen(false)}
         title={"What's Happening?"}
-        dialog={`
-          When you connected your wallet, the in-app custodial Flow account delegated control to your wallet, 
-          establishing hybrid custody of your NFTs and FTs while they continue to reside in the in-app custodial 
-          Flow account <LINK to Flowview GameAccount>.
-        `}
+        DialogContent={() => (
+          <div>
+            {`When you connected your wallet, the in-app custodial Flow account
+            delegated control to your wallet, establishing hybrid custody of
+            your NFTs and FTs while they continue to reside in the in-app
+            custodial Flow account. `}
+            <a
+              className="text-blue-600"
+              href={`https://${process.env.NEXT_PUBLIC_FLOWVIEW_NETWORK}.flowview.app/account/${gameAccountAddress}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {'View account on flowview'}
+            </a>
+            {'.'}
+          </div>
+        )}
         buttonText={'Go to Marketplace'}
         buttonFunc={() =>
           window.open(process.env.NEXT_PUBLIC_MARKETPLACE_URL || '')
@@ -281,12 +319,27 @@ const GameView = () => {
       />
       <Modal
         isOpen={purchaseSuccessModalOpen && !gameMatchID && !enabled}
-        handleClose={() => setPurchaseSuccessModalOpen(false)}
+        handleClose={
+          gameStatus === GameStatus.READY
+            ? handlePlay
+            : () => setPurchaseSuccessModalOpen(false)
+        }
         title={"What's Happening?"}
-        dialog={`
-          After submitting your payment, a game piece NFT was minted and deposited into the in-app custodial 
-          Flow account <LINK to Flowview GameAccount>. You can use this NFT to play the game and win tickets.
-        `}
+        DialogContent={() => (
+          <div>
+            {`After submitting your payment, a game piece NFT was minted and
+            deposited into the in-app custodial Flow account. `}
+            <a
+              className="text-blue-600"
+              href={`https://${process.env.NEXT_PUBLIC_FLOWVIEW_NETWORK}.flowview.app/account/${gameAccountAddress}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {'View account on flowview'}
+            </a>
+            {`. You can use this NFT to play the game and win tickets.`}
+          </div>
+        )}
         buttonText={'Play Now!'}
         buttonFunc={
           gameStatus === GameStatus.READY
@@ -302,7 +355,7 @@ const GameView = () => {
             : () => setPlayModalOpen(false)
         }
         title={'Good Game!'}
-        dialog={message}
+        DialogContent={message}
         buttonText={'Play Again!'}
         buttonFunc={
           gameStatus === GameStatus.ENDED

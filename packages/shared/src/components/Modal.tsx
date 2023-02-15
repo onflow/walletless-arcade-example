@@ -5,14 +5,14 @@ export default function Modal({
   isOpen,
   handleClose,
   title = 'Modal Title',
-  dialog,
+  DialogContent,
   buttonText,
   buttonFunc,
 }: {
   isOpen: boolean
   handleClose: () => void
   title?: string
-  dialog: string
+  DialogContent: React.FC
   buttonText: string
   buttonFunc: () => void
 }) {
@@ -55,7 +55,9 @@ export default function Modal({
                     {title}
                   </Dialog.Title>
                   <div className="mt-2">
-                    <p className="text-sm text-gray-500">{dialog}</p>
+                    <p className="text-sm text-gray-500">
+                      <DialogContent />
+                    </p>
                   </div>
 
                   <div className="mt-4">
