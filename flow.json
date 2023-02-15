@@ -1,66 +1,73 @@
 {
   "contracts": {
     "ArcadePrize": {
-      "source": "./contracts/ArcadePrize.cdc",
+      "source": "./cadence/contracts/ArcadePrize.cdc",
       "aliases": {
         "emulator": "0xf8d6e0586b0a20c7",
         "testnet": "0x917b2b1dafdcfa58"
       }
     },
     "ChildAccount": {
-      "source": "./contracts/ChildAccount.cdc",
+      "source": "./cadence/contracts/ChildAccount.cdc",
       "aliases": {
         "emulator": "0xf8d6e0586b0a20c7",
         "testnet": "0x1b655847a90e644a"
       }
     },
-    "FlowToken": {
-      "source": "./contracts/utility/FlowToken.cdc",
+    "DynamicNFT": {
+      "source": "./cadence/contracts/DynamicNFT.cdc",
       "aliases": {
-        "emulator": "0xee82856bf20e2aa6",
+        "emulator": "0xf8d6e0586b0a20c7",
+        "testnet": "0x917b2b1dafdcfa58"
+      }
+    },
+    "FlowToken": {
+      "source": "./cadence/contracts/utility/FlowToken.cdc",
+      "aliases": {
+        "emulator": "0x0ae53cb6e3f42a79",
         "testnet": "0x7e60df042a9c0868"
       }
     },
     "FungibleToken": {
-      "source": "./contracts/utility/FungibleToken.cdc",
+      "source": "./cadence/contracts/utility/FungibleToken.cdc",
       "aliases": {
         "emulator": "0xee82856bf20e2aa6",
-        "testnet": "0x9a0766d93b6608b7",
-        "mainnet": "0xf233dcee88fe0abe"
+        "mainnet": "0xf233dcee88fe0abe",
+        "testnet": "0x9a0766d93b6608b7"
       }
     },
     "FungibleTokenMetadataViews": {
-      "source": "./contracts/utility/FungibleTokenMetadataViews.cdc",
+      "source": "./cadence/contracts/utility/FungibleTokenMetadataViews.cdc",
       "aliases": {
         "emulator": "0xf8d6e0586b0a20c7",
-        "testnet": "0x9a0766d93b6608b7",
-        "mainnet": "0xf233dcee88fe0abe"
+        "mainnet": "0xf233dcee88fe0abe",
+        "testnet": "0x9a0766d93b6608b7"
+      }
+    },
+    "GamePieceNFT": {
+      "source": "./cadence/contracts/GamePieceNFT.cdc",
+      "aliases": {
+        "emulator": "0xf8d6e0586b0a20c7",
+        "testnet": "0x917b2b1dafdcfa58"
       }
     },
     "GamingMetadataViews": {
-      "source": "./contracts/GamingMetadataViews.cdc",
+      "source": "./cadence/contracts/GamingMetadataViews.cdc",
       "aliases": {
         "emulator": "0xf8d6e0586b0a20c7",
         "testnet": "0x917b2b1dafdcfa58"
       }
     },
     "MetadataViews": {
-      "source": "./contracts/utility/MetadataViews.cdc",
+      "source": "./cadence/contracts/utility/MetadataViews.cdc",
       "aliases": {
         "emulator": "0xf8d6e0586b0a20c7",
-        "testnet": "0x631e88ae7f1d7c20",
-        "mainnet": "0x1d7e57aa55817448"
-      }
-    },
-    "MonsterMaker": {
-      "source": "./contracts/MonsterMaker.cdc",
-      "aliases": {
-        "emulator": "0xf8d6e0586b0a20c7",
-        "testnet": "0xfd3d8fe2c8056370"
+        "mainnet": "0x1d7e57aa55817448",
+        "testnet": "0x631e88ae7f1d7c20"
       }
     },
     "NonFungibleToken": {
-      "source": "./contracts/utility/NonFungibleToken.cdc",
+      "source": "./cadence/contracts/utility/NonFungibleToken.cdc",
       "aliases": {
         "emulator": "0xf8d6e0586b0a20c7",
         "mainnet": "0x1d7e57aa55817448",
@@ -68,14 +75,14 @@
       }
     },
     "RockPaperScissorsGame": {
-      "source": "./contracts/RockPaperScissorsGame.cdc",
+      "source": "./cadence/contracts/RockPaperScissorsGame.cdc",
       "aliases": {
         "emulator": "0xf8d6e0586b0a20c7",
         "testnet": "0x917b2b1dafdcfa58"
       }
     },
     "TicketToken": {
-      "source": "./contracts/TicketToken.cdc",
+      "source": "./cadence/contracts/TicketToken.cdc",
       "aliases": {
         "emulator": "0xf8d6e0586b0a20c7",
         "testnet": "0x917b2b1dafdcfa58"
@@ -84,8 +91,8 @@
   },
   "networks": {
     "emulator": "127.0.0.1:3569",
-    "testnet": "access.devnet.nodes.onflow.org:9000",
-    "mainnet": "access.mainnet.nodes.onflow.org:9000"
+    "mainnet": "access.mainnet.nodes.onflow.org:9000",
+    "testnet": "access.devnet.nodes.onflow.org:9000"
   },
   "accounts": {
     "emulator-account": {
@@ -103,7 +110,11 @@
         "FungibleTokenMetadataViews",
         "ChildAccount",
         "GamingMetadataViews",
-        "MonsterMaker"
+        "DynamicNFT",
+        "GamePieceNFT",
+        "TicketToken",
+        "ArcadePrize",
+        "RockPaperScissorsGame"
       ]
     },
     "testnet": {

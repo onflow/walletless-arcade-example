@@ -1,4 +1,4 @@
-import ChildAccount from "../contracts/ChildAccount.cdc"
+import ChildAccount from "../../contracts/ChildAccount.cdc"
 
 /// Returns the child address associated with a public key if account
 /// was created by the ChildAccountCreator at the specified Address and
@@ -23,3 +23,4 @@ pub fun main(creatorAddress: Address, pubKey: String): Address? {
   }
   return nil
 }
+ 

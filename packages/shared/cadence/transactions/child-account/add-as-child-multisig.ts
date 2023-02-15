@@ -1,7 +1,7 @@
 const ADD_AS_CHILD_MULTISIG = `
 import NonFungibleToken from 0xNonFungibleToken
 import MetadataViews from 0xMetadataViews
-import MonsterMaker from 0xMonsterMaker
+import GamePieceNFT from 0xGamePieceNFT
 import ChildAccount from 0xChildAccount
 import FungibleToken from 0xFungibleToken
 import TicketToken from 0xTicketToken
@@ -34,6 +34,7 @@ transaction {
         }
         // Ensure ChildAccountManagerViewer is linked properly
         if !parent.getCapability<&{ChildAccount.ChildAccountManagerViewer}>(ChildAccount.ChildAccountManagerPublicPath).check() {
+            parent.unlink(ChildAccount.ChildAccountManagerPublicPath)
             // Link
             parent.link<
                 &{ChildAccount.ChildAccountManagerViewer}
@@ -71,41 +72,43 @@ transaction {
             ) ?? panic("Could not borrow reference to ChildAccountTag in account ".concat(child.address.toString()))
         self.info = childTagRef.info
         
-        /* --- Configure parent's MonsterMaker.Collection --- */
+        /** --- Setup parent's GamePieceNFT.Collection --- */
         //
-        // Check for Collection in parent's account
-        if parent.borrow<&MonsterMaker.Collection>(from: MonsterMaker.CollectionStoragePath) == nil {
-            // Create a new empty collection & save it to parent account
-            parent.save(<-MonsterMaker.createEmptyCollection(), to: MonsterMaker.CollectionStoragePath)
+        // Set up GamePieceNFT.Collection if it doesn't exist
+        if parent.borrow<&GamePieceNFT.Collection>(from: GamePieceNFT.CollectionStoragePath) == nil {
+            // Create a new empty collection
+            let collection <- GamePieceNFT.createEmptyCollection()
+            // save it to the account
+            parent.save(<-collection, to: GamePieceNFT.CollectionStoragePath)
         }
-        // Check public capabilities on the parent's collection
+        // Check for public capabilities
         if !parent.getCapability<
-                &MonsterMaker.Collection{NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, MonsterMaker.MonsterMakerCollectionPublic, MetadataViews.ResolverCollection}
+                &GamePieceNFT.Collection{NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, GamePieceNFT.GamePieceNFTCollectionPublic, MetadataViews.ResolverCollection}
             >(
-                MonsterMaker.CollectionPublicPath
+                GamePieceNFT.CollectionPublicPath
             ).check() {
             // create a public capability for the collection
-            parent.unlink(MonsterMaker.CollectionPublicPath)
+            parent.unlink(GamePieceNFT.CollectionPublicPath)
             parent.link<
-                &MonsterMaker.Collection{NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, MonsterMaker.MonsterMakerCollectionPublic, MetadataViews.ResolverCollection}
+                &GamePieceNFT.Collection{NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, GamePieceNFT.GamePieceNFTCollectionPublic, MetadataViews.ResolverCollection}
             >(
-                MonsterMaker.CollectionPublicPath,
-                target: MonsterMaker.CollectionStoragePath
+                GamePieceNFT.CollectionPublicPath,
+                target: GamePieceNFT.CollectionStoragePath
             )
         }
-        // Check public capabilities on the parent's collection
-        if !parent.getCapability<&MonsterMaker.Collection{NonFungibleToken.Provider}>(MonsterMaker.ProviderPrivatePath).check() {
+        // Check for private capabilities
+        if !parent.getCapability<&GamePieceNFT.Collection{NonFungibleToken.Provider}>(GamePieceNFT.ProviderPrivatePath).check() {
             // Link the Provider Capability in private storage
-            parent.unlink(MonsterMaker.ProviderPrivatePath)
-            parent.link<&{
-                NonFungibleToken.Provider
-            }>(
-                MonsterMaker.ProviderPrivatePath,
-                target: MonsterMaker.CollectionStoragePath
+            parent.unlink(GamePieceNFT.ProviderPrivatePath)
+            parent.link<
+                &GamePieceNFT.Collection{NonFungibleToken.Provider}
+            >(
+                GamePieceNFT.ProviderPrivatePath,
+                target: GamePieceNFT.CollectionStoragePath
             )
         }
 
-        /* --- Configure parent's account with TicketTokens Vault --- */
+        /* --- Configure parent's account with TicketToken.Vault --- */
         //
         if parent.borrow<&TicketToken.Vault>(from: TicketToken.VaultStoragePath) == nil {
             // Create a new flowToken Vault and put it in storage
@@ -125,7 +128,7 @@ transaction {
             )
         }
 
-        if !parent.getCapability<&TicketToken.Vault{FungibleToken.Receiver, FungibleToken.Balance}>(
+        if !parent.getCapability<&TicketToken.Vault{FungibleToken.Provider}>(
             TicketToken.ProviderPrivatePath
         ).check() {
             // Unlink any capability that may exist there
