@@ -198,8 +198,6 @@ const GameView = () => {
     }
   }, [currentUser?.addr])
 
-  console.log('message', message)
-
   return (
     <div className="container m-auto">
       {totalTicketBalance && (
