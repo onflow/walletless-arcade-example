@@ -133,7 +133,7 @@ export default function GameAccountContextProvider({ children }: Props) {
     setGameAccountPublicKey(gameAccountPublicKey)
     setGameAccountPrivateKey(gameAccountPrivateKey)
     setGameAccountAddress(gameAccountAddress)
-  }, [currentUser?.addr])
+  }, [getGameAccountAddressFromGameAdmin])
 
   useEffect(() => {
     if (gameAccountPrivateKey && gameAccountPublicKey) {

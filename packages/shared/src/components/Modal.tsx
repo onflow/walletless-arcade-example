@@ -4,7 +4,6 @@ import { Fragment } from 'react'
 export default function Modal({
   isOpen,
   handleClose,
-  handleOpen,
   title = 'Modal Title',
   dialog,
   buttonText,
@@ -12,7 +11,6 @@ export default function Modal({
 }: {
   isOpen: boolean
   handleClose: () => void
-  handleOpen?: () => void
   title?: string
   dialog: string
   buttonText: string
