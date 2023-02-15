@@ -6,7 +6,7 @@ import {
   useReducer,
   useMemo,
 } from 'react'
-import type { ReactNode, Dispatch, SetStateAction } from 'react'
+import type { ReactNode } from 'react'
 import { useFclContext, useTicketContext } from 'shared'
 import { useGameAccountContext } from './GameAccountContext'
 import WALLETLESS_ONBOARDING_MINT_FROM_RESOURCE from '../../cadence/transactions/onboarding/walletless-onboarding-mint-from-resource'
@@ -109,31 +109,24 @@ const initialState: State = {
   setGamePiecePurchased: async function (
     isGamePiecePurchased: boolean
   ): Promise<void> {
-    // throw new Error("Function not implemented.");
     return undefined
   },
   setupNewSinglePlayerMatch: async function (): Promise<void> {
-    // throw new Error("Function not implemented.");
     return undefined
   },
   getGamePieceNFTID: async function (): Promise<void> {
-    // throw new Error("Function not implemented.");
     return undefined
   },
   getWinLossRecord: async function (): Promise<void> {
-    // throw new Error(`Function not implemented.`);
     return undefined
   },
   submitBothSinglePlayerMoves: async function (_move: number): Promise<void> {
-    // throw new Error(`Function not implemented. ${_move}`);
     return undefined
   },
   resolveMatchAndReturnNFTS: async function (): Promise<void> {
-    // throw new Error("Function not implemented.");
     return undefined
   },
   resetGame: async function (): Promise<void> {
-    // throw new Error("Function not implemented.");
     return undefined
   },
 }
@@ -324,8 +317,7 @@ export default function RpsGameContextProvider({ children }: Props) {
     getTransactionStatusOnSealed,
   } = useFclContext()
 
-  const { totalTicketBalance, getTicketAmount, mintTickets } =
-    useTicketContext()
+  const { getTicketAmount, mintTickets } = useTicketContext()
 
   const {
     gameAccountAddress,
@@ -338,12 +330,12 @@ export default function RpsGameContextProvider({ children }: Props) {
 
   const isPlaying = useMemo(
     () => getIsPlaying(state, gameAccountAddress, isLoaded),
-    [state, gameAccountAddress]
+    [state, gameAccountAddress, isLoaded]
   )
 
   const isReady = useMemo(
     () => getIsReady(state, gameAccountAddress, isLoaded),
-    [state, gameAccountAddress]
+    [state, gameAccountAddress, isLoaded]
   )
 
   const isInitialized = useMemo(
@@ -396,13 +388,13 @@ export default function RpsGameContextProvider({ children }: Props) {
         isGameInitialized: true,
       })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    currentUser?.addr,
+    isLoaded,
     isGameInitialized,
     gameAccountAddress,
     gameAccountPublicKey,
-    isLoaded,
+    executeTransaction,
+    getGameAccountAddressFromGameAdmin,
   ])
 
   const getGamePieceNFTID = useCallback(async () => {
@@ -421,8 +413,7 @@ export default function RpsGameContextProvider({ children }: Props) {
         gamePieceNFTID: res[0],
       })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isGameInitialized, gameAccountAddress])
+  }, [isGameInitialized, gameAccountAddress, executeScript])
 
   const getGamePlayerID = useCallback(async () => {
     if (isGameInitialized && gameAccountAddress) {
@@ -438,8 +429,7 @@ export default function RpsGameContextProvider({ children }: Props) {
         gamePlayerID: res,
       })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isGameInitialized, gameAccountAddress])
+  }, [isGameInitialized, gameAccountAddress, executeScript])
 
   const setupNewSinglePlayerMatch = useCallback(async () => {
     if (gamePieceNFTID && gameAccountPrivateKey && gameAccountAddress) {
@@ -495,6 +485,7 @@ export default function RpsGameContextProvider({ children }: Props) {
     gameAccountPrivateKey,
     gameAccountAddress,
     executeTransaction,
+    getTransactionStatusOnSealed,
   ])
 
   const submitBothSinglePlayerMoves = useCallback(
@@ -581,7 +572,6 @@ export default function RpsGameContextProvider({ children }: Props) {
       const newMatchCreatedEvent = transactionEvents.find(event =>
         event?.type.includes('MatchOver')
       )
-      // const matchId = newMatchCreatedEvent.data?.matchID
       const player1ID = newMatchCreatedEvent.data?.player1ID
       const player1MoveRawValue = newMatchCreatedEvent.data?.player1MoveRawValue
       const player2ID = newMatchCreatedEvent.data?.player2ID
@@ -618,11 +608,13 @@ export default function RpsGameContextProvider({ children }: Props) {
       })
     }
   }, [
-    gamePieceNFTID,
     gameMatchID,
-    executeTransaction,
     gameAccountPrivateKey,
     gameAccountAddress,
+    executeTransaction,
+    getTransactionStatusOnSealed,
+    gamePlayerID,
+    mintTickets,
   ])
 
   const getWinLossRecord = useCallback(async () => {
@@ -640,7 +632,7 @@ export default function RpsGameContextProvider({ children }: Props) {
         winLossRecord: res,
       })
     }
-  }, [isInitialized, gameAccountAddress, gamePieceNFTID])
+  }, [isGameInitialized, gameAccountAddress, gamePieceNFTID, executeScript])
 
   const resetGame = useCallback(async () => {
     dispatch({
@@ -664,6 +656,9 @@ export default function RpsGameContextProvider({ children }: Props) {
     setupNewSinglePlayerMatch,
     getGamePieceNFTID,
     resolveMatchAndReturnNFTS,
+    resetGame,
+    getWinLossRecord,
+    setGamePiecePurchased,
   ])
 
   useEffect(() => {
@@ -698,7 +693,6 @@ export default function RpsGameContextProvider({ children }: Props) {
       gameStatus: GameStatus.UNPURCHASED,
     })
     return
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     currentUser?.addr,
     isPlaying,
@@ -739,6 +733,8 @@ export default function RpsGameContextProvider({ children }: Props) {
     getGameAccountAddressFromGameAdmin,
     loadGameAccount,
     getGamePieceNFTID,
+    getWinLossRecord,
+    getGamePlayerID,
   ])
 
   useEffect(() => {
@@ -750,7 +746,7 @@ export default function RpsGameContextProvider({ children }: Props) {
     fn()
     const id = setInterval(fn, 5000)
     return () => clearInterval(id)
-  }, [gameAccountAddress, gameStatus])
+  }, [gameAccountAddress, gameStatus, getTicketAmount])
 
   const providerProps = useMemo(
     () => ({

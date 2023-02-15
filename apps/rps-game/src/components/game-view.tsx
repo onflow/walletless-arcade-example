@@ -7,10 +7,14 @@ import {
   useFclContext,
   useTicketContext,
 } from 'shared'
-import MonsterLogo from "../../public/static/monster-logo.png"
-import MarketLogo from "../../public/static/market-logo.png"
-import { useRpsGameContext, GameStatus } from '../contexts'
-import Image from "next/image"
+import MonsterLogo from '../../public/static/monster-logo.png'
+import MarketLogo from '../../public/static/market-logo.png'
+import {
+  useRpsGameContext,
+  GameStatus,
+  useGameAccountContext,
+} from '../contexts'
+import Image from 'next/image'
 
 type PlayerMove = 'rock' | 'paper' | 'scissors' | undefined
 
@@ -45,6 +49,8 @@ const GameView = () => {
   } = useRpsGameContext()
 
   const { totalTicketBalance } = useTicketContext()
+
+  const { gameAccountAddress } = useGameAccountContext()
 
   const handleEndgame = useCallback(
     async function (gameResult: any) {
@@ -97,7 +103,11 @@ const GameView = () => {
 
       if (isPlayerWinner) {
         setMessage(
-          `For each win, the game deposits 10 tickets in the form of Fungible Tokens into the in-app custodial Flow account <LINK to FlowView>`
+          `For each win, the game deposits 10 tickets in the form of Fungible Tokens into an in-app custodial Flow account.
+          You can find it here ${gameAccountAddress}.
+          Head to settings and connect a wallet to link this account. Once linked you'll
+          have full control over the tickets and other assets held here.
+          `
         )
       } else if (winningNFTID && !isPlayerWinner) {
         setMessage(
@@ -192,15 +202,27 @@ const GameView = () => {
         </div>
 
         <div className="flex min-h-full items-center justify-center">
-          <div className="flex flex-col min-h-full items-center justify-center m-4">
-            <Image width={200} height={200} alt="user monster" src={MonsterLogo.src} className="tile flex h-24 w-24 items-center justify-center bg-green-500" />  
+          <div className="m-4 flex min-h-full flex-col items-center justify-center">
+            <Image
+              width={200}
+              height={200}
+              alt="user monster"
+              src={MonsterLogo.src}
+              className="tile flex h-24 w-24 items-center justify-center bg-green-500"
+            />
             <code className="mt-4">You</code>
           </div>
-          
-          <code className="m-4">{"vs"}</code>
 
-          <div className="flex flex-col min-h-full items-center justify-center m-4">
-            <Image width={200} height={200} alt="opponent monster" src={MarketLogo.src} className="tile flex h-24 w-24 items-center justify-center bg-pink-500" />
+          <code className="m-4">{'vs'}</code>
+
+          <div className="m-4 flex min-h-full flex-col items-center justify-center">
+            <Image
+              width={200}
+              height={200}
+              alt="opponent monster"
+              src={MarketLogo.src}
+              className="tile flex h-24 w-24 items-center justify-center bg-pink-500"
+            />
             <code className="mt-4">Opponent</code>
           </div>
         </div>
@@ -246,7 +268,6 @@ const GameView = () => {
       <Modal
         isOpen={goToMarketplaceModalOpen && !enabled}
         handleClose={() => setGoToMarketplaceOpen(false)}
-        handleOpen={() => setGoToMarketplaceOpen(true)}
         title={"What's Happening?"}
         dialog={`
           When you connected your wallet, the in-app custodial Flow account delegated control to your wallet, 
@@ -264,7 +285,7 @@ const GameView = () => {
         title={"What's Happening?"}
         dialog={`
           After submitting your payment, a game piece NFT was minted and deposited into the in-app custodial 
-          Flow account (link here). You can use this NFT to play the game and win tickets.
+          Flow account <LINK to Flowview GameAccount>. You can use this NFT to play the game and win tickets.
         `}
         buttonText={'Play Now!'}
         buttonFunc={
@@ -280,7 +301,6 @@ const GameView = () => {
             ? handlePlayAgain
             : () => setPlayModalOpen(false)
         }
-        handleOpen={() => null}
         title={'Good Game!'}
         dialog={message}
         buttonText={'Play Again!'}

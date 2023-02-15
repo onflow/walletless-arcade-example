@@ -72,30 +72,19 @@ const Home: NextPage = () => {
   return (
     <>
       <Modal
-        isOpen={isInitialModalOpen && !enabled}
-        handleClose={() => null}
-        handleOpen={() => null}
-        dialog={`
-          Welcome to the Prize Marketplace. Connect your wallet, and all the tickets you earned in the Rock Paper Scissors game will appear.
-          You can spend those tickets on an NFT Prize!
-        `}
-        buttonText={'Lets go!'}
-        buttonFunc={() => setIsInitialModalOpen(false)}
-      />
-      <Modal
         isOpen={isWalletConnectedModal && !enabled}
         handleClose={() => null}
-        handleOpen={() => null}
+        title={'Wallet Connected!'}
         dialog={`
-          Now that you've connected your wallet, your balance reflects the tickets you collected in the monster arcade game account.
+          Now that you've connected your wallet, your balance reflects the tickets you won in the Monster Arcade.
+          You can redeem them for an NFT prize without having to withdraw to you own wallet.
         `}
-        buttonText={'Lets Purchase!'}
+        buttonText={'Close'}
         buttonFunc={() => setIsWalletConnectedModal(false)}
       />
       <Modal
         isOpen={isPurchaseSuccessModalOpen && !enabled}
         handleClose={() => null}
-        handleOpen={() => null}
         title={'Purchase Successful!'}
         dialog={`
          You used tickets from your linked game account to purchase an NFT

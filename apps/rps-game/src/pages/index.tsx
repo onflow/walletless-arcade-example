@@ -11,7 +11,7 @@ import {
   useAppContext,
 } from 'shared'
 import { useSession, signIn, signOut } from 'next-auth/react'
-import { useRpsGameContext } from '../contexts'
+import { useGameAccountContext, useRpsGameContext } from '../contexts'
 import purchaseNft from '../utils/purchase-nft'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
@@ -46,6 +46,8 @@ const Home: NextPage = () => {
     state: { isGamePiecePurchased, setGamePiecePurchased },
   } = useRpsGameContext()
 
+  const { gameAccountAddress } = useGameAccountContext()
+
   useEffect(() => {
     const fn = async () => {
       await setGamePiecePurchased(purchase_success === 'true')
@@ -73,7 +75,6 @@ const Home: NextPage = () => {
             <Modal
               isOpen={isInitialModalOpen && !enabled}
               handleClose={() => setIsInitialModalOpen(false)}
-              handleOpen={() => setIsInitialModalOpen(true)}
               title={'Welcome to Flow Arcade'}
               dialog={`
                 This is a demo of Flow's Walletless Onboarding mechanisms.
@@ -109,11 +110,10 @@ const Home: NextPage = () => {
             <Modal
               isOpen={isPrePurchaseModalOpen}
               handleClose={() => setIsPrepurchaseModalOpen(false)}
-              handleOpen={() => setIsPrepurchaseModalOpen(true)}
               title={'What’s Happening?'}
               dialog={`
                 When you logged in, the app created a Flow account for you in the background. 
-                The address of the custodial account is <LINK> and can be found in Settings.
+                The address of the custodial account is ${gameAccountAddress} and can be found in Settings.
                 To play the game, you'll need to purchase a game piece NFT.  
                 Once you purchase, the NFT will be deposited into the in-app custodial Flow account.
               `}
