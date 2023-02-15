@@ -75,10 +75,13 @@ const Home: NextPage = () => {
         isOpen={isWalletConnectedModal && !enabled}
         handleClose={() => null}
         title={'Wallet Connected!'}
-        dialog={`
-          Now that you've connected your wallet, your balance reflects the tickets you won in the Monster Arcade.
-          You can redeem them for an NFT prize without having to withdraw to you own wallet.
-        `}
+        DialogContent={() => (
+          <div>
+            Now that you've connected your wallet, your balance reflects the
+            tickets you won in the Monster Arcade. You can redeem them for an
+            NFT prize without having to withdraw to you own wallet.
+          </div>
+        )}
         buttonText={'Close'}
         buttonFunc={() => setIsWalletConnectedModal(false)}
       />
@@ -86,10 +89,13 @@ const Home: NextPage = () => {
         isOpen={isPurchaseSuccessModalOpen && !enabled}
         handleClose={() => null}
         title={'Purchase Successful!'}
-        dialog={`
-         You used tickets from your linked game account to purchase an NFT
-         without needing to withdraw them!
-         The Rainbow Ducky NFT was minted to you main account.`}
+        DialogContent={() => (
+          <div>
+            You used tickets from your linked game account to purchase an NFT
+            without needing to withdraw them! The Rainbow Ducky NFT was minted
+            to you main account.
+          </div>
+        )}
         buttonText={'View Purchase'}
         buttonFunc={() => {
           setIsPurchaseSuccessModalOpen(false)

@@ -76,10 +76,12 @@ const Home: NextPage = () => {
               isOpen={isInitialModalOpen && !enabled}
               handleClose={() => setIsInitialModalOpen(false)}
               title={'Welcome to Flow Arcade'}
-              dialog={`
-                This is a demo of Flow's Walletless Onboarding mechanisms.
-                The first step is to login using Google Auth.
-              `}
+              DialogContent={() => (
+                <div>
+                  This is a demo of Flow's Walletless Onboarding mechanisms. The
+                  first step is to login using Google Auth.
+                </div>
+              )}
               buttonText={'Lets start!'}
               buttonFunc={() => setIsInitialModalOpen(false)}
             />
@@ -111,12 +113,24 @@ const Home: NextPage = () => {
               isOpen={isPrePurchaseModalOpen}
               handleClose={() => setIsPrepurchaseModalOpen(false)}
               title={'What’s Happening?'}
-              dialog={`
-                When you logged in, the app created a Flow account for you in the background. 
-                The address of the custodial account is ${gameAccountAddress} and can be found in Settings.
-                To play the game, you'll need to purchase a game piece NFT.  
-                Once you purchase, the NFT will be deposited into the in-app custodial Flow account.
-              `}
+              DialogContent={() => (
+                <div>
+                  When you logged in, the app created a Flow account for you in
+                  the background. The address of the custodial account is
+                  {gameAccountAddress} (
+                  <a
+                    className="text-blue-600"
+                    href={`https://${process.env.NEXT_PUBLIC_FLOWVIEW_NETWORK}.flowview.app/account/${gameAccountAddress}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    View account on flowview
+                  </a>
+                  ) and can be found in Settings. To play the game, you'll need
+                  to purchase a game piece NFT. Once you purchase, the NFT will
+                  be deposited into the in-app custodial Flow account.
+                </div>
+              )}
               buttonText={'Close'}
               buttonFunc={() => setIsPrepurchaseModalOpen(false)}
             />
