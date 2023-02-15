@@ -78,8 +78,8 @@ const Home: NextPage = () => {
               title={'Welcome to Flow Arcade'}
               DialogContent={() => (
                 <div>
-                  This is a demo of Flow's Walletless Onboarding mechanisms. The
-                  first step is to login using Google Auth.
+                  {`This is a demo of Flow's Walletless Onboarding mechanisms. The
+                  first step is to login using Google Auth.`}
                 </div>
               )}
               buttonText={'Lets start!'}
@@ -115,8 +115,8 @@ const Home: NextPage = () => {
               title={'What’s Happening?'}
               DialogContent={() => (
                 <div>
-                  When you logged in, the app created a Flow account for you in
-                  the background. The address of the custodial account is
+                  {`When you logged in, the app created a Flow account for you in
+                  the background. The address of the custodial account is `}
                   {gameAccountAddress} (
                   <a
                     className="text-blue-600"
@@ -126,9 +126,10 @@ const Home: NextPage = () => {
                   >
                     View account on flowview
                   </a>
-                  ) and can be found in Settings. To play the game, you'll need
+                  )
+                  {` and can be found in Settings. To play the game, you'll need
                   to purchase a game piece NFT. Once you purchase, the NFT will
-                  be deposited into the in-app custodial Flow account.
+                  be deposited into the in-app custodial Flow account.`}
                 </div>
               )}
               buttonText={'Close'}

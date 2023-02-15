@@ -271,19 +271,19 @@ const GameView = () => {
         title={"What's Happening?"}
         DialogContent={() => (
           <div>
-            When you connected your wallet, the in-app custodial Flow account
+            {`When you connected your wallet, the in-app custodial Flow account
             delegated control to your wallet, establishing hybrid custody of
             your NFTs and FTs while they continue to reside in the in-app
-            custodial Flow account.{' '}
+            custodial Flow account. `}
             <a
               className="text-blue-600"
               href={`https://${process.env.NEXT_PUBLIC_FLOWVIEW_NETWORK}.flowview.app/account/${gameAccountAddress}`}
               target="_blank"
               rel="noreferrer"
             >
-              View account on flowview
+              {'View account on flowview'}
             </a>
-            .
+            {' .'}
           </div>
         )}
         buttonText={'Go to Marketplace'}
@@ -297,17 +297,17 @@ const GameView = () => {
         title={"What's Happening?"}
         DialogContent={() => (
           <div>
-            After submitting your payment, a game piece NFT was minted and
-            deposited into the in-app custodial Flow account.{' '}
+            {`After submitting your payment, a game piece NFT was minted and
+            deposited into the in-app custodial Flow account. `}
             <a
               className="text-blue-600"
               href={`https://${process.env.NEXT_PUBLIC_FLOWVIEW_NETWORK}.flowview.app/account/${gameAccountAddress}`}
               target="_blank"
               rel="noreferrer"
             >
-              View account on flowview
+              {'View account on flowview'}
             </a>
-            . You can use this NFT to play the game and win tickets.
+            {` . You can use this NFT to play the game and win tickets.`}
           </div>
         )}
         buttonText={'Play Now!'}
