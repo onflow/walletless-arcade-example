@@ -358,7 +358,7 @@ export default function RpsGameContextProvider({ children }: Props) {
         WALLETLESS_ONBOARDING,
         (arg: any, t: any) => [
           arg(gameAccountPublicKey, t.String),
-          arg('100.0', t.UFix64),
+          arg('1.0', t.UFix64),
           arg('RPS Proxy Account', t.String),
           arg('Proxy Account for Flow RPS', t.String),
           arg('flow-games.com/icon.png', t.String),
@@ -444,11 +444,7 @@ export default function RpsGameContextProvider({ children }: Props) {
         ],
         {
           limit: 9999,
-          payer: userAuthorizationFunction(
-            gameAccountPrivateKey,
-            '0',
-            gameAccountAddress
-          ),
+          payer: adminAuthorizationFunction,
           proposer: userAuthorizationFunction(
             gameAccountPrivateKey,
             '0',
@@ -504,11 +500,7 @@ export default function RpsGameContextProvider({ children }: Props) {
           (arg: any, t: any) => [arg(matchID, t.UInt64), arg(move, t.UInt8)],
           {
             limit: 9999,
-            payer: userAuthorizationFunction(
-              gameAccountPrivateKey,
-              '0',
-              gameAccountAddress
-            ),
+            payer: adminAuthorizationFunction,
             proposer: userAuthorizationFunction(
               gameAccountPrivateKey,
               '0',
@@ -543,11 +535,7 @@ export default function RpsGameContextProvider({ children }: Props) {
         (arg: any, t: any) => [arg(matchID, t.UInt64)],
         {
           limit: 9999,
-          payer: userAuthorizationFunction(
-            gameAccountPrivateKey,
-            '0',
-            gameAccountAddress
-          ),
+          payer: adminAuthorizationFunction,
           proposer: userAuthorizationFunction(
             gameAccountPrivateKey,
             '0',
