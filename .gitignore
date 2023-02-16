@@ -36,8 +36,8 @@ yarn-error.log*
 .env.development.local
 .env.test.local
 .env.production.local
-packages/database/.env
-packages/database/.env.local
+**/**/.env
+**/**/.env.local
 
 # turbo
 .turbo
@@ -52,3 +52,4 @@ packages/database/.env.local
 flowdb
 testnet.private.json
 emulator.private.json
+*.private.json
