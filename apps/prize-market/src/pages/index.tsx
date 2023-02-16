@@ -78,7 +78,7 @@ const Home: NextPage = () => {
           <div>
             {`Now that you've connected your wallet, your balance reflects
             the tickets you won in the Monster Arcade. You can redeem them for
-            an NFT prize without having to withdraw to you own wallet.`}
+            an NFT prize without having to withdraw to your own wallet.`}
           </div>
         )}
         buttonText={'Close'}
