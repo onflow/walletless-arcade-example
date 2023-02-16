@@ -1,15 +1,15 @@
 import NonFungibleToken from "../../../contracts/utility/NonFungibleToken.cdc"
-import MonsterMaker from "../../../contracts/MonsterMaker.cdc"
+import GamePieceNFT from "../../../contracts/GamePieceNFT.cdc"
 import RockPaperScissorsGame from "../../../contracts/RockPaperScissorsGame.cdc"
 
 /// The signer signs up for the specified Match.id, setting up a GamePlayer resource
-/// if need be in the process and escrowing the specified MonsterMaker NFT
+/// if need be in the process and escrowing the specified GamePieceNFT NFT
 ///
 transaction(matchID: UInt64, escrowNFTID: UInt64) {
 
     let gamePlayerRef: &RockPaperScissorsGame.GamePlayer
     let receiverCap: Capability<&{NonFungibleToken.Receiver}>
-    var nft: @MonsterMaker.NFT
+    var nft: @GamePieceNFT.NFT
 
     prepare(signer: AuthAccount) {
         // Check if a GamePlayer already exists, pass this block if it does
@@ -20,7 +20,9 @@ transaction(matchID: UInt64, escrowNFTID: UInt64) {
             signer.save(<-gamePlayer, to: RockPaperScissorsGame.GamePlayerStoragePath)
         }
         // Make sure the public capability is properly linked
-        if !signer.getCapability<&{RockPaperScissorsGame.GamePlayerPublic}>(RockPaperScissorsGame.GamePlayerPublicPath).check() {
+        if !signer.getCapability<
+                &{RockPaperScissorsGame.GamePlayerPublic}
+            >(RockPaperScissorsGame.GamePlayerPublicPath).check() {
             signer.unlink(RockPaperScissorsGame.GamePlayerPublicPath)
             // Link GamePlayerPublic Capability so player can be added to Matches
             signer.link<&{
@@ -31,8 +33,10 @@ transaction(matchID: UInt64, escrowNFTID: UInt64) {
             )
         }
         // Make sure the private capability is properly linked
-        if !signer.getCapability<&{RockPaperScissorsGame.GamePlayerID}>(RockPaperScissorsGame.GamePlayerPrivatePath).check() {
-            signer.unlink(RockPaperScissorsGame.GamePlayerPublicPath)
+        if !signer.getCapability<
+                &{RockPaperScissorsGame.GamePlayerID, RockPaperScissorsGame.DelegatedGamePlayer}
+            >(RockPaperScissorsGame.GamePlayerPrivatePath).check() {
+            signer.unlink(RockPaperScissorsGame.GamePlayerPrivatePath)
             // Link GamePlayerID Capability
             signer.link<&{
                 RockPaperScissorsGame.GamePlayerID
@@ -42,25 +46,26 @@ transaction(matchID: UInt64, escrowNFTID: UInt64) {
             )
         }
         // Get the GamePlayer reference from the signing account's storage
-        self.gamePlayerRef = signer
-            .borrow<&RockPaperScissorsGame.GamePlayer>(
+        self.gamePlayerRef = signer.borrow<
+                &RockPaperScissorsGame.GamePlayer
+            >(
                 from: RockPaperScissorsGame.GamePlayerStoragePath
             )!
         
         // Get the account's Receiver Capability
         self.receiverCap = signer.getCapability<
-                &{NonFungibleToken.Receiver}
+                &GamePieceNFT.Collection{NonFungibleToken.Receiver}
             >(
-                MonsterMaker.CollectionPublicPath
+                GamePieceNFT.CollectionPublicPath
             )
         // Get a reference to the account's Provider
         let providerRef = signer.borrow<
-                &{NonFungibleToken.Provider}
+                &GamePieceNFT.Collection{NonFungibleToken.Provider}
             >(
-                from: MonsterMaker.CollectionStoragePath
+                from: GamePieceNFT.CollectionStoragePath
             ) ?? panic("Could not borrow reference to account's Provider")
         // Withdraw the desired NFT
-        self.nft <-providerRef.withdraw(withdrawID: escrowNFTID) as! @MonsterMaker.NFT
+        self.nft <-providerRef.withdraw(withdrawID: escrowNFTID) as! @GamePieceNFT.NFT
     }
 
     execute {

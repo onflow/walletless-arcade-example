@@ -72,19 +72,6 @@ const Home: NextPage = () => {
       <FullScreenLayout nav={<NavBar navProps={navProps} />} theme="green">
         {!session && (
           <FlexContainer className="w-full items-center justify-center">
-            <Modal
-              isOpen={isInitialModalOpen && !enabled}
-              handleClose={() => setIsInitialModalOpen(false)}
-              title={'Welcome to Flow Arcade'}
-              DialogContent={() => (
-                <div>
-                  {`This is a demo of Flow's Walletless Onboarding mechanisms. The
-                  first step is to login using Google Auth.`}
-                </div>
-              )}
-              buttonText={'Lets start!'}
-              buttonFunc={() => setIsInitialModalOpen(false)}
-            />
             <div className="w-full">
               <div className="align-center my-10 flex justify-center md:container md:mx-auto lg:my-14">
                 <Image src={MonsterLogo} alt="Monster Logo" priority />
@@ -109,20 +96,6 @@ const Home: NextPage = () => {
         )}
         {session && !isGamePiecePurchased && (
           <FlexContainer className="w-full items-center justify-center">
-            <Modal
-              isOpen={isPrePurchaseModalOpen}
-              handleClose={() => setIsPrepurchaseModalOpen(false)}
-              title={'What’s Happening?'}
-              DialogContent={() => (
-                <div>
-                  {`Now that you're logged in, you're ready to purchase a game piece NFT so you can play the game!
-                  Once purchased, the app will create a Flow account in the background, and deposit
-                  your game piece to it.`}
-                </div>
-              )}
-              buttonText={'Close'}
-              buttonFunc={() => setIsPrepurchaseModalOpen(false)}
-            />
             <div className="w-full">
               <h1 className="text-primary-green text-center text-4xl font-bold">
                 You need some monsters to start playing in the arcade.
@@ -143,7 +116,38 @@ const Home: NextPage = () => {
             </div>
           </FlexContainer>
         )}
-
+        <Modal
+          isOpen={!!session === false && isInitialModalOpen && !enabled}
+          handleClose={() => setIsInitialModalOpen(false)}
+          title={'Welcome to Flow Arcade'}
+          DialogContent={() => (
+            <div>
+              {`This is a demo of Flow's Walletless Onboarding mechanisms. The
+                  first step is to login using Google Auth.`}
+            </div>
+          )}
+          buttonText={'Lets start!'}
+          buttonFunc={() => setIsInitialModalOpen(false)}
+        />
+        <Modal
+          isOpen={
+            !!session === true &&
+            !isGamePiecePurchased &&
+            isPrePurchaseModalOpen &&
+            !enabled
+          }
+          handleClose={() => setIsPrepurchaseModalOpen(false)}
+          title={"What's Happening?"}
+          DialogContent={() => (
+            <div>
+              {`Now that you're logged in, you're ready to purchase a game piece NFT so you can play the game!
+                  Once purchased, the app will create a Flow account in the background, and deposit
+                  your game piece to it.`}
+            </div>
+          )}
+          buttonText={'Close'}
+          buttonFunc={() => setIsPrepurchaseModalOpen(false)}
+        />
         {session && isGamePiecePurchased && <GameView />}
       </FullScreenLayout>
     </>
@@ -151,3 +155,4 @@ const Home: NextPage = () => {
 }
 
 export default Home
+ 

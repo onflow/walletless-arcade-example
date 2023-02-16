@@ -8,7 +8,7 @@ import {
 import { useFclContext } from 'shared'
 import type { ReactNode } from 'react'
 import * as fcl from '@onflow/fcl'
-import IS_GAME_PIECE_NFT_COLLECTION_CONFIGURED from '../../cadence/scripts/monster-maker/is-monster-maker-collection-configured'
+import IS_GAME_PIECE_NFT_COLLECTION_CONFIGURED from '../../cadence/scripts/gamepiece-nft/is-collection-configured'
 import IS_CHILD_ACCOUNT_OF from '../../cadence/scripts/child-account/is_child_account_of'
 import ADD_AS_CHILD_MULTISIG from '../../cadence/transactions/child-account/add-as-child-multisig'
 import { useGameAccountContext } from './GameAccountContext'

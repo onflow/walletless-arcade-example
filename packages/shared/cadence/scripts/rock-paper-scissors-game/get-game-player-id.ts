@@ -20,7 +20,6 @@ pub fun main(playerAddress: Address): UInt64? {
     // No reference found, return nil
     return nil
 }
-
 `
 
 export default GET_GAME_PLAYER_ID

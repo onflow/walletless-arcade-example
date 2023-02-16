@@ -108,7 +108,9 @@ const GameView = () => {
 
       if (isPlayerWinner) {
         const newMessage = function () {
-          return (
+          return enabled ? (
+            <div>{`You Win! You played ${playerMoveString} and beat ${opponentMoveString}. You received 10 tickets!`}</div>
+          ) : (
             <div>
               {`For each win, the game deposits 10 tickets in the form of Fungible
             Tokens into an in-app custodial Flow account. You can find it here 
@@ -145,6 +147,11 @@ const GameView = () => {
   useEffect(() => {
     if (gameStatus === GameStatus.ENDED) {
       handleEndgame(gameResult)
+    }
+    if (gameStatus === GameStatus.READY) {
+      if (purchaseSuccessModalOpen && !gameMatchID && enabled) {
+        handlePlay()
+      }
     }
   }, [gameResult, gameStatus, handleEndgame])
 
@@ -197,8 +204,6 @@ const GameView = () => {
       setGoToMarketplaceOpen(true)
     }
   }, [currentUser?.addr])
-
-  console.log('message', message)
 
   return (
     <div className="container m-auto">

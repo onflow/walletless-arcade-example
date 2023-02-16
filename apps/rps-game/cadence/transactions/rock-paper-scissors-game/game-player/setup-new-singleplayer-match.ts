@@ -1,6 +1,6 @@
 const SETUP_NEW_SINGLEPLAYER_MATCH = `
 import NonFungibleToken from 0xNonFungibleToken
-import MonsterMaker from 0xMonsterMaker
+import GamePieceNFT from 0xGamePieceNFT
 import RockPaperScissorsGame from 0xRockPaperScissorsGame
 
 /// Transaction that creates a new Match in single player mode and 
@@ -18,17 +18,17 @@ transaction(submittingNFTID: UInt64, matchTimeLimitInMinutes: UInt) {
         let receiverCap = acct.getCapability<
                 &{NonFungibleToken.Receiver}
             >(
-                MonsterMaker.CollectionPublicPath
+                GamePieceNFT.CollectionPublicPath
             )
         
         // Get a reference to the account's Provider
         let providerRef = acct.borrow<&{
                 NonFungibleToken.Provider
             }>(
-                from: MonsterMaker.CollectionStoragePath
+                from: GamePieceNFT.CollectionStoragePath
             ) ?? panic("Could not borrow reference to account's Provider")
         // Withdraw the desired NFT
-        let submittingNFT <-providerRef.withdraw(withdrawID: submittingNFTID) as! @MonsterMaker.NFT
+        let submittingNFT <-providerRef.withdraw(withdrawID: submittingNFTID) as! @GamePieceNFT.NFT
 
         // Create a match with the given timeLimit in minutes
         let newMatchID = gamePlayerRef

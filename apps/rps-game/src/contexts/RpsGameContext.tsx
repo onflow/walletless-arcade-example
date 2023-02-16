@@ -9,12 +9,12 @@ import {
 import type { ReactNode } from 'react'
 import { useFclContext, useTicketContext } from 'shared'
 import { useGameAccountContext } from './GameAccountContext'
-import WALLETLESS_ONBOARDING_MINT_FROM_RESOURCE from '../../cadence/transactions/onboarding/walletless-onboarding-mint-from-resource'
+import WALLETLESS_ONBOARDING from '../../cadence/transactions/onboarding/walletless-onboarding'
 import SETUP_NEW_SINGLE_PLAYER_MATCH from '../../cadence/transactions/rock-paper-scissors-game/game-player/setup-new-singleplayer-match'
 import GET_GAME_PLAYER_ID from '../../cadence/scripts/rock-paper-scissors-game/get-game-player-id'
 import SUBMIT_BOTH_SINGLE_PLAYER_MOVES from '../../cadence/transactions/rock-paper-scissors-game/game-player/submit-both-singleplayer-moves'
-import GET_COLLECTION_IDS from '../../cadence/scripts/monster-maker/get-collection-ids'
-import GET_RPS_WIN_LOSS from '../../cadence/scripts/monster-maker/get-rps-win-loss'
+import GET_COLLECTION_IDS from '../../cadence/scripts/gamepiece-nft/get-collection-ids'
+import GET_RPS_WIN_LOSS from '../../cadence/scripts/gamepiece-nft/get-rps-win-loss'
 import {
   userAuthorizationFunction,
   adminAuthorizationFunction,
@@ -355,7 +355,7 @@ export default function RpsGameContextProvider({ children }: Props) {
 
     if (!isGameInitialized && !gameAccountAddress && gameAccountPublicKey) {
       const txid = await executeTransaction(
-        WALLETLESS_ONBOARDING_MINT_FROM_RESOURCE,
+        WALLETLESS_ONBOARDING,
         (arg: any, t: any) => [
           arg(gameAccountPublicKey, t.String),
           arg('100.0', t.UFix64),

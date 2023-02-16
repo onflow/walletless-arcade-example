@@ -27,7 +27,6 @@ const Home: NextPage = () => {
   const { enabled } = useAppContext()
   const { currentUser, connect, logout: disconnect } = useFclContext()
   const {
-    ownedPrizes,
     getOwnedPrizes,
     childTicketVaultAddress,
     totalTicketBalance,

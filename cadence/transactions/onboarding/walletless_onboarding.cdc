@@ -2,7 +2,7 @@ import ChildAccount from "../../contracts/ChildAccount.cdc"
 import MetadataViews from "../../contracts/utility/MetadataViews.cdc"
 import FungibleToken from "../../contracts/utility/FungibleToken.cdc"
 import NonFungibleToken from "../../contracts/utility/NonFungibleToken.cdc"
-import MonsterMaker from "../../contracts/MonsterMaker.cdc"
+import GamePieceNFT from "../../contracts/GamePieceNFT.cdc"
 import RockPaperScissorsGame from "../../contracts/RockPaperScissorsGame.cdc"
 import TicketToken from "../../contracts/TicketToken.cdc"
 
@@ -52,56 +52,53 @@ transaction(
             childAccountInfo: info
         )
 
-        /* --- Set up MonsterMaker.Collection --- */
+        /* --- Set up GamePieceNFT.Collection --- */
         //
         // create & save it to the account
-        newAccount.save(<-MonsterMaker.createEmptyCollection(), to: MonsterMaker.CollectionStoragePath)
+        newAccount.save(<-GamePieceNFT.createEmptyCollection(), to: GamePieceNFT.CollectionStoragePath)
 
         // create a public capability for the collection
         newAccount.link<
-            &MonsterMaker.Collection{NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, MonsterMaker.MonsterMakerCollectionPublic, MetadataViews.ResolverCollection}
+            &GamePieceNFT.Collection{NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, GamePieceNFT.GamePieceNFTCollectionPublic, MetadataViews.ResolverCollection}
         >(
-            MonsterMaker.CollectionPublicPath,
-            target: MonsterMaker.CollectionStoragePath
+            GamePieceNFT.CollectionPublicPath,
+            target: GamePieceNFT.CollectionStoragePath
         )
 
         // Link the Provider Capability in private storage
         newAccount.link<
-            &MonsterMaker.Collection{NonFungibleToken.Provider}
+            &GamePieceNFT.Collection{NonFungibleToken.Provider}
         >(
-            MonsterMaker.CollectionPublicPath,
-            target: MonsterMaker.CollectionStoragePath
+            GamePieceNFT.ProviderPrivatePath,
+            target: GamePieceNFT.CollectionStoragePath
         )
 
         // Grab Collection related references & Capabilities
-        let collectionRef = newAccount.borrow<&MonsterMaker.Collection>(from: MonsterMaker.CollectionStoragePath)!
+        let collectionRef = newAccount.borrow<
+                &GamePieceNFT.Collection{NonFungibleToken.CollectionPublic}
+            >(
+                from: GamePieceNFT.CollectionStoragePath
+            )!
         
         /* --- Make sure new account has a GamePieceNFT.NFT to play with --- */
         //
-        // Borrow a reference to the NFTMinter Capability in minter account's storage
-        // NOTE: This assumes a Capability is stored, and not the base resource - this would occurr
-        // if the signing minter was granted the NFTMinter Capability for a base resource located in
-        // another account
-        let minterCapRef = signer.borrow<
-                &Capability<&MonsterMaker.NFTMinter>
+        // Borrow a reference to the Minter Capability in minter account's storage
+        let minterRef = signer.borrow<
+                &GamePieceNFT.Minter
             >(
-                from: MonsterMaker.MinterStoragePath
-            ) ?? panic("Couldn't borrow reference to NFTMinter Capability in storage at ".concat(MonsterMaker.MinterStoragePath.toString()))
-        let minterRef = minterCapRef.borrow() ?? panic("Couldn't borrow reference to NFTMinter from Capability")
+                from: GamePieceNFT.MinterStoragePath
+            ) ?? panic("Couldn't borrow reference to Minter Capability in storage at ".concat(GamePieceNFT.MinterStoragePath.toString()))
         // Build the MonsterComponent struct from given arguments
-        let componentValue = MonsterMaker.MonsterComponent(
+        let componentValue = GamePieceNFT.MonsterComponent(
                 background: monsterBackground,
                 head: monsterHead,
                 torso: monsterTorso,
                 leg: monsterLeg
             )
-        // TODO: Add royalty feature to MM using beneficiaries, cuts, and descriptions. At the moment, we don't provide royalties with KI, so this will be an empty list.
-        let royalties: [MetadataViews.Royalty] = []
         // Mint the NFT to the new account's collection
         minterRef.mintNFT(
             recipient: collectionRef,
-            component: componentValue,
-            royalties: royalties
+            component: componentValue
         )
 
         /* --- Set user up with GamePlayer in new account --- */
@@ -144,3 +141,4 @@ transaction(
         )
     }
 }
+ 
