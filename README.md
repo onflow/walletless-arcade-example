@@ -46,6 +46,13 @@ flow emulator start
 flow dev-wallet
 ```
 
+- Copy emulator.private.json.example and testnet.private.json.example files and update with your own key data.
+
+```sh
+cp emulator.private.json.example emulator.private.json
+cp testnet.private.json.example testnet.private.json
+```
+
 - Copy the .env-example file to .env and update the required values.
 
 ```sh

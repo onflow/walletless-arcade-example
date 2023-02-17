@@ -1,0 +1,14 @@
+{
+  "accounts": {
+    "emulator-account": {
+      "address": "f8d6e0586b0a20c7",
+      "key": {
+        "type": "hex",
+        "index": 0,
+        "signatureAlgorithm": "ECDSA_P256",
+        "hashAlgorithm": "SHA3_256",
+        "privateKey": "5d4fee50d6098eef11b6cf45fdc043f4eb06d8946638255e381636d6e2886100"
+      }
+    }
+  }
+}
