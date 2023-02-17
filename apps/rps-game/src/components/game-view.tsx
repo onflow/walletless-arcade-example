@@ -19,7 +19,7 @@ import Image from 'next/image'
 type PlayerMove = 'rock' | 'paper' | 'scissors' | undefined
 
 const GameView = () => {
-  const { enabled } = useAppContext()
+  const { enabled, fullScreenLoading } = useAppContext()
   const { currentUser } = useFclContext()
 
   const [purchaseSuccessModalOpen, setPurchaseSuccessModalOpen] =
@@ -51,25 +51,6 @@ const GameView = () => {
   const { totalTicketBalance } = useTicketContext()
 
   const { gameAccountAddress } = useGameAccountContext()
-
-  const handlePlayAgain = async () => {
-    if (gameStatus !== GameStatus.ENDED) return
-    setPlayModalOpen(false)
-    setPurchaseSuccessModalOpen(false)
-
-    setPlayerMove(undefined)
-    setOpponentMove(undefined)
-    await resetGame()
-    await setupNewSinglePlayerMatch()
-  }
-
-  const handlePlay = useCallback(async () => {
-    if (gameStatus !== GameStatus.READY) return
-    setPlayModalOpen(false)
-    setPurchaseSuccessModalOpen(false)
-
-    await setupNewSinglePlayerMatch()
-  }, [gameStatus, setupNewSinglePlayerMatch])
 
   const handleEndgame = useCallback(
     async function (gameResult: any) {
@@ -160,8 +141,46 @@ const GameView = () => {
         setMessage(() => newMessage)
       }
     },
-    [enabled, gameAccountAddress, gamePieceNFTID, gamePlayerID]
+    [gamePieceNFTID, gamePlayerID]
   )
+
+  useEffect(() => {
+    if (gameStatus === GameStatus.ENDED) {
+      handleEndgame(gameResult)
+    }
+    if (gameStatus === GameStatus.READY) {
+      if (purchaseSuccessModalOpen && !gameMatchID && enabled) {
+        handlePlay()
+      }
+    }
+  }, [gameResult, gameStatus, handleEndgame])
+
+  useEffect(() => {
+    setPlayModalOpen(gameStatus === GameStatus.ENDED)
+  }, [gameStatus])
+
+  const toggleDisableButtons = () => {
+    setLocked(locked => !locked)
+  }
+
+  const handlePlayAgain = async () => {
+    if (gameStatus !== GameStatus.ENDED) return
+    setPlayModalOpen(false)
+    setPurchaseSuccessModalOpen(false)
+
+    setPlayerMove(undefined)
+    setOpponentMove(undefined)
+    await resetGame()
+    await setupNewSinglePlayerMatch()
+  }
+
+  const handlePlay = async () => {
+    if (gameStatus !== GameStatus.READY) return
+    setPlayModalOpen(false)
+    setPurchaseSuccessModalOpen(false)
+
+    await setupNewSinglePlayerMatch()
+  }
 
   const handleMove = async (command: string) => {
     if (gameStatus !== GameStatus.PLAYING) return
@@ -178,33 +197,6 @@ const GameView = () => {
     }
 
     await resolveMatchAndReturnNFTS()
-  }
-
-  useEffect(() => {
-    if (gameStatus === GameStatus.ENDED) {
-      handleEndgame(gameResult)
-    }
-    if (gameStatus === GameStatus.READY) {
-      if (purchaseSuccessModalOpen && !gameMatchID && enabled) {
-        handlePlay()
-      }
-    }
-  }, [
-    enabled,
-    gameMatchID,
-    gameResult,
-    gameStatus,
-    handleEndgame,
-    handlePlay,
-    purchaseSuccessModalOpen,
-  ])
-
-  useEffect(() => {
-    setPlayModalOpen(gameStatus === GameStatus.ENDED)
-  }, [gameStatus])
-
-  const toggleDisableButtons = () => {
-    setLocked(locked => !locked)
   }
 
   useEffect(() => {
