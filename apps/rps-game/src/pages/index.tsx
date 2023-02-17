@@ -1,5 +1,7 @@
-import type { NextPage } from 'next'
 import Head from 'next/head'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
+import Image from 'next/image'
 import {
   FullScreenLayout,
   FlexContainer,
@@ -7,21 +9,20 @@ import {
   NavBar,
   CustomButton,
   Modal,
+  Spinner,
   useFclContext,
   useAppContext,
 } from 'shared'
 import { useSession, signIn, signOut } from 'next-auth/react'
-import { useGameAccountContext, useRpsGameContext } from '../contexts'
+import { useRpsGameContext } from '../contexts'
 import purchaseNft from '../utils/purchase-nft'
-import { useRouter } from 'next/router'
-import { useEffect } from 'react'
 import { GameView } from '../components'
 import MonsterLogo from '../../public/static/monster-logo.png'
-import Image from 'next/image'
-import { useState } from 'react'
+
+import type { NextPage } from 'next'
 
 const Home: NextPage = () => {
-  const { enabled } = useAppContext()
+  const { enabled, fullScreenLoading, setFullScreenLoading } = useAppContext()
   const { currentUser, connect, logout: disconnect } = useFclContext()
   const { data: session, status } = useSession()
   const router = useRouter()
@@ -46,8 +47,6 @@ const Home: NextPage = () => {
     state: { isGamePiecePurchased, setGamePiecePurchased },
   } = useRpsGameContext()
 
-  const { gameAccountAddress } = useGameAccountContext()
-
   useEffect(() => {
     const fn = async () => {
       await setGamePiecePurchased(purchase_success === 'true')
@@ -70,6 +69,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <FullScreenLayout nav={<NavBar navProps={navProps} />} theme="green">
+        <Spinner show={fullScreenLoading} />
         {!session && (
           <FlexContainer className="w-full items-center justify-center">
             <div className="w-full">
@@ -81,7 +81,7 @@ const Home: NextPage = () => {
               </h1>
               <div className="my-10 md:container md:mx-auto lg:my-14">
                 <h2 className="text-center text-3xl font-bold text-green-400">
-                  You’ll need to login or sign up to join in the fun.
+                  Login or sign up to join in the fun.
                 </h2>
               </div>
               <div className="my-10 md:container md:mx-auto lg:my-14">
@@ -101,7 +101,7 @@ const Home: NextPage = () => {
                 You need some monsters to start playing in the arcade.
               </h1>
               <h2 className="text-center text-3xl font-bold text-green-400">
-                Let’s go shopping for some monsters!
+                Lets go shopping for some monsters!
               </h2>
               <div className="my-10 md:container md:mx-auto lg:my-14">
                 <Row>
@@ -155,4 +155,3 @@ const Home: NextPage = () => {
 }
 
 export default Home
- 
