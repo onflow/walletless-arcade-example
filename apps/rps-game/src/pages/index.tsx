@@ -69,7 +69,6 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <FullScreenLayout nav={<NavBar navProps={navProps} />} theme="green">
-        <Spinner show={fullScreenLoading} />
         {!session && (
           <FlexContainer className="w-full items-center justify-center">
             <div className="w-full">
