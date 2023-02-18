@@ -5,6 +5,7 @@ import {
   useCallback,
   useReducer,
   useMemo,
+  useState,
 } from 'react'
 import type { ReactNode } from 'react'
 import { useFclContext, useTicketContext } from 'shared'
@@ -290,16 +291,22 @@ export const RpsGameContext = createContext<{
   dispatch: React.Dispatch<Action>
   gameAccountAddress: string | null
   gameAccountPublicKey: string | null
+  loadingOpponentMove: boolean
+  setLoadingOpponentMove: React.Dispatch<React.SetStateAction<boolean>>
 }>({
   state: initialState,
   dispatch: () => null,
   gameAccountAddress: null,
   gameAccountPublicKey: null,
+  loadingOpponentMove: false,
+  setLoadingOpponentMove: () => null,
 })
 
 export const useRpsGameContext = () => useContext(RpsGameContext)
 
 export default function RpsGameContextProvider({ children }: Props) {
+  const [loadingOpponentMove, setLoadingOpponentMove] = useState<boolean>(false)
+
   const [state, dispatch] = useReducer(reducer, initialState)
   const {
     gameStatus,
@@ -494,7 +501,7 @@ export default function RpsGameContextProvider({ children }: Props) {
       ) {
         const matchID = gameMatchID
         const move = _move // 0 = rock, 1 = paper, 2 = scissors
-
+        setLoadingOpponentMove(true)
         const txId = await executeTransaction(
           SUBMIT_BOTH_SINGLE_PLAYER_MOVES,
           (arg: any, t: any) => [arg(matchID, t.UInt64), arg(move, t.UInt8)],
@@ -585,6 +592,7 @@ export default function RpsGameContextProvider({ children }: Props) {
         await mintTickets(gameAccountAddress, '10.0')
       }
 
+      setLoadingOpponentMove(false)
       dispatch({
         type: 'SET_GAME_RESULT',
         gameResult: endgame,
@@ -744,6 +752,8 @@ export default function RpsGameContextProvider({ children }: Props) {
       gameAccountPublicKey,
       setGamePiecePurchased,
       isPlaying,
+      loadingOpponentMove,
+      setLoadingOpponentMove,
     }),
     [
       state,
@@ -752,6 +762,8 @@ export default function RpsGameContextProvider({ children }: Props) {
       gameAccountPublicKey,
       setGamePiecePurchased,
       isPlaying,
+      loadingOpponentMove,
+      setLoadingOpponentMove,
     ]
   )
 
