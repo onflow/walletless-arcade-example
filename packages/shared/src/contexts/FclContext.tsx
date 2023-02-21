@@ -88,7 +88,6 @@ export default function FclContextProvider({
       setTransactionInProgress(true)
       setTransactionStatus(-1)
       setTransactionEvents(null)
-      setFullScreenLoading(true)
 
       const transactionId = await fcl
         .mutate({
@@ -107,12 +106,22 @@ export default function FclContextProvider({
 
       if (transactionId) {
         setTxId(transactionId)
-        fcl.tx(transactionId).subscribe((res: any) => {
-          setTransactionStatus(res.status)
-          setTransactionEvents(res.events || null)
-          setTransactionInProgress(false)
-          setFullScreenLoading(false)
+
+        await new Promise((pres, prej) => {
+          fcl.tx(transactionId).subscribe((res: any) => {
+            setTransactionStatus(res.status)
+
+            if (res.status >= 4) {
+              setTransactionEvents(res.events || null)
+              setTransactionInProgress(false)
+
+              pres(transactionId)
+            } else if (res.status === 5) {
+              prej(transactionId)
+            }
+          })
         })
+
         return transactionId
       }
     },
