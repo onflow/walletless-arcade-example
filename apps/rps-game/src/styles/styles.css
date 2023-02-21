@@ -2,6 +2,19 @@
 @tailwind base;
 @tailwind utilities;
 
+.spinner {
+  animation: spin infinite 1s linear;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .internal-landing-card-green-bg {
   background: linear-gradient(
     85.22deg,

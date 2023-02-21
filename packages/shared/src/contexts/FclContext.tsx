@@ -9,6 +9,7 @@ import {
 } from 'react'
 
 import type { ReactNode } from 'react'
+import { useAppContext } from './AppContext'
 
 interface IFclContext {
   currentUser: fcl.CurrentUserObject | null | undefined
@@ -57,6 +58,8 @@ export default function FclContextProvider({
   const [transactionEvents, setTransactionEvents] = useState(null)
   const [txId, setTxId] = useState<string | null>(null)
 
+  const { fullScreenLoading, setFullScreenLoading } = useAppContext()
+
   useEffect(() => fcl.currentUser.subscribe(setCurrentUser), [])
 
   const connect = useCallback(() => {
@@ -85,6 +88,7 @@ export default function FclContextProvider({
       setTransactionInProgress(true)
       setTransactionStatus(-1)
       setTransactionEvents(null)
+      setFullScreenLoading(true)
 
       const transactionId = await fcl
         .mutate({
@@ -107,10 +111,10 @@ export default function FclContextProvider({
           setTransactionStatus(res.status)
           setTransactionEvents(res.events || null)
           setTransactionInProgress(false)
+          setFullScreenLoading(false)
         })
+        return transactionId
       }
-
-      return transactionId
     },
     []
   )

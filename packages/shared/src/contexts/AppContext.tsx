@@ -8,11 +8,13 @@ import {
 
 import type { ReactNode } from 'react'
 
-const LOCAL_STORAGE_FIRE_ENABLED = "LOCAL_STORAGE_FIRE_ENABLED"
+const LOCAL_STORAGE_FIRE_ENABLED = 'LOCAL_STORAGE_FIRE_ENABLED'
 
 interface IAppContext {
   enabled: boolean
   toggleEnabled: () => void
+  fullScreenLoading: boolean
+  setFullScreenLoading: (loading: boolean) => void
 }
 
 export const AppContext = createContext<IAppContext>({} as IAppContext)
@@ -26,9 +28,10 @@ export const useAppContext = () => {
 }
 
 function getFireModeFromLocalStorage() {
-  if (typeof window !== "undefined") {
-    const fromStorage = window.localStorage.getItem(LOCAL_STORAGE_FIRE_ENABLED) ?? "false"
-    if (typeof JSON.parse(fromStorage) === "boolean") {
+  if (typeof window !== 'undefined') {
+    const fromStorage =
+      window.localStorage.getItem(LOCAL_STORAGE_FIRE_ENABLED) ?? 'false'
+    if (typeof JSON.parse(fromStorage) === 'boolean') {
       return JSON.parse(fromStorage)
     }
   }
@@ -41,11 +44,15 @@ export default function AppContextProvider({
   children: ReactNode
 }) {
   const [enabled, setEnabled] = useState<boolean>(getFireModeFromLocalStorage())
+  const [fullScreenLoading, setFullScreenLoading] = useState<boolean>(false)
 
   const toggleEnabled = useCallback(() => {
     setEnabled(enabled => {
-      if (typeof window !== "undefined") {
-        window.localStorage.setItem(LOCAL_STORAGE_FIRE_ENABLED, JSON.stringify(!enabled))
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem(
+          LOCAL_STORAGE_FIRE_ENABLED,
+          JSON.stringify(!enabled)
+        )
       }
       return !enabled
     })
@@ -55,8 +62,10 @@ export default function AppContextProvider({
     () => ({
       enabled,
       toggleEnabled,
+      fullScreenLoading,
+      setFullScreenLoading,
     }),
-    [enabled, toggleEnabled]
+    [enabled, toggleEnabled, fullScreenLoading, setFullScreenLoading]
   )
 
   return (
@@ -69,4 +78,3 @@ export default function AppContextProvider({
     </AppContext.Provider>
   )
 }
- 

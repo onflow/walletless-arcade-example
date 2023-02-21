@@ -119,10 +119,12 @@
     },
     "testnet": {
       "testnet-account": [
-        "TicketToken",
         "ArcadePrize",
+        "DynamicNFT",
+        "GamePieceNFT",
+        "GamingMetadataViews",
         "RockPaperScissorsGame",
-        "GamePieceNFT"
+        "TicketToken"
       ]
     }
   }

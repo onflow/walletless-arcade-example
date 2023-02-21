@@ -3,10 +3,12 @@ import {
   FlashButton,
   Row,
   Modal,
+  Spinner,
   useAppContext,
   useFclContext,
   useTicketContext,
 } from 'shared'
+import Image from 'next/image'
 import MonsterLogo from '../../public/static/monster-logo.png'
 import MarketLogo from '../../public/static/market-logo.png'
 import {
@@ -14,12 +16,11 @@ import {
   GameStatus,
   useGameAccountContext,
 } from '../contexts'
-import Image from 'next/image'
 
 type PlayerMove = 'rock' | 'paper' | 'scissors' | undefined
 
 const GameView = () => {
-  const { enabled } = useAppContext()
+  const { enabled, fullScreenLoading } = useAppContext()
   const { currentUser } = useFclContext()
 
   const [purchaseSuccessModalOpen, setPurchaseSuccessModalOpen] =
@@ -46,6 +47,8 @@ const GameView = () => {
       gamePlayerID,
       winLossRecord,
     },
+    loadingOpponentMove,
+    setLoadingOpponentMove,
   } = useRpsGameContext()
 
   const { totalTicketBalance } = useTicketContext()
@@ -141,7 +144,7 @@ const GameView = () => {
         setMessage(() => newMessage)
       }
     },
-    [gamePieceNFTID, gamePlayerID]
+    [enabled, gameAccountAddress, gamePieceNFTID, gamePlayerID]
   )
 
   useEffect(() => {
@@ -259,6 +262,7 @@ const GameView = () => {
         </div>
 
         <div className="flex h-60 items-center justify-center rounded-md border border-pink-500 border-opacity-100 md:h-96">
+          {loadingOpponentMove && <Spinner size={70} />}
           {opponentMove === 'rock' && (
             <span className="text-9xl font-extrabold">🪨</span>
           )}
@@ -269,6 +273,7 @@ const GameView = () => {
             <span className="text-9xl font-extrabold">✂️</span>
           )}
           {!playerMove &&
+            !loadingOpponentMove &&
             (gameStatus === GameStatus.READY ||
               gameStatus === GameStatus.PLAYING) && (
               <span className="text-9xl font-extrabold">❓</span>
@@ -360,7 +365,7 @@ const GameView = () => {
             : () => setPlayModalOpen(false)
         }
         title={'Good Game!'}
-        DialogContent={message}
+        DialogContent={message ?? ''}
         buttonText={'Play Again!'}
         buttonFunc={
           gameStatus === GameStatus.ENDED
