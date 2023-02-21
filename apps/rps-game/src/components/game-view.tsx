@@ -120,7 +120,7 @@ const GameView = () => {
             ${gameAccountAddress} (`}
               <a
                 className="text-blue-600"
-                href={`https://${process.env.NEXT_PUBLIC_FLOWVIEW_NETWORK}.flowview.app/account/${gameAccountAddress}/fungible_token`}
+                href={`https://${process.env.NEXT_PUBLIC_FLOW_NETWORK}.flowview.app/account/${gameAccountAddress}/fungible_token`}
                 target="_blank"
                 rel="noreferrer"
               >
@@ -313,7 +313,7 @@ const GameView = () => {
             custodial Flow account. `}
             <a
               className="text-blue-600"
-              href={`https://${process.env.NEXT_PUBLIC_FLOWVIEW_NETWORK}.flowview.app/account/${gameAccountAddress}`}
+              href={`https://${process.env.NEXT_PUBLIC_FLOW_NETWORK}.flowview.app/account/${gameAccountAddress}`}
               target="_blank"
               rel="noreferrer"
             >
@@ -341,7 +341,7 @@ const GameView = () => {
             deposited into the in-app custodial Flow account. `}
             <a
               className="text-blue-600"
-              href={`https://${process.env.NEXT_PUBLIC_FLOWVIEW_NETWORK}.flowview.app/account/${gameAccountAddress}`}
+              href={`https://${process.env.NEXT_PUBLIC_FLOW_NETWORK}.flowview.app/account/${gameAccountAddress}`}
               target="_blank"
               rel="noreferrer"
             >
