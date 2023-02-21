@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import Stripe from 'stripe'
+import { getUrl } from '../../utils/get-url'
 
 const stripe = new Stripe(process.env.STRIPE_SK as string, {
   apiVersion: '2022-11-15',
@@ -23,8 +24,8 @@ export default async function handler(
       },
     ],
     mode: 'payment',
-    success_url: `http://localhost:${process.env.PORT}?purchase_success=true`,
-    cancel_url: `http://localhost:${process.env.PORT}?purchase_error=true`,
+    success_url: `${getUrl()}?purchase_success=true`,
+    cancel_url: `${getUrl()}?purchase_error=true`,
   })
 
   res.json({ url: session.url })
