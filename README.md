@@ -30,9 +30,38 @@ This is example Flow App was created to demonstrate walletless onboarding and pr
 
 ## Quickstart Demo
 
-To demo the functionality of this repo, clone it and follow the steps below. Requires installation of [Flow CLI](https://github.com/onflow/flow-cli/releases/tag/v0.45.1-cadence-attachments-3) (Attachments/AuthAccount Capability pre-release version).
+To demo the functionality of this repo, clone it and follow the steps below.
 
 ### Pre-Requisites
+
+1. Install Flow CLI 
+:warning: Requires installation of [Flow CLI](https://github.com/onflow/flow-cli/releases/tag/v0.45.1-cadence-attachments-3) (Attachments/AuthAccount Capability pre-release version).
+
+```sh
+sh -ci "$(curl -fsSL https://raw.githubusercontent.com/onflow/flow-cli/master/install.sh)" -- v0.45.1-cadence-attachments-3
+```
+
+2. Copy `emulator.private.json.example` and `testnet.private.json.example` files and update with your own key data.
+
+```sh
+cp emulator.private.json.example emulator.private.json
+cp testnet.private.json.example testnet.private.json
+```
+
+3. Copy the .env-example file to .env and update the required values.
+
+```sh
+cp .env-example .env
+```
+
+:warning: App requires several `env` vars for development and deployment. Credentials and API keys can be acquired through their respective providers. See `.env-example` for details
+
+#### Service Providers
+
+- Stripe (Used for NFT Purchase): [https://stripe.com/docs/development](https://stripe.com/docs/development)
+- Google (Used as Next Auth Provider): [https://developers.google.com/identity/protocols/oauth2/openid-connect](https://developers.google.com/identity/protocols/oauth2/openid-connect)
+
+### Run Demo
 
 - Start the emulator
 
@@ -46,20 +75,6 @@ flow emulator start
 flow dev-wallet
 ```
 
-- Copy emulator.private.json.example and testnet.private.json.example files and update with your own key data.
-
-```sh
-cp emulator.private.json.example emulator.private.json
-cp testnet.private.json.example testnet.private.json
-```
-
-- Copy the .env-example file to .env and update the required values.
-
-```sh
-cp .env-example .env
-```
-
-### Demo
 
 - Start dev server to deploy the contracts and configure the service account
 
@@ -92,3 +107,19 @@ To build all apps and packages, run the following command:
 ```shell
 npm run build
 ```
+
+### Deploy
+The following env vars are required for deployment:
+#### Public
+- NEXT_PUBLIC_VERCEL_URL: Your Vercel URL (ex: https://walletless-arcade-game.vercel.app)
+- NEXT_PUBLIC_ADMIN_ADDRESS: The address of the admin account where game and prize contracts are deployed
+- NEXT_PUBLIC_ADMIN_KEY_INDEX: The key index of the admin account where game and prize contracts are deployed
+- NEXTAUTH_URL: Your Vercel URL (ex: https://walletless-arcade-game.vercel.app)
+- NEXTAUTH_SECRET: A random string is used to hash tokens, sign/encrypt cookies and generate cryptographic keys. You can generate the secret via `openssl rand -base64 32` on Linux
+- NEXT_PUBLIC_FLOW_NETWORK: The network you are deploying to (ex: testnet)
+- NEXT_PUBLIC_MARKETPLACE_URL: The URL of the prize marketplace (ex: https://walletless-arcade-prize-market.vercel.app)
+#### Private
+- ADMIN_PRIVATE_KEY_HEX: The private key of the admin account where game and prize contracts are deployed
+- GOOGLE_CLIENT_SECRET: The Google Client Secret. Used as Provider for NextAuth
+- GOOGLE_CLIENT_ID: The Google Client ID. Used as Provider for NextAuth
+- STRIPE_SK: The Stripe Secret Key. Used for NFT Purchase
