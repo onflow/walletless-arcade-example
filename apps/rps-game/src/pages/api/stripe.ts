@@ -32,7 +32,6 @@ export default async function handler(
       success_url: `${getUrl()}?purchase_success=true`,
       cancel_url: `${getUrl()}?purchase_error=true`,
     })
-
     res.json({ url: session.url })
     res.end()
   } catch (e) {
