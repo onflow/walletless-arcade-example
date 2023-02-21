@@ -3,12 +3,12 @@ import {
   FlashButton,
   Row,
   Modal,
+  Spinner,
   useAppContext,
   useFclContext,
   useTicketContext,
 } from 'shared'
 import Image from 'next/image'
-import { FaSpinner } from 'react-icons/fa'
 import MonsterLogo from '../../public/static/monster-logo.png'
 import MarketLogo from '../../public/static/market-logo.png'
 import {
@@ -144,7 +144,7 @@ const GameView = () => {
         setMessage(() => newMessage)
       }
     },
-    [gamePieceNFTID, gamePlayerID]
+    [enabled, gameAccountAddress, gamePieceNFTID, gamePlayerID]
   )
 
   useEffect(() => {
@@ -262,11 +262,7 @@ const GameView = () => {
         </div>
 
         <div className="flex h-60 items-center justify-center rounded-md border border-pink-500 border-opacity-100 md:h-96">
-          {loadingOpponentMove && (
-            <span className="text-green-500 opacity-75">
-              <FaSpinner className="spinner" size={70} />
-            </span>
-          )}
+          {loadingOpponentMove && <Spinner size={70} />}
           {opponentMove === 'rock' && (
             <span className="text-9xl font-extrabold">🪨</span>
           )}
