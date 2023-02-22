@@ -11,6 +11,7 @@ import {
   Modal,
   useFclContext,
   useAppContext,
+  FullScreenSpinner,
 } from 'shared'
 import { useSession, signIn, signOut } from 'next-auth/react'
 import { useRpsGameContext } from '../contexts'
@@ -68,6 +69,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <FullScreenLayout nav={<NavBar navProps={navProps} />} theme="green">
+        <FullScreenSpinner display={fullScreenLoading} />
         {!session && (
           <FlexContainer className="w-full items-center justify-center">
             <div className="w-full">
