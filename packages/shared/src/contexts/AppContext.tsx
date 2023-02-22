@@ -15,6 +15,7 @@ interface IAppContext {
   toggleEnabled: () => void
   fullScreenLoading: boolean
   setFullScreenLoading: (loading: boolean) => void
+  fullScreenLoadingMessage: string
 }
 
 export const AppContext = createContext<IAppContext>({} as IAppContext)
@@ -45,6 +46,8 @@ export default function AppContextProvider({
 }) {
   const [enabled, setEnabled] = useState<boolean>(getFireModeFromLocalStorage())
   const [fullScreenLoading, setFullScreenLoading] = useState<boolean>(false)
+  const [fullScreenLoadingMessage, setFullScreenLoadingMessage] =
+    useState<string>('')
 
   const toggleEnabled = useCallback(() => {
     setEnabled(enabled => {
@@ -64,8 +67,17 @@ export default function AppContextProvider({
       toggleEnabled,
       fullScreenLoading,
       setFullScreenLoading,
+      fullScreenLoadingMessage,
+      setFullScreenLoadingMessage,
     }),
-    [enabled, toggleEnabled, fullScreenLoading, setFullScreenLoading]
+    [
+      enabled,
+      toggleEnabled,
+      fullScreenLoading,
+      setFullScreenLoading,
+      fullScreenLoadingMessage,
+      setFullScreenLoadingMessage,
+    ]
   )
 
   return (
