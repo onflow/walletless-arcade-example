@@ -4,7 +4,7 @@
       "source": "./cadence/contracts/ArcadePrize.cdc",
       "aliases": {
         "emulator": "0xf8d6e0586b0a20c7",
-        "testnet": "0x6dea4ae7f4dcb770"
+        "testnet": "0x917b2b1dafdcfa58"
       }
     },
     "ChildAccount": {
@@ -18,7 +18,7 @@
       "source": "./cadence/contracts/DynamicNFT.cdc",
       "aliases": {
         "emulator": "0xf8d6e0586b0a20c7",
-        "testnet": "0x6dea4ae7f4dcb770"
+        "testnet": "0x917b2b1dafdcfa58"
       }
     },
     "FlowToken": {
@@ -48,14 +48,14 @@
       "source": "./cadence/contracts/GamePieceNFT.cdc",
       "aliases": {
         "emulator": "0xf8d6e0586b0a20c7",
-        "testnet": "0x6dea4ae7f4dcb770"
+        "testnet": "0x917b2b1dafdcfa58"
       }
     },
     "GamingMetadataViews": {
       "source": "./cadence/contracts/GamingMetadataViews.cdc",
       "aliases": {
         "emulator": "0xf8d6e0586b0a20c7",
-        "testnet": "0x6dea4ae7f4dcb770"
+        "testnet": "0x917b2b1dafdcfa58"
       }
     },
     "MetadataViews": {
@@ -78,14 +78,14 @@
       "source": "./cadence/contracts/RockPaperScissorsGame.cdc",
       "aliases": {
         "emulator": "0xf8d6e0586b0a20c7",
-        "testnet": "0x6dea4ae7f4dcb770"
+        "testnet": "0x917b2b1dafdcfa58"
       }
     },
     "TicketToken": {
       "source": "./cadence/contracts/TicketToken.cdc",
       "aliases": {
         "emulator": "0xf8d6e0586b0a20c7",
-        "testnet": "0x6dea4ae7f4dcb770"
+        "testnet": "0x917b2b1dafdcfa58"
       }
     }
   },
