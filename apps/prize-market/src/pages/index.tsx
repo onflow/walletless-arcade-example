@@ -23,8 +23,8 @@ const Home: NextPage = () => {
   const [isWalletConnectedModal, setIsWalletConnectedModal] =
     useState<boolean>(false)
   const [isInitialModalOpen, setIsInitialModalOpen] = useState<boolean>(false)
-
-  const { enabled } = useAppContext()
+  const { enabled, fullScreenLoading, fullScreenLoadingMessage } =
+    useAppContext()
   const { currentUser, connect, logout: disconnect } = useFclContext()
   const {
     getOwnedPrizes,
@@ -71,7 +71,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Modal
-        isOpen={isWalletConnectedModal && !enabled}
+        isOpen={isWalletConnectedModal && !enabled && !fullScreenLoading}
         handleClose={() => null}
         title={'Wallet Connected!'}
         DialogContent={() => (
@@ -85,7 +85,7 @@ const Home: NextPage = () => {
         buttonFunc={() => setIsWalletConnectedModal(false)}
       />
       <Modal
-        isOpen={isPurchaseSuccessModalOpen && !enabled}
+        isOpen={isPurchaseSuccessModalOpen && !enabled && !fullScreenLoading}
         handleClose={() => null}
         title={'Purchase Successful!'}
         DialogContent={() => (

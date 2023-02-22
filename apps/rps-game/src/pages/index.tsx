@@ -22,7 +22,8 @@ import MonsterLogo from '../../public/static/monster-logo.png'
 import type { NextPage } from 'next'
 
 const Home: NextPage = () => {
-  const { enabled, fullScreenLoading, setFullScreenLoading } = useAppContext()
+  const { enabled, fullScreenLoading, fullScreenLoadingMessage } =
+    useAppContext()
   const { currentUser, connect, logout: disconnect } = useFclContext()
   const { data: session, status } = useSession()
   const router = useRouter()
@@ -69,7 +70,10 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <FullScreenLayout nav={<NavBar navProps={navProps} />} theme="green">
-        <FullScreenSpinner display={fullScreenLoading} />
+        <FullScreenSpinner
+          display={fullScreenLoading}
+          message={fullScreenLoadingMessage}
+        />
         {!session && (
           <FlexContainer className="w-full items-center justify-center">
             <div className="w-full">
@@ -117,7 +121,12 @@ const Home: NextPage = () => {
           </FlexContainer>
         )}
         <Modal
-          isOpen={!!session === false && isInitialModalOpen && !enabled}
+          isOpen={
+            !!session === false &&
+            isInitialModalOpen &&
+            !enabled &&
+            !fullScreenLoading
+          }
           handleClose={() => setIsInitialModalOpen(false)}
           title={'Welcome to Flow Arcade'}
           DialogContent={() => (
@@ -134,7 +143,8 @@ const Home: NextPage = () => {
             !!session === true &&
             !isGamePiecePurchased &&
             isPrePurchaseModalOpen &&
-            !enabled
+            !enabled &&
+            !fullScreenLoading
           }
           handleClose={() => setIsPrepurchaseModalOpen(false)}
           title={"What's Happening?"}
