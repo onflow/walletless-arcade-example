@@ -571,9 +571,6 @@ export default function RpsGameContextProvider({ children }: Props) {
               gameAccountAddress
             ),
           ],
-        },
-        {
-          title: 'Resolving Match',
         }
       )
 
