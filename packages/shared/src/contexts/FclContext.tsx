@@ -92,12 +92,12 @@ export default function FclContextProvider({
       options: any = {},
       messages: any = {}
     ): Promise<string | void> => {
-      setFullScreenLoading(true)
       setTransactionInProgress(true)
       setTransactionStatus(-1)
       setTransactionEvents(null)
 
       if (messages?.title) {
+        setFullScreenLoading(true)
         setFullScreenLoadingMessage(messages?.title)
       }
 
