@@ -368,8 +368,6 @@ export default function RpsGameContextProvider({ children }: Props) {
     if (!isLoaded) return
 
     if (!isGameInitialized && !gameAccountAddress && gameAccountPublicKey) {
-      setFullScreenLoadingMessage('Initializing Game Account')
-      setFullScreenLoading(true)
       const txid = await executeTransaction(
         WALLETLESS_ONBOARDING,
         (arg: any, t: any) => [
