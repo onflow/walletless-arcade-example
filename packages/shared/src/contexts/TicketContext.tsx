@@ -85,6 +85,9 @@ export default function TicketContextProvider({ children }: Props) {
           payer: fcl.authz,
           proposer: fcl.authz,
           authorizations: [fcl.authz],
+        },
+        {
+          title: 'Purchasing Prize',
         }
       )
     },
@@ -185,4 +188,3 @@ export default function TicketContextProvider({ children }: Props) {
     <TicketContext.Provider value={value}>{children}</TicketContext.Provider>
   )
 }
- 

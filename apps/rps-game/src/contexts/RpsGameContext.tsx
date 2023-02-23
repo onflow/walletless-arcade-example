@@ -368,8 +368,6 @@ export default function RpsGameContextProvider({ children }: Props) {
     if (!isLoaded) return
 
     if (!isGameInitialized && !gameAccountAddress && gameAccountPublicKey) {
-      setFullScreenLoadingMessage('Initializing Game Account')
-      setFullScreenLoading(true)
       const txid = await executeTransaction(
         WALLETLESS_ONBOARDING,
         (arg: any, t: any) => [
@@ -389,6 +387,9 @@ export default function RpsGameContextProvider({ children }: Props) {
           payer: adminAuthorizationFunction,
           proposer: adminAuthorizationFunction,
           authorizations: [adminAuthorizationFunction],
+        },
+        {
+          title: 'Initializing Game Account',
         }
       )
 
@@ -453,8 +454,6 @@ export default function RpsGameContextProvider({ children }: Props) {
     if (gamePieceNFTID && gameAccountPrivateKey && gameAccountAddress) {
       const submittingNFTID = gamePieceNFTID
       const matchTimeLimitInMinutes = 5
-      setFullScreenLoadingMessage('Creating New Match')
-      setFullScreenLoading(true)
       const txId = await executeTransaction(
         SETUP_NEW_SINGLE_PLAYER_MATCH,
         (arg: any, t: any) => [
@@ -476,6 +475,9 @@ export default function RpsGameContextProvider({ children }: Props) {
               gameAccountAddress
             ),
           ],
+        },
+        {
+          title: 'Creating New Match',
         }
       )
       if (!txId) return
@@ -534,6 +536,9 @@ export default function RpsGameContextProvider({ children }: Props) {
                 gameAccountAddress
               ),
             ],
+          },
+          {
+            title: 'Submitting Move',
           }
         )
       }
@@ -569,6 +574,9 @@ export default function RpsGameContextProvider({ children }: Props) {
               gameAccountAddress
             ),
           ],
+        },
+        {
+          title: 'Resolving Match',
         }
       )
 

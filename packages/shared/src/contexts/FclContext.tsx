@@ -18,7 +18,8 @@ interface IFclContext {
   executeTransaction: (
     cadence: string,
     args?: any,
-    options?: any
+    options?: any,
+    messages?: any
   ) => Promise<string | void>
   executeScript: (cadence: string, args?: any) => Promise<any>
   getTransactionStatusOnSealed: (transactionStatus: string) => Promise<any>
@@ -58,7 +59,12 @@ export default function FclContextProvider({
   const [transactionEvents, setTransactionEvents] = useState(null)
   const [txId, setTxId] = useState<string | null>(null)
 
-  const { setFullScreenLoading } = useAppContext()
+  const {
+    fullScreenLoading,
+    setFullScreenLoading,
+    fullScreenLoadingMessage,
+    setFullScreenLoadingMessage,
+  } = useAppContext()
 
   useEffect(() => fcl.currentUser.subscribe(setCurrentUser), [])
 
@@ -83,11 +89,17 @@ export default function FclContextProvider({
     async (
       cadence: string,
       args: any = () => [],
-      options: any = {}
+      options: any = {},
+      messages: any = {}
     ): Promise<string | void> => {
       setTransactionInProgress(true)
       setTransactionStatus(-1)
       setTransactionEvents(null)
+
+      if (messages?.title) {
+        setFullScreenLoading(true)
+        setFullScreenLoadingMessage(messages?.title)
+      }
 
       const transactionId = await fcl
         .mutate({
@@ -111,10 +123,25 @@ export default function FclContextProvider({
           fcl.tx(transactionId).subscribe((res: any) => {
             setTransactionStatus(res.status)
 
+            if (res.status === 2) {
+              if (messages?.title) {
+                setFullScreenLoadingMessage(
+                  messages?.title + ' ...awaiting execution...'
+                )
+              }
+            }
+            if (res.status === 3) {
+              if (messages?.title) {
+                setFullScreenLoadingMessage(
+                  messages?.title + ' ...awaiting sealing...'
+                )
+              }
+            }
             if (res.status >= 4) {
               setTransactionEvents(res.events || null)
               setTransactionInProgress(false)
               setFullScreenLoading(false)
+              setFullScreenLoadingMessage('')
 
               pres(transactionId)
             } else if (res.status === 5) {
