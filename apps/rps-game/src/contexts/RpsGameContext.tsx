@@ -536,9 +536,6 @@ export default function RpsGameContextProvider({ children }: Props) {
                 gameAccountAddress
               ),
             ],
-          },
-          {
-            title: 'Submitting Move',
           }
         )
       }

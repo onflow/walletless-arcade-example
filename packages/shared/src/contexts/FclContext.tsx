@@ -126,14 +126,14 @@ export default function FclContextProvider({
             if (res.status === 2) {
               if (messages?.title) {
                 setFullScreenLoadingMessage(
-                  messages?.title + ' ...awaiting execution...'
+                  messages?.title + ' ...Awaiting Execution...'
                 )
               }
             }
             if (res.status === 3) {
               if (messages?.title) {
                 setFullScreenLoadingMessage(
-                  messages?.title + ' ...awaiting sealing...'
+                  messages?.title + ' ...Awaiting Sealing...'
                 )
               }
             }
