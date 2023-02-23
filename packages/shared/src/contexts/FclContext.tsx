@@ -58,7 +58,7 @@ export default function FclContextProvider({
   const [transactionEvents, setTransactionEvents] = useState(null)
   const [txId, setTxId] = useState<string | null>(null)
 
-  const { fullScreenLoading, setFullScreenLoading } = useAppContext()
+  const { setFullScreenLoading } = useAppContext()
 
   useEffect(() => fcl.currentUser.subscribe(setCurrentUser), [])
 
@@ -88,7 +88,6 @@ export default function FclContextProvider({
       setTransactionInProgress(true)
       setTransactionStatus(-1)
       setTransactionEvents(null)
-      setFullScreenLoading(true)
 
       const transactionId = await fcl
         .mutate({

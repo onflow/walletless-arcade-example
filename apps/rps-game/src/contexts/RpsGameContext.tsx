@@ -8,7 +8,7 @@ import {
   useState,
 } from 'react'
 import type { ReactNode } from 'react'
-import { useFclContext, useTicketContext } from 'shared'
+import { useFclContext, useTicketContext, useAppContext } from 'shared'
 import { useGameAccountContext } from './GameAccountContext'
 import WALLETLESS_ONBOARDING from '../../cadence/transactions/onboarding/walletless-onboarding'
 import SETUP_NEW_SINGLE_PLAYER_MATCH from '../../cadence/transactions/rock-paper-scissors-game/game-player/setup-new-singleplayer-match'
@@ -335,6 +335,13 @@ export default function RpsGameContextProvider({ children }: Props) {
     loadGameAccount,
   } = useGameAccountContext()
 
+  const {
+    fullScreenLoading,
+    setFullScreenLoading,
+    fullScreenLoadingMessage,
+    setFullScreenLoadingMessage,
+  } = useAppContext()
+
   const isPlaying = useMemo(
     () => getIsPlaying(state, gameAccountAddress, isLoaded),
     [state, gameAccountAddress, isLoaded]
@@ -361,6 +368,8 @@ export default function RpsGameContextProvider({ children }: Props) {
     if (!isLoaded) return
 
     if (!isGameInitialized && !gameAccountAddress && gameAccountPublicKey) {
+      setFullScreenLoadingMessage('Initializing Game Account')
+      setFullScreenLoading(true)
       const txid = await executeTransaction(
         WALLETLESS_ONBOARDING,
         (arg: any, t: any) => [
@@ -400,6 +409,8 @@ export default function RpsGameContextProvider({ children }: Props) {
     isGameInitialized,
     gameAccountAddress,
     gameAccountPublicKey,
+    setFullScreenLoadingMessage,
+    setFullScreenLoading,
     executeTransaction,
     getGameAccountAddressFromGameAdmin,
   ])
@@ -442,7 +453,8 @@ export default function RpsGameContextProvider({ children }: Props) {
     if (gamePieceNFTID && gameAccountPrivateKey && gameAccountAddress) {
       const submittingNFTID = gamePieceNFTID
       const matchTimeLimitInMinutes = 5
-
+      setFullScreenLoadingMessage('Creating New Match')
+      setFullScreenLoading(true)
       const txId = await executeTransaction(
         SETUP_NEW_SINGLE_PLAYER_MATCH,
         (arg: any, t: any) => [
@@ -487,6 +499,8 @@ export default function RpsGameContextProvider({ children }: Props) {
     gamePieceNFTID,
     gameAccountPrivateKey,
     gameAccountAddress,
+    setFullScreenLoadingMessage,
+    setFullScreenLoading,
     executeTransaction,
     getTransactionStatusOnSealed,
   ])
