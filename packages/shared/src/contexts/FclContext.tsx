@@ -18,7 +18,8 @@ interface IFclContext {
   executeTransaction: (
     cadence: string,
     args?: any,
-    options?: any
+    options?: any,
+    messages?: any
   ) => Promise<string | void>
   executeScript: (cadence: string, args?: any) => Promise<any>
   getTransactionStatusOnSealed: (transactionStatus: string) => Promise<any>
@@ -140,7 +141,7 @@ export default function FclContextProvider({
               setTransactionEvents(res.events || null)
               setTransactionInProgress(false)
               setFullScreenLoading(false)
-              setFullScreenLoadingMessage(null)
+              setFullScreenLoadingMessage('')
 
               pres(transactionId)
             } else if (res.status === 5) {
