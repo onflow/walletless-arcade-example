@@ -87,8 +87,6 @@ export default function UserContextProvider({ children }: Props) {
         (arg: any, t: any) => [],
         {
           limit: 9999,
-          // payer: adminAuthorizationFunction,
-          // proposer: adminAuthorizationFunction,
           authorizations: [
             fcl.authz,
             userAuthorizationFunction(
@@ -101,13 +99,7 @@ export default function UserContextProvider({ children }: Props) {
       )
       return txid
     }
-  }, [
-    executeTransaction,
-    adminAuthorizationFunction,
-    userAuthorizationFunction,
-    gameAccountPrivateKey,
-    gameAccountAddress,
-  ])
+  }, [executeTransaction, gameAccountPrivateKey, gameAccountAddress])
 
   useEffect(() => {
     const fn = async () => {
@@ -118,7 +110,13 @@ export default function UserContextProvider({ children }: Props) {
       }
     }
     fn()
-  }, [currentUser?.addr, gameAccountPrivateKey, gameAccountAddress])
+  }, [
+    currentUser?.addr,
+    gameAccountPrivateKey,
+    gameAccountAddress,
+    checkIsUserAccountConnectedToChildAccount,
+    connectUserAccountToChildAccount,
+  ])
 
   useEffect(() => {
     checkIsUserAccountInitialized()

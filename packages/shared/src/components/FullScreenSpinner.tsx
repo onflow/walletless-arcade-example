@@ -1,6 +1,6 @@
 import { FaSpinner } from 'react-icons/fa'
 
-export const FullScreenSpinner = ({
+const FullScreenSpinner = ({
   display = false,
   message = 'Transaction submitted...',
 }: {

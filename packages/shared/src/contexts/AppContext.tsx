@@ -16,6 +16,7 @@ interface IAppContext {
   fullScreenLoading: boolean
   setFullScreenLoading: (loading: boolean) => void
   fullScreenLoadingMessage: string
+  setFullScreenLoadingMessage: (message: string) => void
 }
 
 export const AppContext = createContext<IAppContext>({} as IAppContext)
