@@ -9,9 +9,11 @@ const FullScreenSpinner = ({
 }) => {
   return (
     <div
-      className={`${
-        display ? '' : 'hidden'
-      } fixed top-0 left-0 right-0 bottom-0 z-50 flex h-screen w-full flex-col items-center justify-center overflow-hidden bg-gray-700 opacity-75`}
+      className={`${''} fixed top-0 left-0 right-0 bottom-0 z-50 flex h-screen w-full flex-col items-center justify-center overflow-hidden bg-gray-700 opacity-75`}
+      onClick={e => {
+        e.stopPropagation()
+        e.preventDefault()
+      }}
     >
       <span className="mb-4 text-center text-xl font-semibold text-green-500 opacity-75">
         <FaSpinner className="spinner" size={70} />
