@@ -49,22 +49,13 @@ cd walletless-arcade-example
 ### Pre-Requisites
 
 **1. Install Flow CLI**
-:warning: Requires installation of [Flow CLI](https://github.com/onflow/flow-cli/releases/tag/v0.45.1-cadence-attachments-3) (Attachments/AuthAccount Capability pre-release version).
+:warning: Requires installation of [Flow CLI](https://github.com/onflow/flow-cli/releases/tag/v0.45.1-cadence-attachments-dev-wallet) (Attachments/AuthAccount Capability pre-release version).
 
 ```sh
-sh -ci "$(curl -fsSL https://raw.githubusercontent.com/onflow/flow-cli/master/install.sh)" -- v0.45.1-cadence-attachments-3
+sh -ci "$(curl -fsSL https://raw.githubusercontent.com/onflow/flow-cli/master/install.sh)" -- v0.45.1-cadence-attachments-dev-wallet
 ```
 
-**2. Clone Flow dev-wallet**
-It's required to clone and run [Flow dev-wallet](https://github.com/onflow/fcl-dev-wallet) from source rather than CLI until release of Emulator alpha features. Before using the dev wallet, you'll need to start the Flow emulator.
-
-```sh
-git clone https://github.com/onflow/fcl-dev-wallet.git
-```
-
-:bookmark: The variables defined in your this repo's flow.json file and .env files should match the addresses and keys of your emulator-account. For details about flow.json visit the [flow-cli configuration reference](https://docs.onflow.org/flow-cli/configuration/).
-
-**3. Copy `emulator.private.json.example` and `testnet.private.json.example`**
+**2. Copy `emulator.private.json.example` and `testnet.private.json.example`**
 
 ```sh
 cp emulator.private.json.example emulator.private.json
@@ -73,7 +64,7 @@ cp testnet.private.json.example testnet.private.json
 
 :bookmark: Update with your own key data.
 
-**4. Copy the .env-example file to .env and update the required values.**
+**3. Copy the .env-example file to .env and update the required values.**
 
 ```sh
 cp .env-example .env
@@ -97,10 +88,8 @@ flow emulator start
 - Start the Dev Wallet (From a new terminal window)
 
 ```sh
-cd fcl-dev-wallet
-PORT=8701 npm run dev
+flow dev-wallet
 ```
-
 
 - Start dev server to deploy the contracts and configure the service account (From a new terminal window)
 
