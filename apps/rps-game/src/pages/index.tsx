@@ -12,7 +12,6 @@ import {
   useFclContext,
   useAppContext,
   FullScreenSpinner,
-  Button,
 } from 'shared'
 import { useSession, signIn, signOut } from 'next-auth/react'
 import { useRpsGameContext } from '../contexts'
