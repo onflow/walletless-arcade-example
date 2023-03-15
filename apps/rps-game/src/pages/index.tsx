@@ -12,6 +12,7 @@ import {
   useFclContext,
   useAppContext,
   FullScreenSpinner,
+  Button,
 } from 'shared'
 import { useSession, signIn, signOut } from 'next-auth/react'
 import { useRpsGameContext } from '../contexts'
@@ -31,6 +32,8 @@ const Home: NextPage = () => {
   const [isInitialModalOpen, setIsInitialModalOpen] = useState<boolean>(true)
   const [isPrePurchaseModalOpen, setIsPrepurchaseModalOpen] =
     useState<boolean>(true)
+  const [isPreStripeRedirectModalOpen, setIsPreStripeRedirectModalOpen] =
+    useState<boolean>(false)
 
   const navProps = {
     session,
@@ -47,6 +50,13 @@ const Home: NextPage = () => {
   const {
     state: { isGamePiecePurchased, setGamePiecePurchased },
   } = useRpsGameContext()
+
+  const preStripeRedirect = () => {
+    if (enabled) purchaseNft()
+    else {
+      setIsPreStripeRedirectModalOpen(true)
+    }
+  }
 
   useEffect(() => {
     const fn = async () => {
@@ -110,7 +120,7 @@ const Home: NextPage = () => {
               <div className="my-10 md:container md:mx-auto lg:my-14">
                 <Row>
                   <CustomButton
-                    onClick={() => purchaseNft()}
+                    onClick={() => preStripeRedirect()}
                     bgColor="bg-green-600"
                   >
                     Buy Now
@@ -157,6 +167,43 @@ const Home: NextPage = () => {
           )}
           buttonText={'Close'}
           buttonFunc={() => setIsPrepurchaseModalOpen(false)}
+        />
+        <Modal
+          isOpen={
+            !!session === true &&
+            !isGamePiecePurchased &&
+            isPreStripeRedirectModalOpen &&
+            !enabled &&
+            !fullScreenLoading
+          }
+          handleClose={() => purchaseNft()}
+          title={'Before You Purchase'}
+          DialogContent={() => (
+            <div className="flex flex-col">
+              {`You're about to be redirected to Stripe to complete your purchase. Use the Stripe test card "4242-4242-4242-4242" with any Email, Expiration Date, CCV and Location (including Postal Code / Zip Code) to purchase.`}
+              <div className="mt-4">
+                <button
+                  id="copy-button"
+                  type="button"
+                  className="inline-flex justify-center rounded-md border border-transparent bg-gray-100 px-4 py-2 text-sm font-medium text-black hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                  onClick={async () => {
+                    await navigator.clipboard.writeText('4242424242424242')
+                    const btnEl = document.getElementById('copy-button')
+                    if (btnEl) {
+                      btnEl.innerHTML = 'Copied!'
+                      setTimeout(() => {
+                        btnEl.innerHTML = 'Copy Test Card'
+                      }, 2000)
+                    }
+                  }}
+                >
+                  Copy Test Card
+                </button>
+              </div>
+            </div>
+          )}
+          buttonText={'Continue'}
+          buttonFunc={() => purchaseNft()}
         />
         {session && isGamePiecePurchased && <GameView />}
       </FullScreenLayout>
