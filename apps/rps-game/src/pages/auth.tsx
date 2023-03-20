@@ -38,10 +38,6 @@ export default function SignIn({
     signOut,
   }
 
-  const icons = {
-    google: GoogleIcon,
-  }
-
   return (
     <>
       <FullScreenLayout nav={<NavBar navProps={navProps} />} theme="green">
@@ -57,12 +53,12 @@ export default function SignIn({
                   onClick={() => signIn(provider.id)}
                 >
                   Sign in with {provider.name}
-                  {icons[provider.id] && (
+                  {provider.id === 'google' && (
                     <Image
                       width={100}
                       height={100}
                       alt={`${provider.id} Logo`}
-                      src={icons[provider.id]?.src}
+                      src={GoogleIcon.src}
                       className="tile flex h-12 w-12 items-center justify-center"
                     />
                   )}
