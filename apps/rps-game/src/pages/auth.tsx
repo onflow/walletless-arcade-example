@@ -42,8 +42,6 @@ export default function SignIn({
     google: GoogleIcon,
   }
 
-  console.log('providers', providers)
-
   return (
     <>
       <FullScreenLayout nav={<NavBar navProps={navProps} />} theme="green">
