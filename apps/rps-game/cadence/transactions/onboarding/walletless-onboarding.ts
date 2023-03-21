@@ -1,5 +1,6 @@
 const WALLETLESS_ONBOARDING = `
-import ChildAccount from 0xChildAccount
+import LinkedAccounts from 0xLinkedAccounts
+import AccountCreator from 0xAccountCreator
 import MetadataViews from 0xMetadataViews
 import FungibleToken from 0xFungibleToken
 import NonFungibleToken from 0xNonFungibleToken
@@ -7,19 +8,14 @@ import GamePieceNFT from 0xGamePieceNFT
 import RockPaperScissorsGame from 0xRockPaperScissorsGame
 import TicketToken from 0xTicketToken
 
-/// This transaction creates an account from the given public key, using the
-/// ChildAccountCreator with the signer as the account's payer, additionally
-/// funding the new account with the specified amount of Flow from the signer's
-/// account. The newly created account is then configured with resources &
-/// Capabilities necessary to play RockPaperScissorsGame Matches.
+/// This transaction creates an account from the given public key, using the signer's AccountCreator.Creator with the
+/// signer as the account's payer, additionally funding the new account with the specified amount of Flow from the 
+/// signer's account. The newly created account is then configured with resources & Capabilities necessary to play 
+/// RockPaperScissorsGame Matches.
 ///
 transaction(
         pubKey: String,
         fundingAmt: UFix64,
-        childAccountName: String,
-        childAccountDescription: String,
-        clientIconURL: String,
-        clientExternalURL: String,
         monsterBackground: Int,
         monsterHead: Int,
         monsterTorso: Int,
@@ -29,28 +25,33 @@ transaction(
     prepare(signer: AuthAccount) {
         /* --- Create a new account --- */
         //
-        // Get a reference to the signer's ChildAccountCreator
-        let creatorRef = signer.borrow<
-                &ChildAccount.ChildAccountCreator
-            >(
-                from: ChildAccount.ChildAccountCreatorStoragePath
-            ) ?? panic(
-                "No ChildAccountCreator in signer's account at "
-                .concat(ChildAccount.ChildAccountCreatorStoragePath.toString())
+        // Ensure resource is saved where expected
+        if signer.type(at: AccountCreator.CreatorStoragePath) == nil {
+            signer.save(
+                <-AccountCreator.createNewCreator(),
+                to: AccountCreator.CreatorStoragePath
             )
-        // Construct the ChildAccountInfo metadata struct
-        let info = ChildAccount.ChildAccountInfo(
-                name: childAccountName,
-                description: childAccountDescription,
-                clientIconURL: MetadataViews.HTTPFile(url: clientIconURL),
-                clienExternalURL: MetadataViews.ExternalURL(clientExternalURL),
-                originatingPublicKey: pubKey
+        }
+        // Ensure public Capability is linked
+        if !signer.getCapability<&AccountCreator.Creator{AccountCreator.CreatorPublic}>(
+            AccountCreator.CreatorPublicPath).check() {
+            // Link the public Capability
+            signer.unlink(AccountCreator.CreatorPublicPath)
+            signer.link<&AccountCreator.Creator{AccountCreator.CreatorPublic}>(
+                AccountCreator.CreatorPublicPath,
+                target: AccountCreator.CreatorStoragePath
             )
+        }
+        // Get a reference to the client's AccountCreator.Creator
+        let creatorRef = signer.borrow<&AccountCreator.Creator>(
+                from: AccountCreator.CreatorStoragePath
+            ) ?? panic("No AccountCreator in signer's account!")
+
         // Create the account
-        let newAccount = creatorRef.createChildAccount(
+        let newAccount = creatorRef.createNewAccount(
             signer: signer,
             initialFundingAmount: fundingAmt,
-            childAccountInfo: info
+            originatingPublicKey: pubKey
         )
 
         /* --- Set up GamePieceNFT.Collection --- */
