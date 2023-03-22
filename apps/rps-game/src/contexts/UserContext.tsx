@@ -10,8 +10,8 @@ import { useFclContext } from 'shared'
 import type { ReactNode } from 'react'
 import { useGameAccountContext } from './GameAccountContext'
 import { userAuthorizationFunction } from '../utils/authz-functions'
-import IS_CHILD_ACCOUNT_OF from '../../cadence/scripts/child-account/is_child_account_of'
-import ADD_AS_CHILD_MULTISIG from '../../cadence/transactions/child-account/add-as-child-multisig'
+import IS_CHILD_ACCOUNT_OF from '../../cadence/scripts/linked-accounts/is_child_account_of'
+import ADD_AS_CHILD_MULTISIG from '../../cadence/transactions/linked-accounts/add-as-child-multisig'
 import IS_GAME_PIECE_NFT_COLLECTION_CONFIGURED from '../../cadence/scripts/gamepiece-nft/is-collection-configured'
 
 interface Props {
@@ -81,7 +81,12 @@ export default function UserContextProvider({ children }: Props) {
     if (gameAccountPrivateKey && gameAccountAddress) {
       const txid = await executeTransaction(
         ADD_AS_CHILD_MULTISIG,
-        (arg: any, t: any) => [],
+        (arg: any, t: any) => [
+          arg('RPS Proxy Account', t.String),
+          arg('Proxy Account for Flow RPS', t.String),
+          arg('flow-games.com/icon.png', t.String),
+          arg('flow-games.com', t.String),
+        ],
         {
           limit: 9999,
           authorizations: [

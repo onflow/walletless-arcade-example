@@ -4,7 +4,7 @@ import MetadataViews from 0xMetadataViews
 import ArcadePrize from 0xArcadePrize
 import FungibleToken from 0xFungibleToken
 import TicketToken from 0xTicketToken
-import ChildAccount from 0xChildAccount
+import LinkedAccounts from 0xLinkedAccounts
 
 /// Transaction to mint ArcadePrize.NFT to recipient's Collection, paying
 /// with the TicketToken.Vault in the signer's child account
@@ -66,17 +66,15 @@ transaction(fundingChildAddress: Address, minterAddress: Address) {
             ).borrow()
             ?? panic("Could not get receiver reference to the NFT Collection")
 
-        // Get a reference to the signer's ChildAccountManager from storage
-        let managerRef = signer.borrow<
-                &ChildAccount.ChildAccountManager
-            >(
-                from: ChildAccount.ChildAccountManagerStoragePath
-            ) ?? panic("Could not borrow reference to ChildAccountManager in signer's account at expected path!")
+        // Get a reference to the signer's LinkedAccounts.Collection from storage
+        let collectionRef: &LinkedAccounts.Collection = signer.borrow<&LinkedAccounts.Collection>(
+                from: LinkedAccounts.CollectionStoragePath
+            ) ?? panic("Could not borrow reference to LinkedAccounts.Collection in signer's account at expected path!")
         // Borrow a reference to the signer's specified child account
-        let childAccount = managerRef.getChildAccountRef(address: fundingChildAddress)
-            ?? panic("Could not get AuthAccount reference for specified address ".concat(fundingChildAddress.toString()))
+        let childAccount: &AuthAccount = collectionRef.getChildAccountRef(address: fundingChildAddress)
+            ?? panic("Signer does not have access to specified account")
         // Get a reference to the child account's TicketToken Vault
-        let vaultRef = childAccount.borrow<&TicketToken.Vault>(
+        let vaultRef: &TicketToken.Vault = childAccount.borrow<&TicketToken.Vault>(
                 from: TicketToken.VaultStoragePath
             ) ?? panic("Could not borrow a reference to the child account's TicketToken Vault at expected path!")
         // Withdraw payment in the form of TicketToken

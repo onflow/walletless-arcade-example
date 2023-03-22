@@ -74,6 +74,22 @@
         "testnet": "0x631e88ae7f1d7c20"
       }
     },
+    "ViewResolver": {
+      "source": "./cadence/contracts/utility/ViewResolver.cdc",
+      "aliases": {
+        "emulator": "0xf8d6e0586b0a20c7",
+        "mainnet": "0x1d7e57aa55817448",
+        "testnet": "0x631e88ae7f1d7c20"
+      }
+    },
+    "AccountCreator": {
+      "source": "./cadence/contracts/utility/AccountCreator.cdc",
+      "aliases": {
+        "emulator": "0xf8d6e0586b0a20c7",
+        "mainnet": "0x1d7e57aa55817448",
+        "testnet": "0x917b2b1dafdcfa58"
+      }
+    },
     "RockPaperScissorsGame": {
       "source": "./cadence/contracts/RockPaperScissorsGame.cdc",
       "aliases": {
@@ -86,6 +102,20 @@
       "aliases": {
         "emulator": "0xf8d6e0586b0a20c7",
         "testnet": "0x917b2b1dafdcfa58"
+      }
+    },
+    "LinkedAccounts": {
+      "source": "./cadence/contracts/LinkedAccounts.cdc",
+      "aliases": {
+        "emulator": "0xf8d6e0586b0a20c7",
+        "testnet": "0x1b655847a90e644a"
+      }
+    },
+    "LinkedAccountMetadataViews": {
+      "source": "./cadence/contracts/LinkedAccountMetadataViews.cdc",
+      "aliases": {
+        "emulator": "0xf8d6e0586b0a20c7",
+        "testnet": "0x1b655847a90e644a"
       }
     }
   },
@@ -114,7 +144,11 @@
         "GamePieceNFT",
         "TicketToken",
         "ArcadePrize",
-        "RockPaperScissorsGame"
+        "RockPaperScissorsGame",
+        "AccountCreator",
+        "ViewResolver",
+        "LinkedAccounts",
+        "LinkedAccountMetadataViews"
       ]
     },
     "testnet": {

@@ -373,10 +373,6 @@ export default function RpsGameContextProvider({ children }: Props) {
         (arg: any, t: any) => [
           arg(gameAccountPublicKey, t.String),
           arg('1.0', t.UFix64),
-          arg('RPS Proxy Account', t.String),
-          arg('Proxy Account for Flow RPS', t.String),
-          arg('flow-games.com/icon.png', t.String),
-          arg('flow-games.com', t.String),
           arg('0', t.Int),
           arg('0', t.Int),
           arg('0', t.Int),

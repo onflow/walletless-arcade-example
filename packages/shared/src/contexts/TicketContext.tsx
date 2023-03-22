@@ -4,7 +4,7 @@ import { useFclContext } from './FclContext'
 import MINT_RAINBOW_DUCK_PAYING_WITH_CHILD_VAULT from '../../cadence/transactions/arcade-prize/mint-rainbow-duck-paying-with-child-vault'
 import GET_BALANCE_OF_ALL_CHILD_ACCOUNTS from '../../cadence/scripts/ticket-token/get-balance-of-all-child-accounts'
 import GET_BALANCE from '../../cadence/scripts/ticket-token/get-balance'
-import GET_ALL_NFT_DISPLAY_VIEWS_FROM_STORAGE from '../../cadence/scripts/child-account/get-all-nft-display-views-from-storage'
+import GET_ALL_NFT_DISPLAY_VIEWS_FROM_STORAGE from '../../cadence/scripts/linked-accounts/get-all-nft-display-views-from-storage'
 
 import type { ReactNode } from 'react'
 
@@ -146,7 +146,7 @@ export default function TicketContextProvider({ children }: Props) {
               )
 
             const childTicketVaultAddress =
-              Object.keys(childAccountsTicketBalances)[0] || null
+              Object.keys(childAccountsTicketBalances)[1] || null
             setChildTicketVaultAddress(childTicketVaultAddress)
 
             const sumOfChildAccountBalances = (
