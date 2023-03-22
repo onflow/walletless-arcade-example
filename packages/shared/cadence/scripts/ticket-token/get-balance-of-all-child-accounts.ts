@@ -33,7 +33,7 @@ pub fun main(parentAddress: Address): {Address: UFix64} {
 
     // Get the specified account's TicketToken balance
     let accountBalances: {Address: UFix64} = {
-        parentAddress: getTicketTokenBalance(parentAddress)
+        parentAddress: getTicketTokenBalance(from: parentAddress)
     }
     // Get a ref to the parentAddress's LinkedAccounts.Collection if possible
     if let viewerRef = getAccount(parentAddress).getCapability<&LinkedAccounts.Collection{LinkedAccounts.CollectionPublic}>(
@@ -41,7 +41,7 @@ pub fun main(parentAddress: Address): {Address: UFix64} {
         // Iterate over the linked accounts, adding their balance to the ongoing return mapping
         let linkedAccounts: [Address] = viewerRef.getLinkedAccountAddresses()
         for address in linkedAccounts {
-            if let balance = getTicketTokenBalanceSafe(address) {
+            if let balance = getTicketTokenBalanceSafe(from: address) {
                 accountBalances.insert(key: address, balance)
             }
         }

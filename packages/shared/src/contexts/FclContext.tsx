@@ -137,7 +137,7 @@ export default function FclContextProvider({
                 )
               }
             }
-            if (res.status >= 3) {
+            if (res.status >= 4) {
               setTransactionEvents(res.events || null)
               setTransactionInProgress(false)
               setFullScreenLoading(false)

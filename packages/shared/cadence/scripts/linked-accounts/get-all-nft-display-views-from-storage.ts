@@ -57,7 +57,7 @@ pub fun getAllViewsFromAddress(_ address: Address): [NFTData] {
     // Iterate over each public path
     account.forEachStored(fun (path: StoragePath, type: Type): Bool {
         // Check if it's a Collection we're interested in, if so, get a reference
-        if type.isSubtype(of: collectionType) {
+        if type.isSubtype(of: collectionType) && !type.isSubtype(of: Type<@LinkedAccounts.Collection>()) {
             if let collectionRef = account.borrow<
                 &{NonFungibleToken.CollectionPublic, MetadataViews.ResolverCollection}
             >(from: path) {
@@ -104,14 +104,13 @@ pub fun main(address: Address): {Address: [NFTData]} {
     let allNFTData: {Address: [NFTData]} = {}
     
     // Add all retrieved views to the running mapping indexed on address
-    allNFTData.insert(key: address, getAllViewsFromAddress(address))
+    let data: [NFTData] = getAllViewsFromAddress(address)
+    allNFTData.insert(key: address, data)
     
     /* Iterate over any child accounts */ 
     //
     // Get reference to LinkedAccounts.Collection if it exists
-    if let collectionRef = getAccount(address).getCapability<
-            &LinkedAccounts.Collection{LinkedAccounts.CollectionPublic}
-        >(
+    if let collectionRef = getAccount(address).getCapability<&LinkedAccounts.Collection{LinkedAccounts.CollectionPublic}>(
             LinkedAccounts.CollectionPublicPath
         ).borrow() {
         // Iterate over each linked account in LinkedAccounts.Collection
