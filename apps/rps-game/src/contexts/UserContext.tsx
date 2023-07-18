@@ -11,7 +11,7 @@ import type { ReactNode } from 'react'
 import { useGameAccountContext } from './GameAccountContext'
 import { userAuthorizationFunction } from '../utils/authz-functions'
 import IS_CHILD_ACCOUNT_OF from '../../cadence/scripts/hybrid-custody/is-child-account-of'
-import ADD_AS_CHILD_MULTISIG from '../../cadence/transactions/hybrid-custody/add-as-child-multisig'
+import ADD_AS_CHILD_MULTISIGN from '../../cadence/transactions/hybrid-custody/add-as-child-multisign'
 import IS_GAME_PIECE_NFT_COLLECTION_CONFIGURED from '../../cadence/scripts/gamepiece-nft/is-collection-configured'
 
 interface Props {
@@ -79,13 +79,16 @@ export default function UserContextProvider({ children }: Props) {
 
   const connectUserAccountToChildAccount = useCallback(async () => {
     if (gameAccountPrivateKey && gameAccountAddress) {
+      // TODO - The way we link may need to change depending on custodial solution. Most folks will likely
+      //      perform a two-stage publish & claim in which the app signs the publish and user signs the claim/redeem.
+      const factoryAndFilterAddress = fcl.withPrefix(
+        process.env.NEXT_PUBLIC_ADMIN_ADDRESS || ''
+      )
       const txid = await executeTransaction(
-        ADD_AS_CHILD_MULTISIG,
+        ADD_AS_CHILD_MULTISIGN,
         (arg: any, t: any) => [
-          arg('RPS Proxy Account', t.String),
-          arg('Proxy Account for Flow RPS', t.String),
-          arg('flow-games.com/icon.png', t.String),
-          arg('flow-games.com', t.String),
+          arg(factoryAndFilterAddress, t.Address),
+          arg(factoryAndFilterAddress, t.String),
         ],
         {
           limit: 9999,

@@ -368,6 +368,8 @@ export default function RpsGameContextProvider({ children }: Props) {
     if (!isLoaded) return
 
     if (!isGameInitialized && !gameAccountAddress && gameAccountPublicKey) {
+      // TODO - we'll want to do this via custodial service provider. This may mean we have a pre-created
+      //      account and have the account sign a self-custodied onboarding transaction
       const txid = await executeTransaction(
         WALLETLESS_ONBOARDING,
         (arg: any, t: any) => [

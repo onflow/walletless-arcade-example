@@ -65,7 +65,7 @@ export default function GameAccountContextProvider({ children }: Props) {
       const adminAdress = fcl.withPrefix(
         process.env.NEXT_PUBLIC_ADMIN_ADDRESS || ''
       )
-
+      // TODO - Will need to get account address from custodial service API
       if (adminAdress && gameAccountPublicKey) {
         const res: string = await executeScript(
           GET_CHILD_ADDRESS_FROM_PUBLIC_KEY_ON_CREATOR,

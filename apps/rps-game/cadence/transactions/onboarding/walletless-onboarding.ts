@@ -1,6 +1,4 @@
 const WALLETLESS_ONBOARDING = `
-import LinkedAccounts from 0xLinkedAccounts
-import AccountCreator from 0xAccountCreator
 import MetadataViews from 0xMetadataViews
 import FungibleToken from 0xFungibleToken
 import NonFungibleToken from 0xNonFungibleToken
@@ -8,10 +6,9 @@ import GamePieceNFT from 0xGamePieceNFT
 import RockPaperScissorsGame from 0xRockPaperScissorsGame
 import TicketToken from 0xTicketToken
 
-/// This transaction creates an account from the given public key, using the signer's AccountCreator.Creator with the
-/// signer as the account's payer, additionally funding the new account with the specified amount of Flow from the 
-/// signer's account. The newly created account is then configured with resources & Capabilities necessary to play 
-/// RockPaperScissorsGame Matches.
+/// This transaction creates a signer-funded account, adding the given public key. The new account is additionally funded
+/// with specified amount of Flow from the signer's account. The newly created account is then configured with resources
+/// & Capabilities necessary to play RockPaperScissorsGame Matches.
 ///
 transaction(
         pubKey: String,
@@ -25,34 +22,31 @@ transaction(
     prepare(signer: AuthAccount) {
         /* --- Create a new account --- */
         //
-        // Ensure resource is saved where expected
-        if signer.type(at: AccountCreator.CreatorStoragePath) == nil {
-            signer.save(
-                <-AccountCreator.createNewCreator(),
-                to: AccountCreator.CreatorStoragePath
+        // Create the new account
+        let newAccount = AuthAccount(payer: signer)
+        // Create a public key for the proxy account from the passed in string
+        let key = PublicKey(
+                publicKey: pubKey.decodeHex(),
+                signatureAlgorithm: SignatureAlgorithm.ECDSA_P256
             )
-        }
-        // Ensure public Capability is linked
-        if !signer.getCapability<&AccountCreator.Creator{AccountCreator.CreatorPublic}>(
-            AccountCreator.CreatorPublicPath).check() {
-            // Link the public Capability
-            signer.unlink(AccountCreator.CreatorPublicPath)
-            signer.link<&AccountCreator.Creator{AccountCreator.CreatorPublic}>(
-                AccountCreator.CreatorPublicPath,
-                target: AccountCreator.CreatorStoragePath
-            )
-        }
-        // Get a reference to the client's AccountCreator.Creator
-        let creatorRef = signer.borrow<&AccountCreator.Creator>(
-                from: AccountCreator.CreatorStoragePath
-            ) ?? panic("No AccountCreator in signer's account!")
-
-        // Create the account
-        let newAccount = creatorRef.createNewAccount(
-            signer: signer,
-            initialFundingAmount: fundingAmt,
-            originatingPublicKey: pubKey
+        // Add the given key to the new account
+        newAccount.keys.add(
+            publicKey: key,
+            hashAlgorithm: HashAlgorithm.SHA3_256,
+            weight: 1000.0
         )
+        // Fund the account if so specified
+        if fundingAmt > 0.0 {
+            // Add some initial funds to the new account, pulled from the signing account.  Amount determined by initialFundingAmount
+            let fundingVault <- signer.borrow<&{FungibleToken.Provider}>(
+                    from: /storage/flowTokenVault
+                )!.withdraw(
+                    amount: fundingAmt
+                )
+            newAccount.getCapability<&{FungibleToken.Receiver}>(/public/flowTokenReceiver).borrow()!.deposit(
+                from: <- fundingVault
+            )
+        }
 
         /* --- Set up GamePieceNFT.Collection --- */
         //
@@ -68,28 +62,22 @@ transaction(
         )
 
         // Link the Provider Capability in private storage
-        newAccount.link<
-            &GamePieceNFT.Collection{NonFungibleToken.Provider}
-        >(
+        newAccount.link<&GamePieceNFT.Collection{NonFungibleToken.Provider}>(
             GamePieceNFT.ProviderPrivatePath,
             target: GamePieceNFT.CollectionStoragePath
         )
 
         // Grab Collection related references & Capabilities
-        let collectionRef = newAccount.borrow<
-                &GamePieceNFT.Collection{NonFungibleToken.CollectionPublic}
-            >(
+        let collectionRef = newAccount
+            .borrow<&GamePieceNFT.Collection{NonFungibleToken.CollectionPublic}>(
                 from: GamePieceNFT.CollectionStoragePath
             )!
         
         /* --- Make sure new account has a GamePieceNFT.NFT to play with --- */
         //
         // Borrow a reference to the Minter Capability in minter account's storage
-        let minterRef = signer.borrow<
-                &GamePieceNFT.Minter
-            >(
-                from: GamePieceNFT.MinterStoragePath
-            ) ?? panic("Couldn't borrow reference to Minter Capability in storage at ".concat(GamePieceNFT.MinterStoragePath.toString()))
+        let minterRef = signer.borrow<&GamePieceNFT.Minter>(from: GamePieceNFT.MinterStoragePath)
+            ?? panic("Couldn't borrow reference to Minter Capability in storage at ".concat(GamePieceNFT.MinterStoragePath.toString()))
         // Build the MonsterComponent struct from given arguments
         let componentValue = GamePieceNFT.MonsterComponent(
                 background: monsterBackground,
@@ -98,10 +86,7 @@ transaction(
                 leg: monsterLeg
             )
         // Mint the NFT to the new account's collection
-        minterRef.mintNFT(
-            recipient: collectionRef,
-            component: componentValue
-        )
+        minterRef.mintNFT(recipient: collectionRef, component: componentValue)
 
         /* --- Set user up with GamePlayer in new account --- */
         //
@@ -110,17 +95,12 @@ transaction(
         // Save it
         newAccount.save(<-gamePlayer, to: RockPaperScissorsGame.GamePlayerStoragePath)
         // Link GamePlayerPublic Capability so player can be added to Matches
-        newAccount.link<&{
-            RockPaperScissorsGame.GamePlayerPublic
-        }>(
+        newAccount.link<&{RockPaperScissorsGame.GamePlayerPublic}>(
             RockPaperScissorsGame.GamePlayerPublicPath,
             target: RockPaperScissorsGame.GamePlayerStoragePath
         )
         // Link GamePlayerID Capability
-        newAccount.link<&{
-            RockPaperScissorsGame.DelegatedGamePlayer,
-            RockPaperScissorsGame.GamePlayerID
-        }>(
+        newAccount.link<&{RockPaperScissorsGame.DelegatedGamePlayer, RockPaperScissorsGame.GamePlayerID}>(
             RockPaperScissorsGame.GamePlayerPrivatePath,
             target: RockPaperScissorsGame.GamePlayerStoragePath
         )
@@ -142,7 +122,6 @@ transaction(
             target: TicketToken.VaultStoragePath
         )
     }
-}
-`
+}`
 
 export default WALLETLESS_ONBOARDING
