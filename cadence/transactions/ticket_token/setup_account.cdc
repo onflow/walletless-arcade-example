@@ -1,6 +1,6 @@
-import FungibleToken from "../../contracts/utility/FungibleToken.cdc"
-import TicketToken from "../../contracts/TicketToken.cdc"
-import MetadataViews from "../../contracts/utility/MetadataViews.cdc"
+import "FungibleToken"
+import "TicketToken"
+import "MetadataViews"
 
 /// This transaction creates a TicketToken.Vault, saves it in signer's storage
 /// and links public & private capabilities

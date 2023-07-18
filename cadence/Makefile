@@ -1,7 +1,7 @@
 .PHONY: test
 test:
-	$(MAKE) test -C lib/js/test
+	set -e
+	flow test --cover ./test/*_tests.cdc
 
 .PHONY: ci
-ci:
-	$(MAKE) ci -C lib/js/test
+ci: test

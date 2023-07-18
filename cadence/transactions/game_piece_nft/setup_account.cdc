@@ -1,6 +1,6 @@
-import NonFungibleToken from "../../contracts/utility/NonFungibleToken.cdc"
-import GamePieceNFT from "../../contracts/GamePieceNFT.cdc"
-import MetadataViews from "../../contracts/utility/MetadataViews.cdc"
+import "NonFungibleToken"
+import "GamePieceNFT"
+import "MetadataViews"
 
 /// Configures signer's account with a GamePieceNFT Collection
 ///

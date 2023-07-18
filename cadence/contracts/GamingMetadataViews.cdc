@@ -1,4 +1,4 @@
-import MetadataViews from "./utility/MetadataViews.cdc"
+import "MetadataViews"
 
 /// GamingMetadataViews
 ///

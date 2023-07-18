@@ -1,6 +1,6 @@
-import NonFungibleToken from "../../../contracts/utility/NonFungibleToken.cdc"
-import GamePieceNFT from "../../../contracts/GamePieceNFT.cdc"
-import RockPaperScissorsGame from "../../../contracts/RockPaperScissorsGame.cdc"
+import "NonFungibleToken"
+import "GamePieceNFT"
+import "RockPaperScissorsGame"
 
 /// Transaction that creates a new Match in single player mode and 
 /// escrows the specified NFT from the signing account's Collection

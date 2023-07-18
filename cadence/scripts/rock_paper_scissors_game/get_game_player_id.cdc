@@ -1,4 +1,4 @@
-import RockPaperScissorsGame from "../../contracts/RockPaperScissorsGame.cdc"
+import "RockPaperScissorsGame"
 
 /// Returns the GamePlayer.id of the GamePlayer resource
 /// configured at the provided address if it exists

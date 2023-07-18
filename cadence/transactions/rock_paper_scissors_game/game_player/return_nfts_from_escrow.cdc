@@ -1,4 +1,4 @@
-import RockPaperScissorsGame from "../../../contracts/RockPaperScissorsGame.cdc"
+import "RockPaperScissorsGame"
 
 /// ReturnsNFTs from escrow to their owners' Receiver which
 /// is stored in the Match resource itself

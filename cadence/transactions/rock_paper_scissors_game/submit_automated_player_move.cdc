@@ -1,4 +1,4 @@
-import RockPaperScissorsGame from "../../contracts/RockPaperScissorsGame.cdc"
+import "RockPaperScissorsGame"
 
 transaction(matchID: UInt64) {
     execute {

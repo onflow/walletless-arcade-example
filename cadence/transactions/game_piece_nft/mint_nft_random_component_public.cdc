@@ -1,7 +1,7 @@
-import NonFungibleToken from "../../contracts/utility/NonFungibleToken.cdc"
-import GamePieceNFT from "../../contracts/GamePieceNFT.cdc"
-import MetadataViews from "../../contracts/utility/MetadataViews.cdc"
-import FungibleToken from "../../contracts/utility/FungibleToken.cdc"
+import "NonFungibleToken"
+import "GamePieceNFT"
+import "MetadataViews"
+import "FungibleToken"
 
 /// This transction uses the MinterPublic resource to mint a new NFT
 ///
@@ -22,7 +22,7 @@ transaction(minterAddress: Address) {
             >(
                 GamePieceNFT.MinterPublicPath
             ).borrow()
-            ?? panic("Couldn't borrow reference to MinterPublic at ".concat(address.toString()))
+            ?? panic("Couldn't borrow reference to MinterPublic at ".concat(minterAddress.toString()))
         // if the account doesn't already have a collection
         if signer.borrow<&GamePieceNFT.Collection>(from: GamePieceNFT.CollectionStoragePath) == nil {
             // create & save it to the account

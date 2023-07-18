@@ -1,9 +1,9 @@
-import FungibleToken from "../../contracts/utility/FungibleToken.cdc"
-import NonFungibleToken from "../../contracts/utility/NonFungibleToken.cdc"
-import MetadataViews from "../../contracts/utility/MetadataViews.cdc"
-import GamePieceNFT from "../../contracts/GamePieceNFT.cdc"
-import RockPaperScissorsGame from "../../contracts/RockPaperScissorsGame.cdc"
-import TicketToken from "../../contracts/TicketToken.cdc"
+import "FungibleToken"
+import "NonFungibleToken"
+import "MetadataViews"
+import "GamePieceNFT"
+import "RockPaperScissorsGame"
+import "TicketToken"
 
 /// This transaction sets up the following in a signer's account
 /// - GamePieceNFT.Collection
@@ -58,16 +58,12 @@ transaction(minterAddress: Address) {
             )
         }
         // Grab Collection related references & Capabilities
-        self.collectionRef = signer.borrow<
-                &GamePieceNFT.Collection{NonFungibleToken.CollectionPublic}
-            >(
+        self.collectionRef = signer.borrow<&GamePieceNFT.Collection{NonFungibleToken.CollectionPublic}>(
                 from: GamePieceNFT.CollectionStoragePath
             ) ?? panic("Could not borrow reference to signer's CollectionPublic!")
         
         // Borrow a reference to the MinterPublic
-        self.minterPublicRef = getAccount(minterAddress).getCapability<
-                &GamePieceNFT.Minter{GamePieceNFT.MinterPublic}
-            >(
+        self.minterPublicRef = getAccount(minterAddress).getCapability<&GamePieceNFT.Minter{GamePieceNFT.MinterPublic}>(
                 GamePieceNFT.MinterPublicPath
             ).borrow()
             ?? panic("Couldn't borrow reference to MinterPublic at ".concat(minterAddress.toString()))
@@ -90,9 +86,9 @@ transaction(minterAddress: Address) {
                 target: RockPaperScissorsGame.GamePlayerStoragePath
             )
         }
-        if !signer.getCapability<
-                &{RockPaperScissorsGame.GamePlayerID, RockPaperScissorsGame.DelegatedGamePlayer}
-            >(RockPaperScissorsGame.GamePlayerPrivatePath).check() {
+        if !signer.getCapability<&{RockPaperScissorsGame.GamePlayerID, RockPaperScissorsGame.DelegatedGamePlayer}>(
+                RockPaperScissorsGame.GamePlayerPrivatePath
+            ).check() {
             // Link DelegatedGamePlayer & GamePlayerID Capability
             signer.link<
                 &{RockPaperScissorsGame.DelegatedGamePlayer,RockPaperScissorsGame.GamePlayerID}
@@ -109,21 +105,19 @@ transaction(minterAddress: Address) {
             // Create a new flowToken Vault and put it in storage
             signer.save(<-TicketToken.createEmptyVault(), to: TicketToken.VaultStoragePath)
         }
-        if !signer.getCapability<
-                &TicketToken.Vault{FungibleToken.Receiver, FungibleToken.Balance}>
-            (TicketToken.ReceiverPublicPath).check() {
+        if !signer.getCapability<&TicketToken.Vault{FungibleToken.Receiver, FungibleToken.Balance, MetadataViews.Resolver}>(
+                TicketToken.ReceiverPublicPath
+            ).check() {
             // Unlink any capability that may exist there
             signer.unlink(TicketToken.ReceiverPublicPath)
             // Create a public capability to the Vault that only exposes the deposit function
             // & balance field through the Receiver & Balance interface
-            signer.link<&TicketToken.Vault{FungibleToken.Receiver, FungibleToken.Balance}>(
+            signer.link<&TicketToken.Vault{FungibleToken.Receiver, FungibleToken.Balance, MetadataViews.Resolver}>(
                 TicketToken.ReceiverPublicPath,
                 target: TicketToken.VaultStoragePath
             )
         }
-        if !signer.getCapability<
-                &TicketToken.Vault{FungibleToken.Provider}
-            >(TicketToken.ProviderPrivatePath).check() {
+        if !signer.getCapability<&TicketToken.Vault{FungibleToken.Provider}>(TicketToken.ProviderPrivatePath).check() {
             // Unlink any capability that may exist there
             signer.unlink(TicketToken.ProviderPrivatePath)
             // Create a private capability to the Vault that only exposes the withdraw function

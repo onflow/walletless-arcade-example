@@ -1,24 +1,17 @@
-import ChildAccount from "../../contracts/ChildAccount.cdc"
-import MetadataViews from "../../contracts/utility/MetadataViews.cdc"
-import FungibleToken from "../../contracts/utility/FungibleToken.cdc"
-import NonFungibleToken from "../../contracts/utility/NonFungibleToken.cdc"
-import GamePieceNFT from "../../contracts/GamePieceNFT.cdc"
-import RockPaperScissorsGame from "../../contracts/RockPaperScissorsGame.cdc"
-import TicketToken from "../../contracts/TicketToken.cdc"
+import "MetadataViews"
+import "FungibleToken"
+import "NonFungibleToken"
+import "GamePieceNFT"
+import "RockPaperScissorsGame"
+import "TicketToken"
 
-/// This transaction creates an account from the given public key, using the
-/// ChildAccountCreator with the signer as the account's payer, additionally
-/// funding the new account with the specified amount of Flow from the signer's
-/// account. The newly created account is then configured with resources &
-/// Capabilities necessary to play RockPaperScissorsGame Matches.
+/// This transaction creates a signer-funded account, adding the given public key. The new account is additionally funded
+/// with specified amount of Flow from the signer's account. The newly created account is then configured with resources
+/// & Capabilities necessary to play RockPaperScissorsGame Matches.
 ///
 transaction(
         pubKey: String,
         fundingAmt: UFix64,
-        childAccountName: String,
-        childAccountDescription: String,
-        clientIconURL: String,
-        clientExternalURL: String,
         monsterBackground: Int,
         monsterHead: Int,
         monsterTorso: Int,
@@ -28,29 +21,31 @@ transaction(
     prepare(signer: AuthAccount) {
         /* --- Create a new account --- */
         //
-        // Get a reference to the signer's ChildAccountCreator
-        let creatorRef = signer.borrow<
-                &ChildAccount.ChildAccountCreator
-            >(
-                from: ChildAccount.ChildAccountCreatorStoragePath
-            ) ?? panic(
-                "No ChildAccountCreator in signer's account at "
-                .concat(ChildAccount.ChildAccountCreatorStoragePath.toString())
+        // Create the new account
+        let newAccount = AuthAccount(payer: signer)
+        // Create a public key for the proxy account from the passed in string
+        let key = PublicKey(
+                publicKey: pubKey.decodeHex(),
+                signatureAlgorithm: SignatureAlgorithm.ECDSA_P256
             )
-        // Construct the ChildAccountInfo metadata struct
-        let info = ChildAccount.ChildAccountInfo(
-                name: childAccountName,
-                description: childAccountDescription,
-                clientIconURL: MetadataViews.HTTPFile(url: clientIconURL),
-                clienExternalURL: MetadataViews.ExternalURL(clientExternalURL),
-                originatingPublicKey: pubKey
-            )
-        // Create the account
-        let newAccount = creatorRef.createChildAccount(
-            signer: signer,
-            initialFundingAmount: fundingAmt,
-            childAccountInfo: info
+        // Add the given key to the new account
+        newAccount.keys.add(
+            publicKey: key,
+            hashAlgorithm: HashAlgorithm.SHA3_256,
+            weight: 1000.0
         )
+        // Fund the account if so specified
+        if fundingAmt > 0.0 {
+            // Add some initial funds to the new account, pulled from the signing account.  Amount determined by initialFundingAmount
+            let fundingVault <- signer.borrow<&{FungibleToken.Provider}>(
+                    from: /storage/flowTokenVault
+                )!.withdraw(
+                    amount: fundingAmt
+                )
+            newAccount.getCapability<&{FungibleToken.Receiver}>(/public/flowTokenReceiver).borrow()!.deposit(
+                from: <- fundingVault
+            )
+        }
 
         /* --- Set up GamePieceNFT.Collection --- */
         //
@@ -66,28 +61,22 @@ transaction(
         )
 
         // Link the Provider Capability in private storage
-        newAccount.link<
-            &GamePieceNFT.Collection{NonFungibleToken.Provider}
-        >(
+        newAccount.link<&GamePieceNFT.Collection{NonFungibleToken.Provider}>(
             GamePieceNFT.ProviderPrivatePath,
             target: GamePieceNFT.CollectionStoragePath
         )
 
         // Grab Collection related references & Capabilities
-        let collectionRef = newAccount.borrow<
-                &GamePieceNFT.Collection{NonFungibleToken.CollectionPublic}
-            >(
+        let collectionRef = newAccount
+            .borrow<&GamePieceNFT.Collection{NonFungibleToken.CollectionPublic}>(
                 from: GamePieceNFT.CollectionStoragePath
             )!
         
         /* --- Make sure new account has a GamePieceNFT.NFT to play with --- */
         //
         // Borrow a reference to the Minter Capability in minter account's storage
-        let minterRef = signer.borrow<
-                &GamePieceNFT.Minter
-            >(
-                from: GamePieceNFT.MinterStoragePath
-            ) ?? panic("Couldn't borrow reference to Minter Capability in storage at ".concat(GamePieceNFT.MinterStoragePath.toString()))
+        let minterRef = signer.borrow<&GamePieceNFT.Minter>(from: GamePieceNFT.MinterStoragePath)
+            ?? panic("Couldn't borrow reference to Minter Capability in storage at ".concat(GamePieceNFT.MinterStoragePath.toString()))
         // Build the MonsterComponent struct from given arguments
         let componentValue = GamePieceNFT.MonsterComponent(
                 background: monsterBackground,
@@ -96,10 +85,7 @@ transaction(
                 leg: monsterLeg
             )
         // Mint the NFT to the new account's collection
-        minterRef.mintNFT(
-            recipient: collectionRef,
-            component: componentValue
-        )
+        minterRef.mintNFT(recipient: collectionRef, component: componentValue)
 
         /* --- Set user up with GamePlayer in new account --- */
         //
@@ -108,17 +94,12 @@ transaction(
         // Save it
         newAccount.save(<-gamePlayer, to: RockPaperScissorsGame.GamePlayerStoragePath)
         // Link GamePlayerPublic Capability so player can be added to Matches
-        newAccount.link<&{
-            RockPaperScissorsGame.GamePlayerPublic
-        }>(
+        newAccount.link<&{RockPaperScissorsGame.GamePlayerPublic}>(
             RockPaperScissorsGame.GamePlayerPublicPath,
             target: RockPaperScissorsGame.GamePlayerStoragePath
         )
         // Link GamePlayerID Capability
-        newAccount.link<&{
-            RockPaperScissorsGame.DelegatedGamePlayer,
-            RockPaperScissorsGame.GamePlayerID
-        }>(
+        newAccount.link<&{RockPaperScissorsGame.DelegatedGamePlayer, RockPaperScissorsGame.GamePlayerID}>(
             RockPaperScissorsGame.GamePlayerPrivatePath,
             target: RockPaperScissorsGame.GamePlayerStoragePath
         )
@@ -141,4 +122,3 @@ transaction(
         )
     }
 }
- 

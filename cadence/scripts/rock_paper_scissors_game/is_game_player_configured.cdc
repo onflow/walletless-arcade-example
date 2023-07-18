@@ -1,4 +1,4 @@
-import RockPaperScissorsGame from "../../contracts/RockPaperScissorsGame.cdc"
+import "RockPaperScissorsGame"
 
 /// Returns true if the given address has a GamePlayerPublic Capability
 /// configured at the expected path. A player would run this script

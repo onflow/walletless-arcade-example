@@ -1,5 +1,5 @@
-import NonFungibleToken from "../../contracts/utility/NonFungibleToken.cdc"
-import RockPaperScissorsGame from "../../contracts/RockPaperScissorsGame.cdc"
+import "NonFungibleToken"
+import "RockPaperScissorsGame"
 
 /// Returns an array with the moves available for a GamePlayer in the given Match.id
 pub fun main(playerAddr: Address, matchID: UInt64): [RockPaperScissorsGame.Moves]? {

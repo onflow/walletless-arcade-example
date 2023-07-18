@@ -1,6 +1,6 @@
-import NonFungibleToken from "../../../contracts/utility/NonFungibleToken.cdc"
-import GamePieceNFT from "../../../contracts/GamePieceNFT.cdc"
-import RockPaperScissorsGame from "../../../contracts/RockPaperScissorsGame.cdc"
+import "NonFungibleToken"
+import "GamePieceNFT"
+import "RockPaperScissorsGame"
 
 /// Transaction escrows the specified GamePieceNFT to the specified
 /// Match.id for which the signer has a MatchLobbyActions in their GamePlayer

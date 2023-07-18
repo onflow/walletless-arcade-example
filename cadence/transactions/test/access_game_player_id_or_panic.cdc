@@ -1,4 +1,4 @@
-import RockPaperScissorsGame from "../../contracts/RockPaperScissorsGame.cdc"
+import "RockPaperScissorsGame"
 
 /// Reverts is the GamePlayerID Capability is not configured on the signer's
 /// account at the expected PrivatePath

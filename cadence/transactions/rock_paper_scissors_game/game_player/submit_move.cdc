@@ -1,4 +1,4 @@
-import RockPaperScissorsGame from "../../../contracts/RockPaperScissorsGame.cdc"
+import "RockPaperScissorsGame"
 
 /// Transaction to submit player's move
 /// int moves: 0 rock, 1 paper, 2 scissors

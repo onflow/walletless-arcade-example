@@ -1,9 +1,9 @@
-import MetadataViews from "./utility/MetadataViews.cdc"
+import "MetadataViews"
 
 /// DynamicNFT
 /// 
 /// In this contract, we've specified a set of interfaces that enable the implementing
-/// resources to define resource to which they can be attached & receive resources
+/// resources to define resources to which they can be attached & receive resources
 /// as Attachments. An Attachment is simply a resource that can be attached to another
 /// via the Dynamic interface. Dynamic implies that attributes on the NFT can be altered
 /// by entities outside of the NFT's defining contract, and perhaps even with limitations

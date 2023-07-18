@@ -1,6 +1,6 @@
-import NonFungibleToken from "../../../contracts/utility/NonFungibleToken.cdc"
-import RockPaperScissorsGame from "../../../contracts/RockPaperScissorsGame.cdc"
-import GamePieceNFT from "../../../contracts/GamePieceNFT.cdc"
+import "NonFungibleToken"
+import "RockPaperScissorsGame"
+import "GamePieceNFT"
 
 /// ReturnsNFTs from escrow to their owners' Receiver which
 /// is stored in the Match resource itself
@@ -28,9 +28,7 @@ transaction(matchID: UInt64) {
             ?? panic("Could not borrow Reference to MatchPlayerActions Capability!")
 
         // Get the signer's Receiver Capability
-        self.receiverCap = acct.getCapability<
-            &{NonFungibleToken.Receiver}
-            >(
+        self.receiverCap = acct.getCapability<&{NonFungibleToken.Receiver}>(
                 GamePieceNFT.CollectionPublicPath
             )
     }

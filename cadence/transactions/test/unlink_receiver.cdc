@@ -1,6 +1,6 @@
-import NonFungibleToken from "../../contracts/utility/NonFungibleToken.cdc"
-import MetadataViews from "../../contracts/utility/MetadataViews.cdc"
-import GamePieceNFT from "../../contracts/GamePieceNFT.cdc"
+import "NonFungibleToken"
+import "MetadataViews"
+import "GamePieceNFT"
 
 /// Used to test RockPaperScissors.Match.returnPlayerNFTs() behavior
 /// Transaction to unlink NonFungibleToken.Receiver from

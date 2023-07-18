@@ -1,4 +1,4 @@
-import RockPaperScissorsGame from "../../contracts/RockPaperScissorsGame.cdc"
+import "RockPaperScissorsGame"
 
 /// Transaction a player might use to cheat a match on resolution
 /// by conditioning match resolution on the signer winning

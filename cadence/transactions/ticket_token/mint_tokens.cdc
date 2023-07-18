@@ -1,5 +1,5 @@
-import FungibleToken from "../../contracts/utility/FungibleToken.cdc"
-import TicketToken from "../../contracts/TicketToken.cdc"
+import "FungibleToken"
+import "TicketToken"
 
 /// Mints the specified amount of TicketTokens to the given recipient's address,
 /// assuming the recipient has a TicketToken.Vault configured in their account

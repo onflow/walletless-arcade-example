@@ -1,5 +1,5 @@
-import RockPaperScissorsGame from "../../contracts/RockPaperScissorsGame.cdc"
-import GamingMetadataViews from "../../contracts/GamingMetadataViews.cdc"
+import "RockPaperScissorsGame"
+import "GamingMetadataViews"
 
 /// Returns RockPaperScissorsGame metadata stored as GamingMetadataViews.GameContractMetadata
 ///

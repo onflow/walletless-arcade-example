@@ -1,5 +1,5 @@
-import FungibleToken from "./FungibleToken.cdc"
-import MetadataViews from "./MetadataViews.cdc"
+import "FungibleToken"
+import "MetadataViews"
 
 /// This contract implements the metadata standard proposed
 /// in FLIP-1087.

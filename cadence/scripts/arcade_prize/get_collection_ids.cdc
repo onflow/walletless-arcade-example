@@ -1,5 +1,5 @@
-import NonFungibleToken from "../../contracts/utility/NonFungibleToken.cdc"
-import ArcadePrize from "../../contracts/ArcadePrize.cdc"
+import "NonFungibleToken"
+import "ArcadePrize"
 
 /// Script to get NFT IDs in an account's collection
 ///

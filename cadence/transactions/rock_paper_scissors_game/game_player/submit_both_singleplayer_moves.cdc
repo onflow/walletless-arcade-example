@@ -1,4 +1,4 @@
-import RockPaperScissorsGame from "../../../contracts/RockPaperScissorsGame.cdc"
+import "RockPaperScissorsGame"
 
 /// Transaction for a singleplayer match to submit player's move 
 /// and consecutively call for the automated player's move to be 

@@ -1,6 +1,6 @@
-import NonFungibleToken from "../../contracts/utility/NonFungibleToken.cdc"
-import MetadataViews from "../../contracts/utility/MetadataViews.cdc"
-import GamePieceNFT from "../../contracts/GamePieceNFT.cdc"
+import "NonFungibleToken"
+import "MetadataViews"
+import "GamePieceNFT"
 
 /// Returns an array of Display structs containing GamePieceNFT.NFT metadata
 /// for all NFTs in the specified Address's collection

@@ -1,6 +1,6 @@
-import NonFungibleToken from "../../../contracts/utility/NonFungibleToken.cdc"
-import GamePieceNFT from "../../../contracts/GamePieceNFT.cdc"
-import RockPaperScissorsGame from "../../../contracts/RockPaperScissorsGame.cdc"
+import "NonFungibleToken"
+import "GamePieceNFT"
+import "RockPaperScissorsGame"
 
 /// The signer signs up for the specified Match.id, setting up a GamePlayer resource
 /// if need be in the process and escrowing the specified GamePieceNFT NFT
@@ -46,16 +46,12 @@ transaction(matchID: UInt64, escrowNFTID: UInt64) {
             )
         }
         // Get the GamePlayer reference from the signing account's storage
-        self.gamePlayerRef = signer.borrow<
-                &RockPaperScissorsGame.GamePlayer
-            >(
+        self.gamePlayerRef = signer.borrow<&RockPaperScissorsGame.GamePlayer>(
                 from: RockPaperScissorsGame.GamePlayerStoragePath
             )!
         
         // Get the account's Receiver Capability
-        self.receiverCap = signer.getCapability<
-                &GamePieceNFT.Collection{NonFungibleToken.Receiver}
-            >(
+        self.receiverCap = signer.getCapability<&GamePieceNFT.Collection{NonFungibleToken.Receiver}>(
                 GamePieceNFT.CollectionPublicPath
             )
         // Get a reference to the account's Provider

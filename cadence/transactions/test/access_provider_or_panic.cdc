@@ -1,5 +1,5 @@
-import NonFungibleToken from "../../contracts/utility/NonFungibleToken.cdc"
-import GamePieceNFT from "../../contracts/GamePieceNFT.cdc"
+import "NonFungibleToken"
+import "GamePieceNFT"
 
 /// Reverts is the Provider Capability is not configured on the signer's
 /// account at the expected PrivatePath

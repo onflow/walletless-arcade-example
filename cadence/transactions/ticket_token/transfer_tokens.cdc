@@ -1,5 +1,5 @@
-import FungibleToken from "../../contracts/utility/FungibleToken.cdc"
-import TicketToken from "../../contracts/TicketToken.cdc"
+import "FungibleToken"
+import "TicketToken"
 
 /// This transaction is a template for a transaction that
 /// could be used by anyone to send tokens to another account
