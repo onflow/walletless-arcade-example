@@ -10,8 +10,8 @@ import { useFclContext } from 'shared'
 import type { ReactNode } from 'react'
 import { useGameAccountContext } from './GameAccountContext'
 import { userAuthorizationFunction } from '../utils/authz-functions'
-import IS_CHILD_ACCOUNT_OF from '../../cadence/scripts/linked-accounts/is_child_account_of'
-import ADD_AS_CHILD_MULTISIG from '../../cadence/transactions/linked-accounts/add-as-child-multisig'
+import IS_CHILD_ACCOUNT_OF from '../../cadence/scripts/hybrid-custody/is-child-account-of'
+import ADD_AS_CHILD_MULTISIG from '../../cadence/transactions/hybrid-custody/add-as-child-multisig'
 import IS_GAME_PIECE_NFT_COLLECTION_CONFIGURED from '../../cadence/scripts/gamepiece-nft/is-collection-configured'
 
 interface Props {
@@ -63,8 +63,8 @@ export default function UserContextProvider({ children }: Props) {
       try {
         const isUserAccountConnectedToChildAccount: boolean =
           await executeScript(IS_CHILD_ACCOUNT_OF, (arg: any, t: any) => [
-            arg(currentUser?.addr, t.Address),
             arg(gameAccountAddress, t.Address),
+            arg(currentUser?.addr, t.Address),
           ])
         setIsUserAccountConnectedToGameAccount(
           isUserAccountConnectedToChildAccount

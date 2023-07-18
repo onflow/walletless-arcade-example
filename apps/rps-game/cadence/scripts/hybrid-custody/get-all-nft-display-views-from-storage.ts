@@ -1,7 +1,8 @@
 const GET_ALL_NFT_DISPLAY_VIEWS_FROM_STORAGE = `
 import NonFungibleToken from 0xNonFungibleToken
 import MetadataViews from 0xMetadataViews
-import LinkedAccounts from 0xLinkedAccounts
+
+import HybridCustody from 0xHybridCustody
 
 /// Custom struct to make interpretation of NFT & Collection data easy client side
 pub struct NFTData {
@@ -57,7 +58,7 @@ pub fun getAllViewsFromAddress(_ address: Address): [NFTData] {
     // Iterate over each public path
     account.forEachStored(fun (path: StoragePath, type: Type): Bool {
         // Check if it's a Collection we're interested in, if so, get a reference
-        if type.isSubtype(of: collectionType) && !type.isSubtype(of: Type<@LinkedAccounts.Collection>()) {
+        if type.isSubtype(of: collectionType) {
             if let collectionRef = account.borrow<
                 &{NonFungibleToken.CollectionPublic, MetadataViews.ResolverCollection}
             >(from: path) {
@@ -91,33 +92,27 @@ pub fun getAllViewsFromAddress(_ address: Address): [NFTData] {
     return data
 }
 
-/// Script that retrieve data about all publicly accessible NFTs in an account and any of its
-/// child accounts
+/// Script that retrieve data about all publicly accessible NFTs in an account and any of its child accounts
 ///
-/// Note that this script does not consider accounts with exceptionally large collections 
-/// which would result in memory errors. To compose a script that does cover accounts with
-/// a large number of sub-accounts and/or NFTs within those accounts, see example 5 in
-/// the NFT Catalog's README: https://github.com/dapperlabs/nft-catalog and adapt for use
-/// with LinkedAccounts.Collection
+/// Note that this script does not consider accounts with exceptionally large collections which would result in memory
+/// errors. To compose a script that does cover accounts with a large number of sub-accounts and/or NFTs within those
+/// accounts, see example 5 in the NFT Catalog's README: https://github.com/dapperlabs/nft-catalog and adapt for use with
+/// HybridCustody.Manager
 ///
 pub fun main(address: Address): {Address: [NFTData]} {
     let allNFTData: {Address: [NFTData]} = {}
     
     // Add all retrieved views to the running mapping indexed on address
-    let data: [NFTData] = getAllViewsFromAddress(address)
-    allNFTData.insert(key: address, data)
+    allNFTData.insert(key: address, getAllViewsFromAddress(address))
     
     /* Iterate over any child accounts */ 
     //
-    // Get reference to LinkedAccounts.Collection if it exists
-    if let collectionRef = getAccount(address).getCapability<&LinkedAccounts.Collection{LinkedAccounts.CollectionPublic}>(
-            LinkedAccounts.CollectionPublicPath
-        ).borrow() {
-        // Iterate over each linked account in LinkedAccounts.Collection
-        for childAddress in collectionRef.getLinkedAccountAddresses() {
+    // Get reference to HybridCustody.Manager if it exists
+    if let manager = getAuthAccount(address).borrow<&HybridCustody.Manager>(from: HybridCustody.ManagerStoragePath) {
+        // Iterate over each child account
+        for childAddress in manager.getChildAddresses() {
             if !allNFTData.containsKey(childAddress) {
-                // Insert the NFT metadata for those NFTs in each child account
-                // indexing on the account's address
+                // Insert the NFT metadata for those NFTs in each child account indexing on the account's address
                 allNFTData.insert(key: childAddress, getAllViewsFromAddress(childAddress))
             }
         }
