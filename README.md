@@ -49,11 +49,8 @@ cd walletless-arcade-example
 ### Pre-Requisites
 
 **1. Install Flow CLI**
-:warning: Requires installation of [Flow CLI](https://github.com/onflow/flow-cli/releases/tag/v0.45.1-cadence-attachments-dev-wallet) (Attachments/AuthAccount Capability pre-release version).
 
-```sh
-sh -ci "$(curl -fsSL https://raw.githubusercontent.com/onflow/flow-cli/master/install.sh)" -- v0.45.1-cadence-attachments-dev-wallet
-```
+Follow [installation instructions](https://developers.flow.com/tooling/flow-cli/install) to install Flow CLI on to your machine.
 
 **2. Copy `emulator.private.json.example` and `testnet.private.json.example`**
 
