@@ -1,5 +1,6 @@
 {
 	"contracts": {
+		"AccountCreator": "./contracts/utility/AccountCreator.cdc",
 		"AddressUtils": {
 			"source": "./contracts/flow-utils/AddressUtils.cdc",
 			"aliases": {
@@ -202,6 +203,7 @@
 				"MetadataViews",
 				"FungibleTokenMetadataViews",
 				"ViewResolver",
+				"AccountCreator",
 				"GamingMetadataViews",
 				"DynamicNFT",
 				"GamePieceNFT",

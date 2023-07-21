@@ -42,9 +42,12 @@ pub fun testSetupFilterAndFactory() {
 }
 
 pub fun testWalletlessOnboarding() {
-    // Problem - I don't know the address of the created account!
-    walletlessOnboarding(accounts["GamePieceNFT"]!, fundingAmout: 1.0)
-    // TODO: Can't query against account since I don't know what the address is
+    walletlessOnboarding(accounts["GamePieceNFT"]!, pubKey: pubKey, fundingAmout: 1.0)
+
+    let address = scriptExecutor("account_creator/get_address_from_pub_key.cdc", [accounts["GamePieceNFT"]!.address, pubKey])! as! Address
+    let actualKeyIndex = scriptExecutor("account_creator/is_key_active_on_account.cdc", [pubKey, address])! as! Int
+
+    Test.assertEqual(0, actualKeyIndex)
 }
 
 pub fun testSelfCustodyOnboarding() {
@@ -152,6 +155,9 @@ pub fun testBlockchainNativeOnboarding() {
         factoryAddress: filterAndFactory.address,
         filterAddress: filterAndFactory.address
     )
+    let address = scriptExecutor("account_creator/get_address_from_pub_key.cdc", [accounts["GamePieceNFT"]!.address, pubKey])! as! Address
+    let actualKeyIndex = scriptExecutor("account_creator/is_key_active_on_account.cdc", [pubKey, address])! as! Int
+    Test.assertEqual(0, actualKeyIndex)
     
     // Get child account address created in blockchain-native onboarding flow
     let childAddresses = getChildAccountAddresses(parent: parent)
@@ -331,7 +337,7 @@ pub fun transferFlow(amount: UFix64, to: Test.Account) {
     Test.assert(result.status == Test.ResultStatus.succeeded)
 }
 
-pub fun walletlessOnboarding(_ acct: Test.Account, fundingAmout: UFix64) {
+pub fun walletlessOnboarding(_ acct: Test.Account, pubKey: String, fundingAmout: UFix64) {
     txExecutor(
         "onboarding/walletless_onboarding.cdc",
         [acct],
@@ -593,9 +599,6 @@ pub fun setup() {
     let ftProviderFactory = blockchain.createAccount()
     let ftAllFactory = blockchain.createAccount()
 
-    // the account to store a factory manager
-    let nftCapFactory = blockchain.createAccount()
-
     // flow-utils lib contracts
     let arrayUtils = blockchain.createAccount()
     let stringUtils = blockchain.createAccount()
@@ -608,17 +611,13 @@ pub fun setup() {
     let viewResolver = blockchain.createAccount()
     
     // other contracts used in tests
-    let gamingMetadataViews: Test.Account = blockchain.createAccount()
-    let dynamicNFT: Test.Account = blockchain.createAccount()
+    let accountCreator = blockchain.createAccount()
+    let gamingMetadataViews = blockchain.createAccount()
+    let dynamicNFT = blockchain.createAccount()
     let gamePieceNFT = blockchain.createAccount()
     let ticketToken = blockchain.createAccount()
     let rockPaperScissorsGame = blockchain.createAccount()
     let arcadePrize = blockchain.createAccount()
-    
-    // actual test accounts
-    let parent = blockchain.createAccount()
-    let child1 = blockchain.createAccount()
-    let child2 = blockchain.createAccount()
 
     accounts = {
         "NonFungibleToken": nonFungibleToken,
@@ -637,16 +636,13 @@ pub fun setup() {
         "ArrayUtils": arrayUtils,
         "StringUtils": stringUtils,
         "AddressUtils": addressUtils,
+        "AccountCreator": accountCreator,
         "GamingMetadataViews": gamingMetadataViews,
         "DynamicNFT": dynamicNFT,
         "GamePieceNFT": gamePieceNFT,
         "TicketToken": ticketToken,
         "RockPaperScissorsGame": rockPaperScissorsGame,
-        "ArcadePrize": arcadePrize,
-        "parent": parent,
-        "child1": child1,
-        "child2": child2,
-        "nftCapFactory": nftCapFactory
+        "ArcadePrize": arcadePrize
     }
 
     blockchain.useConfiguration(Test.Configuration({
@@ -668,6 +664,7 @@ pub fun setup() {
         "NFTProviderFactory": accounts["NFTProviderFactory"]!.address,
         "FTProviderFactory": accounts["FTProviderFactory"]!.address,
         "FTAllFactory": accounts["FTAllFactory"]!.address,
+        "AccountCreator": accounts["AccountCreator"]!.address,
         "GamingMetadataViews": accounts["GamingMetadataViews"]!.address,
         "DynamicNFT": accounts["DynamicNFT"]!.address,
         "GamePieceNFT": accounts["GamePieceNFT"]!.address,
@@ -688,6 +685,7 @@ pub fun setup() {
     deploy("AddressUtils", accounts["AddressUtils"]!, "../contracts/flow-utils/AddressUtils.cdc")
 
     // helper nft contract so we can actually talk to nfts with tests
+    deploy("AccountCreator", accounts["AccountCreator"]!, "../contracts/utility/AccountCreator.cdc")
     deploy("GamingMetadataViews", accounts["GamingMetadataViews"]!, "../contracts/GamingMetadataViews.cdc")
     deploy("DynamicNFT", accounts["DynamicNFT"]!, "../contracts/DynamicNFT.cdc")
     deploy("GamePieceNFT", accounts["GamePieceNFT"]!, "../contracts/GamePieceNFT.cdc")

@@ -34,9 +34,7 @@ transaction(minterAddress: Address) {
         // Check for public capabilities
         if !signer.getCapability<
                 &GamePieceNFT.Collection{NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, GamePieceNFT.GamePieceNFTCollectionPublic, MetadataViews.ResolverCollection}
-            >(
-                GamePieceNFT.CollectionPublicPath
-            ).check() {
+            >(GamePieceNFT.CollectionPublicPath).check() {
             // create a public capability for the collection
             signer.unlink(GamePieceNFT.CollectionPublicPath)
             signer.link<
@@ -50,9 +48,7 @@ transaction(minterAddress: Address) {
         if !signer.getCapability<&GamePieceNFT.Collection{NonFungibleToken.Provider}>(GamePieceNFT.ProviderPrivatePath).check() {
             // Link the Provider Capability in private storage
             signer.unlink(GamePieceNFT.ProviderPrivatePath)
-            signer.link<
-                &GamePieceNFT.Collection{NonFungibleToken.Provider}
-            >(
+            signer.link<&GamePieceNFT.Collection{NonFungibleToken.Provider}>(
                 GamePieceNFT.ProviderPrivatePath,
                 target: GamePieceNFT.CollectionStoragePath
             )
@@ -79,9 +75,7 @@ transaction(minterAddress: Address) {
         }
         if !signer.getCapability<&{RockPaperScissorsGame.GamePlayerPublic}>(RockPaperScissorsGame.GamePlayerPublicPath).check() {
             // Link GamePlayerPublic Capability so player can be added to Matches
-            signer.link<
-                &{RockPaperScissorsGame.GamePlayerPublic}
-            >(
+            signer.link<&{RockPaperScissorsGame.GamePlayerPublic}>(
                 RockPaperScissorsGame.GamePlayerPublicPath,
                 target: RockPaperScissorsGame.GamePlayerStoragePath
             )
@@ -90,9 +84,7 @@ transaction(minterAddress: Address) {
                 RockPaperScissorsGame.GamePlayerPrivatePath
             ).check() {
             // Link DelegatedGamePlayer & GamePlayerID Capability
-            signer.link<
-                &{RockPaperScissorsGame.DelegatedGamePlayer,RockPaperScissorsGame.GamePlayerID}
-            >(
+            signer.link<&{RockPaperScissorsGame.DelegatedGamePlayer,RockPaperScissorsGame.GamePlayerID}>(
                 RockPaperScissorsGame.GamePlayerPrivatePath,
                 target: RockPaperScissorsGame.GamePlayerStoragePath
             )

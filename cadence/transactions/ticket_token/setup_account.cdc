@@ -1,6 +1,7 @@
 import "FungibleToken"
-import "TicketToken"
 import "MetadataViews"
+
+import "TicketToken"
 
 /// This transaction creates a TicketToken.Vault, saves it in signer's storage
 /// and links public & private capabilities

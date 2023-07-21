@@ -10,6 +10,8 @@ import "CapabilityFactory"
 import "CapabilityFilter"
 import "CapabilityDelegator"
 
+import "AccountCreator"
+
 import "GamePieceNFT"
 import "RockPaperScissorsGame"
 import "TicketToken"
@@ -34,22 +36,38 @@ transaction(
     let childAccountCapability: Capability<&HybridCustody.ChildAccount{HybridCustody.AccountPrivate, HybridCustody.AccountPublic, MetadataViews.Resolver}>
 
     prepare(parent: AuthAccount, app: AuthAccount) {
-        /* --- Account Creation --- */
+        /* --- Create a new account using AccountCreator --- */
         //
-        // Create the child account, funding via the signing app account
-        let child = AuthAccount(payer: app)
-        // Create a public key for the child account from string value in the provided arg
-        // **NOTE:** You may want to specify a different signature algo for your use case
-        let key = PublicKey(
-            publicKey: pubKey.decodeHex(),
-            signatureAlgorithm: SignatureAlgorithm.ECDSA_P256
-        )
-        // Add the key to the new account
-        // **NOTE:** You may want to specify a different hash algo & weight best for your use case
-        child.keys.add(
-            publicKey: key,
-            hashAlgorithm: HashAlgorithm.SHA3_256,
-            weight: 1000.0
+        // **NOTE:** AccountCreator is used here to keep the demo app client-side & simple and should be replaced by an
+        // an an account creation + database or custodial service in a production environment.
+        //
+        // Ensure resource is saved where expected
+        if app.type(at: AccountCreator.CreatorStoragePath) == nil {
+            app.save(
+                <-AccountCreator.createNewCreator(),
+                to: AccountCreator.CreatorStoragePath
+            )
+        }
+        // Ensure public Capability is linked
+        if !app.getCapability<&AccountCreator.Creator{AccountCreator.CreatorPublic}>(
+            AccountCreator.CreatorPublicPath).check() {
+            // Link the public Capability
+            app.unlink(AccountCreator.CreatorPublicPath)
+            app.link<&AccountCreator.Creator{AccountCreator.CreatorPublic}>(
+                AccountCreator.CreatorPublicPath,
+                target: AccountCreator.CreatorStoragePath
+            )
+        }
+        // Get a reference to the client's AccountCreator.Creator
+        let creatorRef = app.borrow<&AccountCreator.Creator>(
+                from: AccountCreator.CreatorStoragePath
+            ) ?? panic("No AccountCreator in app's account!")
+
+        // Create the account
+        let child = creatorRef.createNewAccount(
+            signer: app,
+            initialFundingAmount: fundingAmt,
+            originatingPublicKey: pubKey
         )
         self.childAddress = child.address
 

@@ -1,0 +1,6 @@
+.idea
+.DS_Store
+flowdb/
+.vscode/
+.env
+coverage.json

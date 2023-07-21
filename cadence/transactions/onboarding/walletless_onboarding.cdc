@@ -1,6 +1,9 @@
 import "MetadataViews"
 import "FungibleToken"
 import "NonFungibleToken"
+
+import "AccountCreator"
+
 import "GamePieceNFT"
 import "RockPaperScissorsGame"
 import "TicketToken"
@@ -19,33 +22,39 @@ transaction(
     ) {
 
     prepare(signer: AuthAccount) {
-        /* --- Create a new account --- */
+        /* --- Create a new account using AccountCreator --- */
         //
-        // Create the new account
-        let newAccount = AuthAccount(payer: signer)
-        // Create a public key for the proxy account from the passed in string
-        let key = PublicKey(
-                publicKey: pubKey.decodeHex(),
-                signatureAlgorithm: SignatureAlgorithm.ECDSA_P256
-            )
-        // Add the given key to the new account
-        newAccount.keys.add(
-            publicKey: key,
-            hashAlgorithm: HashAlgorithm.SHA3_256,
-            weight: 1000.0
-        )
-        // Fund the account if so specified
-        if fundingAmt > 0.0 {
-            // Add some initial funds to the new account, pulled from the signing account.  Amount determined by initialFundingAmount
-            let fundingVault <- signer.borrow<&{FungibleToken.Provider}>(
-                    from: /storage/flowTokenVault
-                )!.withdraw(
-                    amount: fundingAmt
-                )
-            newAccount.getCapability<&{FungibleToken.Receiver}>(/public/flowTokenReceiver).borrow()!.deposit(
-                from: <- fundingVault
+        // **NOTE:** AccountCreator is used here to keep the demo app client-side & simple and should be replaced by an
+        // an an account creation + database or custodial service in a production environment.
+        //
+        // Ensure resource is saved where expected
+        if signer.type(at: AccountCreator.CreatorStoragePath) == nil {
+            signer.save(
+                <-AccountCreator.createNewCreator(),
+                to: AccountCreator.CreatorStoragePath
             )
         }
+        // Ensure public Capability is linked
+        if !signer.getCapability<&AccountCreator.Creator{AccountCreator.CreatorPublic}>(
+            AccountCreator.CreatorPublicPath).check() {
+            // Link the public Capability
+            signer.unlink(AccountCreator.CreatorPublicPath)
+            signer.link<&AccountCreator.Creator{AccountCreator.CreatorPublic}>(
+                AccountCreator.CreatorPublicPath,
+                target: AccountCreator.CreatorStoragePath
+            )
+        }
+        // Get a reference to the client's AccountCreator.Creator
+        let creatorRef = signer.borrow<&AccountCreator.Creator>(
+                from: AccountCreator.CreatorStoragePath
+            ) ?? panic("No AccountCreator in signer's account!")
+
+        // Create the account
+        let newAccount = creatorRef.createNewAccount(
+            signer: signer,
+            initialFundingAmount: fundingAmt,
+            originatingPublicKey: pubKey
+        )
 
         /* --- Set up GamePieceNFT.Collection --- */
         //

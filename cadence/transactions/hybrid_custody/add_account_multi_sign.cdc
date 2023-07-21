@@ -54,8 +54,8 @@ transaction(childAccountFactoryAddress: Address, childAccountFilterAddress: Addr
         parent.unlink(HybridCustody.ManagerPublicPath)
         parent.unlink(HybridCustody.ManagerPrivatePath)
 
-        parent.link<&HybridCustody.Manager{HybridCustody.ManagerPrivate, HybridCustody.ManagerPublic}>(HybridCustody.OwnedAccountPrivatePath, target: HybridCustody.ManagerStoragePath)
-        parent.link<&HybridCustody.Manager{HybridCustody.ManagerPublic}>(HybridCustody.OwnedAccountPublicPath, target: HybridCustody.ManagerStoragePath)
+        parent.link<&HybridCustody.Manager{HybridCustody.ManagerPrivate, HybridCustody.ManagerPublic}>(HybridCustody.ManagerPrivatePath, target: HybridCustody.ManagerStoragePath)
+        parent.link<&HybridCustody.Manager{HybridCustody.ManagerPublic}>(HybridCustody.ManagerPublicPath, target: HybridCustody.ManagerStoragePath)
         
         // --------------------- End HybridCustody setup of parent account ---------------------
         

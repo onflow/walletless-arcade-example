@@ -13,16 +13,12 @@ transaction {
         }
         if !signer.getCapability<
                 &GamePieceNFT.Collection{NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, GamePieceNFT.GamePieceNFTCollectionPublic, MetadataViews.ResolverCollection}
-            >(
-                GamePieceNFT.CollectionPublicPath
-            ).check() {
+            >(GamePieceNFT.CollectionPublicPath).check() {
             signer.unlink(GamePieceNFT.CollectionPublicPath)
             // create a public capability for the collection
             signer.link<&GamePieceNFT.Collection{NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, GamePieceNFT.GamePieceNFTCollectionPublic, MetadataViews.ResolverCollection}>(GamePieceNFT.CollectionPublicPath, target: GamePieceNFT.CollectionStoragePath)
         }
-        if !signer.getCapability<
-                &GamePieceNFT.Collection{NonFungibleToken.Provider}
-            >(
+        if !signer.getCapability<&GamePieceNFT.Collection{NonFungibleToken.Provider}>(
                 GamePieceNFT.ProviderPrivatePath
             ).check() {
             signer.unlink(GamePieceNFT.ProviderPrivatePath)

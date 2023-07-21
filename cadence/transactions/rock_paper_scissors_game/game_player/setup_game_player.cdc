@@ -23,7 +23,9 @@ transaction {
             )
         }
         // Link GamePlayerID & DelegatedGamePlayer Capability
-        if !signer.getCapability<&{RockPaperScissorsGame.GamePlayerID}>(RockPaperScissorsGame.GamePlayerPrivatePath).check() {
+        if !signer.getCapability<&{RockPaperScissorsGame.DelegatedGamePlayer, RockPaperScissorsGame.GamePlayerID}>(
+                RockPaperScissorsGame.GamePlayerPrivatePath
+            ).check() {
             signer.unlink(RockPaperScissorsGame.GamePlayerPrivatePath)
             signer.link<&{
                 RockPaperScissorsGame.DelegatedGamePlayer,
