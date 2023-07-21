@@ -10,7 +10,7 @@ import type { ReactNode } from 'react'
 import { useFclContext } from 'shared'
 import { generateKeys } from '../utils/crypto'
 import { getSession, setSession } from '../utils/session'
-import GET_CHILD_ADDRESS_FROM_PUBLIC_KEY_ON_CREATOR from '../../cadence/scripts/hybrid-custody/get-child-address-from-public-key-on-creator'
+import GET_ADDRESS_FROM_PUB_KEY from '../../cadence/scripts/account-creator/get-address-from-pub-key'
 
 interface Props {
   children?: ReactNode
@@ -68,7 +68,7 @@ export default function GameAccountContextProvider({ children }: Props) {
       // TODO - Will need to get account address from custodial service API
       if (adminAdress && gameAccountPublicKey) {
         const res: string = await executeScript(
-          GET_CHILD_ADDRESS_FROM_PUBLIC_KEY_ON_CREATOR,
+          GET_ADDRESS_FROM_PUB_KEY,
           (arg: any, t: any) => [
             arg(adminAdress, t.Address),
             arg(gameAccountPublicKey, t.String),
