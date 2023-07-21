@@ -8,16 +8,16 @@ transaction {
     prepare(signer: AuthAccount) {
 
         // Ensure resource is saved where expected
-        if app.type(at: AccountCreator.CreatorStoragePath) == nil {
-            app.save(<-AccountCreator.createNewCreator(), to: AccountCreator.CreatorStoragePath)
+        if signer.type(at: AccountCreator.CreatorStoragePath) == nil {
+            signer.save(<-AccountCreator.createNewCreator(), to: AccountCreator.CreatorStoragePath)
         }
         // Ensure public Capability is linked
-        if !app.getCapability<&AccountCreator.Creator{AccountCreator.CreatorPublic}>(
+        if !signer.getCapability<&AccountCreator.Creator{AccountCreator.CreatorPublic}>(
             AccountCreator.CreatorPublicPath
         ).check() {
             // Link the public Capability
-            app.unlink(AccountCreator.CreatorPublicPath)
-            app.link<&AccountCreator.Creator{AccountCreator.CreatorPublic}>(
+            signer.unlink(AccountCreator.CreatorPublicPath)
+            signer.link<&AccountCreator.Creator{AccountCreator.CreatorPublic}>(
                 AccountCreator.CreatorPublicPath,
                 target: AccountCreator.CreatorStoragePath
             )

@@ -10,6 +10,6 @@ transaction(amount: UFix64, to: Address) {
             .borrow()
             ?? panic("Could not borrow receiver reference to the recipient's vault")
         let from <- senderVault.withdraw(amount: amount)
-        vaultRef.deposit(from: <- from)
+        receiver.deposit(from: <- from)
     }
 }
