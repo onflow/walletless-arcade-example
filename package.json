@@ -18,7 +18,7 @@
     "dev:local:fund": "flow transactions send ./cadence/transactions/flow_token/transfer_flow.cdc 1000.0 0xe03daebed8ca0615",
     "dev:local:deploy": "npm flow project deploy --network=emulator --update && npm run dev:local:provision && NEXT_PUBLIC_FLOW_NETWORK=local turbo run dev",
     "dev:local:provision": "flow transactions send --network=emulator --signer emulator-account ./cadence/transactions/account_creator/setup.cdc",
-    "dev:local:complete": "sh emulator-setup.sh",
+    "dev:local:complete": "sh emulator-setup.sh && NEXT_PUBLIC_FLOW_NETWORK=local turbo run dev",
     "dev:testnet": "turbo run dev:testnet --parallel",
     "dev:mainnet": "turbo run dev:mainnet --parallel",
     "lint": "turbo run lint",
