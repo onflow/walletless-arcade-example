@@ -3,7 +3,8 @@
 		"AccountCreator": {
 			"source": "./cadence/contracts/utility/AccountCreator.cdc",
 			"aliases": {
-				"emulator": "e03daebed8ca0615"
+				"emulator": "e03daebed8ca0615",
+				"testnet": "a60698727837eccf"
 			}
 		},
 		"AddressUtils": {
@@ -17,7 +18,8 @@
 		"ArcadePrize": {
 			"source": "./cadence/contracts/ArcadePrize.cdc",
 			"aliases": {
-				"emulator": "e03daebed8ca0615"
+				"emulator": "e03daebed8ca0615",
+				"testnet": "a60698727837eccf"
 			}
 		},
 		"ArrayUtils": {
@@ -52,7 +54,8 @@
 		"DynamicNFT": {
 			"source": "./cadence/contracts/DynamicNFT.cdc",
 			"aliases": {
-				"emulator": "e03daebed8ca0615"
+				"emulator": "e03daebed8ca0615",
+				"testnet": "a60698727837eccf"
 			}
 		},
 		"FTAllFactory": {
@@ -95,13 +98,15 @@
 		"GamePieceNFT": {
 			"source": "./cadence/contracts/GamePieceNFT.cdc",
 			"aliases": {
-				"emulator": "e03daebed8ca0615"
+				"emulator": "e03daebed8ca0615",
+				"testnet": "a60698727837eccf"
 			}
 		},
 		"GamingMetadataViews": {
 			"source": "./cadence/contracts/GamingMetadataViews.cdc",
 			"aliases": {
-				"emulator": "e03daebed8ca0615"
+				"emulator": "e03daebed8ca0615",
+				"testnet": "a60698727837eccf"
 			}
 		},
 		"HybridCustody": {
@@ -151,7 +156,8 @@
 		"RockPaperScissorsGame": {
 			"source": "./cadence/contracts/RockPaperScissorsGame.cdc",
 			"aliases": {
-				"emulator": "e03daebed8ca0615"
+				"emulator": "e03daebed8ca0615",
+				"testnet": "a60698727837eccf"
 			}
 		},
 		"StringUtils": {
@@ -165,7 +171,8 @@
 		"TicketToken": {
 			"source": "./cadence/contracts/TicketToken.cdc",
 			"aliases": {
-				"emulator": "e03daebed8ca0615"
+				"emulator": "e03daebed8ca0615",
+				"testnet": "a60698727837eccf"
 			}
 		},
 		"ViewResolver": {
