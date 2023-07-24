@@ -1,6 +1,8 @@
 const GET_BALANCE_OF_ALL_CHILD_ACCOUNTS = `
-import LinkedAccounts from 0xLinkedAccounts
 import FungibleToken from 0xFungibleToken
+
+import HybridCustody from 0xHybridCustody
+
 import TicketToken from 0xTicketToken
 
 /// Helper method that returns the TicketToken balance for the specified address. A balance of 0.0 could mean the 
@@ -35,12 +37,13 @@ pub fun main(parentAddress: Address): {Address: UFix64} {
     let accountBalances: {Address: UFix64} = {
         parentAddress: getTicketTokenBalance(from: parentAddress)
     }
-    // Get a ref to the parentAddress's LinkedAccounts.Collection if possible
-    if let viewerRef = getAccount(parentAddress).getCapability<&LinkedAccounts.Collection{LinkedAccounts.CollectionPublic}>(
-        LinkedAccounts.CollectionPublicPath).borrow() {
-        // Iterate over the linked accounts, adding their balance to the ongoing return mapping
-        let linkedAccounts: [Address] = viewerRef.getLinkedAccountAddresses()
-        for address in linkedAccounts {
+    // Get a ref to the parentAddress's HybridCustody.Manager if possible
+    if let manager = getAccount(parentAddress).borrow<&HybridCustody.Manager(
+        from: HybridCustody.ManagerStoragePath
+    ).borrow() {
+        // Iterate over the child accounts, adding their balance to the ongoing return mapping
+        let childAccounts: [Address] = manager.getLinkedAccountAddresses()
+        for address in childAccounts {
             if let balance = getTicketTokenBalanceSafe(from: address) {
                 accountBalances.insert(key: address, balance)
             }

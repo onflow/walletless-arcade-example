@@ -1,6 +1,6 @@
-import NonFungibleToken from "../../contracts/utility/NonFungibleToken.cdc"
-import MetadataViews from "../../contracts/utility/MetadataViews.cdc"
-import ArcadePrize from "../../contracts/ArcadePrize.cdc"
+import "NonFungibleToken"
+import "MetadataViews"
+import "ArcadePrize"
 
 /// Returns an array of Display structs containing NFT metadata
 /// for all NFTs in the specified Address's collections

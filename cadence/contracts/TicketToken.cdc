@@ -1,8 +1,9 @@
-import FungibleToken from "./utility/FungibleToken.cdc"
-import MetadataViews from "./utility/MetadataViews.cdc"
-import FungibleTokenMetadataViews from "./utility/FungibleTokenMetadataViews.cdc"
+import "FungibleToken"
+import "MetadataViews"
+import "FungibleTokenMetadataViews"
+import "ViewResolver"
 
-pub contract TicketToken : FungibleToken {
+pub contract TicketToken : FungibleToken, ViewResolver {
 
     /// Total supply of TicketTokens in existence
     pub var totalSupply: UFix64

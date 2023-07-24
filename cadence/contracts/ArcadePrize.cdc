@@ -1,7 +1,7 @@
-import NonFungibleToken from "./utility/NonFungibleToken.cdc"
-import FungibleToken from "./utility/FungibleToken.cdc"
-import MetadataViews from "./utility/MetadataViews.cdc"
-import TicketToken from "./TicketToken.cdc"
+import "NonFungibleToken"
+import "FungibleToken"
+import "MetadataViews"
+import "TicketToken"
 
 pub contract ArcadePrize: NonFungibleToken {
 

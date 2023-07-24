@@ -1,8 +1,8 @@
-import NonFungibleToken from "../../contracts/utility/NonFungibleToken.cdc"
-import MetadataViews from "../../contracts/utility/MetadataViews.cdc"
-import ArcadePrize from "../../contracts/ArcadePrize.cdc"
-import FungibleToken from "../../contracts/utility/FungibleToken.cdc"
-import TicketToken from "../../contracts/TicketToken.cdc"
+import "NonFungibleToken"
+import "MetadataViews"
+import "ArcadePrize"
+import "FungibleToken"
+import "TicketToken"
 
 /// Transaction to mint ArcadePrize.NFT to recipient's Collection
 ///

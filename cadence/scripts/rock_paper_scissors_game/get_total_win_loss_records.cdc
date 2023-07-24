@@ -1,5 +1,5 @@
-import GamingMetadataViews from "../../contracts/GamingMetadataViews.cdc"
-import RockPaperScissorsGame from "../../contracts/RockPaperScissorsGame.cdc"
+import "GamingMetadataViews"
+import "RockPaperScissorsGame"
 
 /// This script returns the winLossRecords stored in RockPaperScissors contract
 ///

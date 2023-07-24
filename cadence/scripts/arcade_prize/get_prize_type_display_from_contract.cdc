@@ -1,5 +1,5 @@
-import MetadataViews from "../../contracts/utility/MetadataViews.cdc"
-import ArcadePrize from "../../contracts/ArcadePrize.cdc"
+import "MetadataViews"
+import "ArcadePrize"
 
 /// Returns an array of MetadataViews.Display structs
 ///

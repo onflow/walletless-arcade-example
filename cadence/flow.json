@@ -1,91 +1,185 @@
 {
 	"contracts": {
+		"AccountCreator": {
+			"source": "./contracts/utility/AccountCreator.cdc",
+			"aliases": {
+				"emulator": "045a1763c93006ca",
+				"testnet": "a60698727837eccf"
+			}
+		},
+		"AddressUtils": {
+			"source": "./contracts/flow-utils/AddressUtils.cdc",
+			"aliases": {
+				"emulator": "e03daebed8ca0615",
+				"mainnet": "a340dc0a4ec828ab",
+				"testnet": "31ad40c07a2a9788"
+			}
+		},
 		"ArcadePrize": {
 			"source": "./contracts/ArcadePrize.cdc",
 			"aliases": {
-				"emulator": "0xf8d6e0586b0a20c7",
-				"testnet": "0x917b2b1dafdcfa58"
+				"emulator": "045a1763c93006ca",
+				"testnet": "a60698727837eccf"
 			}
 		},
-		"ChildAccount": {
-			"source": "./contracts/ChildAccount.cdc",
+		"ArrayUtils": {
+			"source": "./contracts/flow-utils/ArrayUtils.cdc",
 			"aliases": {
-				"emulator": "0xf8d6e0586b0a20c7",
-				"testnet": "0x1b655847a90e644a"
+				"emulator": "e03daebed8ca0615",
+				"mainnet": "a340dc0a4ec828ab",
+				"testnet": "31ad40c07a2a9788"
+			}
+		},
+		"CapabilityDelegator": {
+			"source": "./contracts/hybrid-custody/CapabilityDelegator.cdc",
+			"aliases": {
+				"emulator": "120e725050340cab",
+				"testnet": "294e44e1ec6993c6"
+			}
+		},
+		"CapabilityFactory": {
+			"source": "./contracts/hybrid-custody/CapabilityFactory.cdc",
+			"aliases": {
+				"emulator": "120e725050340cab",
+				"testnet": "294e44e1ec6993c6"
+			}
+		},
+		"CapabilityFilter": {
+			"source": "./contracts/hybrid-custody/CapabilityFilter.cdc",
+			"aliases": {
+				"emulator": "120e725050340cab",
+				"testnet": "294e44e1ec6993c6"
 			}
 		},
 		"DynamicNFT": {
 			"source": "./contracts/DynamicNFT.cdc",
 			"aliases": {
-				"emulator": "0xf8d6e0586b0a20c7",
-				"testnet": "0x917b2b1dafdcfa58"
+				"emulator": "045a1763c93006ca",
+				"testnet": "a60698727837eccf"
+			}
+		},
+		"FTAllFactory": {
+			"source": "./contracts/hybrid-custody/factories/FTAllFactory.cdc",
+			"aliases": {
+				"emulator": "120e725050340cab",
+				"testnet": "294e44e1ec6993c6"
+			}
+		},
+		"FTProviderFactory": {
+			"source": "./contracts/hybrid-custody/factories/FTProviderFactory.cdc",
+			"aliases": {
+				"emulator": "120e725050340cab",
+				"testnet": "294e44e1ec6993c6"
 			}
 		},
 		"FlowToken": {
 			"source": "./contracts/utility/FlowToken.cdc",
 			"aliases": {
-				"emulator": "0x0ae53cb6e3f42a79",
-				"testnet": "0x7e60df042a9c0868"
+				"emulator": "0ae53cb6e3f42a79",
+				"testnet": "7e60df042a9c0868"
 			}
 		},
 		"FungibleToken": {
 			"source": "./contracts/utility/FungibleToken.cdc",
 			"aliases": {
-				"emulator": "0xee82856bf20e2aa6",
-				"mainnet": "0xf233dcee88fe0abe",
-				"testnet": "0x9a0766d93b6608b7"
+				"emulator": "ee82856bf20e2aa6",
+				"mainnet": "f233dcee88fe0abe",
+				"testnet": "9a0766d93b6608b7"
 			}
 		},
 		"FungibleTokenMetadataViews": {
 			"source": "./contracts/utility/FungibleTokenMetadataViews.cdc",
 			"aliases": {
-				"emulator": "0xf8d6e0586b0a20c7",
-				"mainnet": "0xf233dcee88fe0abe",
-				"testnet": "0x9a0766d93b6608b7"
+				"emulator": "f8d6e0586b0a20c7",
+				"mainnet": "f233dcee88fe0abe",
+				"testnet": "9a0766d93b6608b7"
 			}
 		},
 		"GamePieceNFT": {
 			"source": "./contracts/GamePieceNFT.cdc",
 			"aliases": {
-				"emulator": "0xf8d6e0586b0a20c7",
-				"testnet": "0x917b2b1dafdcfa58"
+				"emulator": "045a1763c93006ca",
+				"testnet": "a60698727837eccf"
 			}
 		},
 		"GamingMetadataViews": {
 			"source": "./contracts/GamingMetadataViews.cdc",
 			"aliases": {
-				"emulator": "0xf8d6e0586b0a20c7",
-				"testnet": "0x917b2b1dafdcfa58"
+				"emulator": "045a1763c93006ca",
+				"testnet": "a60698727837eccf"
+			}
+		},
+		"HybridCustody": {
+			"source": "./contracts/hybrid-custody/HybridCustody.cdc",
+			"aliases": {
+				"emulator": "120e725050340cab",
+				"testnet": "294e44e1ec6993c6"
 			}
 		},
 		"MetadataViews": {
 			"source": "./contracts/utility/MetadataViews.cdc",
 			"aliases": {
-				"emulator": "0xf8d6e0586b0a20c7",
-				"mainnet": "0x1d7e57aa55817448",
-				"testnet": "0x631e88ae7f1d7c20"
+				"emulator": "f8d6e0586b0a20c7",
+				"mainnet": "1d7e57aa55817448",
+				"testnet": "631e88ae7f1d7c20"
+			}
+		},
+		"NFTCollectionPublicFactory": {
+			"source": "./contracts/hybrid-custody/factories/NFTCollectionPublicFactory.cdc",
+			"aliases": {
+				"emulator": "120e725050340cab",
+				"testnet": "294e44e1ec6993c6"
+			}
+		},
+		"NFTProviderAndCollectionFactory": {
+			"source": "./contracts/hybrid-custody/factories/NFTProviderAndCollectionFactory.cdc",
+			"aliases": {
+				"emulator": "120e725050340cab",
+				"testnet": "294e44e1ec6993c6"
+			}
+		},
+		"NFTProviderFactory": {
+			"source": "./contracts/hybrid-custody/factories/NFTProviderFactory.cdc",
+			"aliases": {
+				"emulator": "120e725050340cab",
+				"testnet": "294e44e1ec6993c6"
 			}
 		},
 		"NonFungibleToken": {
 			"source": "./contracts/utility/NonFungibleToken.cdc",
 			"aliases": {
-				"emulator": "0xf8d6e0586b0a20c7",
-				"mainnet": "0x1d7e57aa55817448",
-				"testnet": "0x631e88ae7f1d7c20"
+				"emulator": "f8d6e0586b0a20c7",
+				"mainnet": "1d7e57aa55817448",
+				"testnet": "631e88ae7f1d7c20"
 			}
 		},
 		"RockPaperScissorsGame": {
 			"source": "./contracts/RockPaperScissorsGame.cdc",
 			"aliases": {
-				"emulator": "0xf8d6e0586b0a20c7",
-				"testnet": "0x917b2b1dafdcfa58"
+				"emulator": "045a1763c93006ca",
+				"testnet": "a60698727837eccf"
+			}
+		},
+		"StringUtils": {
+			"source": "./contracts/flow-utils/StringUtils.cdc",
+			"aliases": {
+				"emulator": "e03daebed8ca0615",
+				"mainnet": "a340dc0a4ec828ab",
+				"testnet": "31ad40c07a2a9788"
 			}
 		},
 		"TicketToken": {
 			"source": "./contracts/TicketToken.cdc",
 			"aliases": {
-				"emulator": "0xf8d6e0586b0a20c7",
-				"testnet": "0x917b2b1dafdcfa58"
+				"emulator": "045a1763c93006ca",
+				"testnet": "a60698727837eccf"
+			}
+		},
+		"ViewResolver": {
+			"source": "./contracts/utility/ViewResolver.cdc",
+			"aliases": {
+				"emulator": "f8d6e0586b0a20c7",
+				"testnet": "631e88ae7f1d7c20"
 			}
 		}
 	},
@@ -99,13 +193,24 @@
 			"address": "f8d6e0586b0a20c7",
 			"key": "83c4da8100a5bb0086fd0835e0b48dbdf507ca4aa15dab56edccee06c82eb110"
 		},
-		"linked-accounts": {
-			"address": "0x1b655847a90e644a",
-			"key": "$LINKED_ACCOUNTS"
+		"emulator-flow-utils": {
+			"address": "e03daebed8ca0615",
+			"key": "f84d8acb8a1efa87e316df886825e0b6acfa795f2599cbb306727084aa45b80d"
 		},
-		"game-account": {
-			"address": "0x917b2b1dafdcfa58",
-			"key": "$GAME_ACCOUNT"
+		"emulator-game": {
+			"address": "045a1763c93006ca",
+			"key": "884bf6b10358c23a35d272123eabb509be0e7bc895c9bfbaaeccae1b1f9204d3"
+		},
+		"emulator-hybrid-custody": {
+			"address": "120e725050340cab",
+			"key": "9219adbbe5caca4f2753fbd4fd22f50d5d5f6a8fe7096bbf381cbd55c2f46aab"
+		},
+		"testnet-game": {
+			"address": "a60698727837eccf",
+			"key": {
+				"type": "file",
+				"location": "testnet-game.pkey"
+			}
 		}
 	},
 	"deployments": {
@@ -114,7 +219,37 @@
 				"NonFungibleToken",
 				"MetadataViews",
 				"FungibleTokenMetadataViews",
-				"ChildAccount",
+				"ViewResolver"
+			],
+			"emulator-flow-utils": [
+				"AddressUtils",
+				"StringUtils",
+				"ArrayUtils"
+			],
+			"emulator-game": [
+				"AccountCreator",
+				"GamingMetadataViews",
+				"DynamicNFT",
+				"GamePieceNFT",
+				"TicketToken",
+				"ArcadePrize",
+				"RockPaperScissorsGame"
+			],
+			"emulator-hybrid-custody": [
+				"CapabilityDelegator",
+				"CapabilityFactory",
+				"CapabilityFilter",
+				"HybridCustody",
+				"NFTProviderFactory",
+				"NFTProviderAndCollectionFactory",
+				"NFTCollectionPublicFactory",
+				"FTProviderFactory",
+				"FTAllFactory"
+			]
+		},
+		"testnet": {
+			"testnet-game": [
+				"AccountCreator",
 				"GamingMetadataViews",
 				"DynamicNFT",
 				"GamePieceNFT",

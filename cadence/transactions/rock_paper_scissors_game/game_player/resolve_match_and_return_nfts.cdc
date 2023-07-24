@@ -1,4 +1,4 @@
-import RockPaperScissorsGame from "../../../contracts/RockPaperScissorsGame.cdc"
+import "RockPaperScissorsGame"
 
 /// Transaction to resolve a Match & return escrowed NFTs to players
 ///

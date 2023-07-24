@@ -14,9 +14,8 @@ This is example Flow App was created to demonstrate walletless onboarding and pr
 
 > **Warning**
 >
-> :warning: This repo is a WIP aiming to showcase how Auth Account capabilities from [FLIP 53](https://github.com/onflow/flips/pull/53) could be use to achieve hydrid custody
->
-> This project implements a local key management solution, but should **not** be used as a reference for building a production grade application.
+> :warning: This project implements a local key management solution, but should **not** be used as a reference for
+> building a production grade application.
 >
 > This project should only be used in aid of local development against a locally run instance of the Flow blockchain like the Flow emulator, and should never be used in conjunction with Flow Mainnet, Testnet, Canarynet or any other instances of Flow.
 
@@ -24,8 +23,9 @@ This is example Flow App was created to demonstrate walletless onboarding and pr
 
 - [Account Linking Overview](https://developers.flow.com/account-linking)
 - [Explore Walletless Onboarding](https://developers.flow.com/account-linking/guides/walletless-onboarding)
-- [Hybrid Custody](https://forum.onflow.org/t/hybrid-custody/4016)
-- [Child Account Contract](https://f.dnz.dev/0x1b655847a90e644a/ChildAccount)
+- [Hybrid Custody Intro Forum Post](https://forum.onflow.org/t/hybrid-custody/4016)
+- [HybridCustody Contract](https://f.dnz.dev/294e44e1ec6993c6/HybridCustody)
+- [HybridCustody Source Repo](https://github.com/onflow/hybrid-custody)
 
 ### Apps and Packages
 
@@ -49,11 +49,8 @@ cd walletless-arcade-example
 ### Pre-Requisites
 
 **1. Install Flow CLI**
-:warning: Requires installation of [Flow CLI](https://github.com/onflow/flow-cli/releases/tag/v0.45.1-cadence-attachments-dev-wallet) (Attachments/AuthAccount Capability pre-release version).
 
-```sh
-sh -ci "$(curl -fsSL https://raw.githubusercontent.com/onflow/flow-cli/master/install.sh)" -- v0.45.1-cadence-attachments-dev-wallet
-```
+Follow [installation instructions](https://developers.flow.com/tooling/flow-cli/install) to install Flow CLI on to your machine.
 
 **2. Copy `emulator.private.json.example` and `testnet.private.json.example`**
 
@@ -91,10 +88,10 @@ flow emulator start
 flow dev-wallet
 ```
 
-- Start dev server to deploy the contracts and configure the service account (From a new terminal window)
+- Start dev server to deploy the contracts and configure the service account (From a new terminal window) - this will create our emulator deployment accounts, transfer our dev account some $FLOW, and configure initial resources
 
 ```sh
-npm run dev:local:deploy
+npm run dev:local:complete
 ```
 
 This command will start the dev server and deploy the contracts to the emulator. It will also configure the service account with the required capabilities.

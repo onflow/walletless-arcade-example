@@ -1,4 +1,4 @@
-import RockPaperScissorsGame from "../../../contracts/RockPaperScissorsGame.cdc"
+import "RockPaperScissorsGame"
 
 /// Transaction that sets up GamePlayer resource in signing account
 /// and exposes GamePlayerPublic capability so matches can be added
@@ -23,7 +23,9 @@ transaction {
             )
         }
         // Link GamePlayerID & DelegatedGamePlayer Capability
-        if !signer.getCapability<&{RockPaperScissorsGame.GamePlayerID}>(RockPaperScissorsGame.GamePlayerPrivatePath).check() {
+        if !signer.getCapability<&{RockPaperScissorsGame.DelegatedGamePlayer, RockPaperScissorsGame.GamePlayerID}>(
+                RockPaperScissorsGame.GamePlayerPrivatePath
+            ).check() {
             signer.unlink(RockPaperScissorsGame.GamePlayerPrivatePath)
             signer.link<&{
                 RockPaperScissorsGame.DelegatedGamePlayer,

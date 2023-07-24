@@ -1,4 +1,4 @@
-import RockPaperScissorsGame from "../../contracts/RockPaperScissorsGame.cdc"
+import "RockPaperScissorsGame"
 
 /// Transaction a player might use to cheat a match
 /// int moves: 0 rock, 1 paper, 2 scissors

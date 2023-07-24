@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Create flow-utils-emulator account e03daebed8ca0615 with private key 3c68d757f895daacaea6cb3bdb460adf3ab7478fa4a5c20cb0c15a656e4566b0
+flow accounts create --key "02023d04808e79ded575c173c28b62bbe3b0e744da08ca31d7709cba0f395302296b8d46dbe5fe188b5c651ba5247b2194982bb394d15aa1630ec3cadcc221b2"
+
+# Create hybrid-custody-emulator account 045a1763c93006ca with private key 5ac3ff33301ea50d9a48cab45969447f2391b941aa4289ac06a4e77a7ab7e74a
+flow accounts create --key "865880170ea9f7ebf63173061abc29319f890bd36a65571ddc72d978708c53b47c2470234079ef6670772815ea534944b1a9d36dadc50e71a62bbee381619093"
+
+# Deploy contracts
+flow deploy

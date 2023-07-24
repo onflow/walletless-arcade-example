@@ -1,11 +1,11 @@
-import FungibleToken from "./FungibleToken.cdc"
-import FlowToken from "./FlowToken.cdc"
+import "FungibleToken"
+import "FlowToken"
 
 /// This contract defines a resource enabling easy account creation and querying of created addresses by their
 /// originating public key strings. Note that this contract serves as a utility for prototyping, and its use isn't
-/// suggested for production environments for a number of reasons, namely that the resource's mapping isn't
-/// scalable for a large number of accounts, passing AuthAccounts is an anti-pattern in Cadence, and this approach is
-/// is more inflexible than account creation handled at the transaction level.
+/// suggested for production environments for a number of reasons, namely that the resource's mapping isn't scalable
+/// for a large number of accounts, passing AuthAccounts is an anti-pattern in Cadence, and this approach is is more
+/// inflexible than account creation handled at the transaction level.
 ///
 pub contract AccountCreator {
 
@@ -88,9 +88,7 @@ pub contract AccountCreator {
             newAccount.getCapability<&FlowToken.Vault{FungibleToken.Receiver}>(/public/flowTokenReceiver)
                 .borrow()!
                 .deposit(
-                    from: <- signer.borrow<&{
-                        FungibleToken.Provider
-                    }>(
+                    from: <- signer.borrow<&{FungibleToken.Provider}>(
                         from: /storage/flowTokenVault
                     )!.withdraw(amount: initialFundingAmount)
                 )
@@ -99,6 +97,34 @@ pub contract AccountCreator {
             emit AccountCreated(creatorAddress: self.owner?.address, creatorUUID: self.uuid, newAccount: newAccount.address, originatingPublicKey: originatingPublicKey)
             return newAccount
         }
+    }
+
+    /// Helper method to determine if a public key is active on an account by comparing the given key against all keys
+    /// active on the given account.
+    ///
+    /// @param publicKey: A public key as a string
+    /// @param address: The address of the account to query against
+    ///
+    /// @return Key index if the key is active on the account, nil otherwise (including if the given public key string
+    /// was invalid)
+    ///
+    pub fun isKeyActiveOnAccount(publicKey: String, address: Address): Int? {
+        // Public key strings must have even length
+        if publicKey.length % 2 != 0 {
+            return nil
+        }
+        
+        var keyIndex = 0
+        var matchingKeyIndex: Int? = nil
+        getAccount(address).keys.forEach(fun (key: AccountKey): Bool {
+            // Encode the key as a string and compare
+            if publicKey == String.encodeHex(key.publicKey.publicKey) && !key.isRevoked {
+                matchingKeyIndex = keyIndex
+            }
+            keyIndex = keyIndex + 1
+            return true
+        })
+        return matchingKeyIndex
     }
 
     pub fun createNewCreator(): @Creator {

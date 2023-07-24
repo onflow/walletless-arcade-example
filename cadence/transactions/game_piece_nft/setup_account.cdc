@@ -1,6 +1,6 @@
-import NonFungibleToken from "../../contracts/utility/NonFungibleToken.cdc"
-import GamePieceNFT from "../../contracts/GamePieceNFT.cdc"
-import MetadataViews from "../../contracts/utility/MetadataViews.cdc"
+import "NonFungibleToken"
+import "GamePieceNFT"
+import "MetadataViews"
 
 /// Configures signer's account with a GamePieceNFT Collection
 ///
@@ -13,16 +13,12 @@ transaction {
         }
         if !signer.getCapability<
                 &GamePieceNFT.Collection{NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, GamePieceNFT.GamePieceNFTCollectionPublic, MetadataViews.ResolverCollection}
-            >(
-                GamePieceNFT.CollectionPublicPath
-            ).check() {
+            >(GamePieceNFT.CollectionPublicPath).check() {
             signer.unlink(GamePieceNFT.CollectionPublicPath)
             // create a public capability for the collection
             signer.link<&GamePieceNFT.Collection{NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, GamePieceNFT.GamePieceNFTCollectionPublic, MetadataViews.ResolverCollection}>(GamePieceNFT.CollectionPublicPath, target: GamePieceNFT.CollectionStoragePath)
         }
-        if !signer.getCapability<
-                &GamePieceNFT.Collection{NonFungibleToken.Provider}
-            >(
+        if !signer.getCapability<&GamePieceNFT.Collection{NonFungibleToken.Provider}>(
                 GamePieceNFT.ProviderPrivatePath
             ).check() {
             signer.unlink(GamePieceNFT.ProviderPrivatePath)

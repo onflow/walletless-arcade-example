@@ -1,7 +1,7 @@
-import NonFungibleToken from "../../contracts/utility/NonFungibleToken.cdc"
-import GamePieceNFT from "../../contracts/GamePieceNFT.cdc"
-import MetadataViews from "../../contracts/utility/MetadataViews.cdc"
-import FungibleToken from "../../contracts/utility/FungibleToken.cdc"
+import "NonFungibleToken"
+import "GamePieceNFT"
+import "MetadataViews"
+import "FungibleToken"
 
 /// This transction uses the MinterPublic resource to mint a new NFT
 ///

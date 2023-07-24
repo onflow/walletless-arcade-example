@@ -1,6 +1,6 @@
-import GamePieceNFT from "../../contracts/GamePieceNFT.cdc"
-import GamingMetadataViews from "../../contracts/GamingMetadataViews.cdc"
-import RockPaperScissorsGame from "../../contracts/RockPaperScissorsGame.cdc"
+import "GamePieceNFT"
+import "GamingMetadataViews"
+import "RockPaperScissorsGame"
 
 /// Script to get the RockPaperScissors BasicWinLoss data from a given address's NFT
 ///

@@ -1,5 +1,5 @@
-import NonFungibleToken from "../../../contracts/utility/NonFungibleToken.cdc"
-import RockPaperScissorsGame from "../../../contracts/RockPaperScissorsGame.cdc"
+import "NonFungibleToken"
+import "RockPaperScissorsGame"
 
 /// The signer signs up for the specified Match.id, setting up a GamePlayer resource
 /// if need be in the process. This gives the signer the ability to engage with an
