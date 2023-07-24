@@ -3,7 +3,7 @@ import MetadataViews from 0xMetadataViews
 import FungibleToken from 0xFungibleToken
 import NonFungibleToken from 0xNonFungibleToken
 
-import AccountCreator fomr 0xAccountCreator
+import AccountCreator from 0xAccountCreator
 
 import GamePieceNFT from 0xGamePieceNFT
 import RockPaperScissorsGame from 0xRockPaperScissorsGame
