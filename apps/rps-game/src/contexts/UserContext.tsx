@@ -88,7 +88,7 @@ export default function UserContextProvider({ children }: Props) {
         ADD_AS_CHILD_MULTISIGN,
         (arg: any, t: any) => [
           arg(factoryAndFilterAddress, t.Address),
-          arg(factoryAndFilterAddress, t.String),
+          arg(factoryAndFilterAddress, t.Address),
         ],
         {
           limit: 9999,
