@@ -3,14 +3,14 @@
 		"AccountCreator": {
 			"source": "./cadence/contracts/utility/AccountCreator.cdc",
 			"aliases": {
-				"emulator": "e03daebed8ca0615",
+				"emulator": "0x179b6b1cb6755e31",
 				"testnet": "a60698727837eccf"
 			}
 		},
 		"AddressUtils": {
 			"source": "./cadence/contracts/flow-utils/AddressUtils.cdc",
 			"aliases": {
-				"emulator": "045a1763c93006ca",
+				"emulator": "0x01cf0e2f2f715450",
 				"mainnet": "a340dc0a4ec828ab",
 				"testnet": "31ad40c07a2a9788"
 			}
@@ -18,14 +18,14 @@
 		"ArcadePrize": {
 			"source": "./cadence/contracts/ArcadePrize.cdc",
 			"aliases": {
-				"emulator": "e03daebed8ca0615",
+				"emulator": "0x179b6b1cb6755e31",
 				"testnet": "a60698727837eccf"
 			}
 		},
 		"ArrayUtils": {
 			"source": "./cadence/contracts/flow-utils/ArrayUtils.cdc",
 			"aliases": {
-				"emulator": "045a1763c93006ca",
+				"emulator": "0x01cf0e2f2f715450",
 				"mainnet": "a340dc0a4ec828ab",
 				"testnet": "31ad40c07a2a9788"
 			}
@@ -33,42 +33,42 @@
 		"CapabilityDelegator": {
 			"source": "./cadence/contracts/hybrid-custody/CapabilityDelegator.cdc",
 			"aliases": {
-				"emulator": "120e725050340cab",
+				"emulator": "0xf3fcd2c1a78f5eee",
 				"testnet": "294e44e1ec6993c6"
 			}
 		},
 		"CapabilityFactory": {
 			"source": "./cadence/contracts/hybrid-custody/CapabilityFactory.cdc",
 			"aliases": {
-				"emulator": "120e725050340cab",
+				"emulator": "0xf3fcd2c1a78f5eee",
 				"testnet": "294e44e1ec6993c6"
 			}
 		},
 		"CapabilityFilter": {
 			"source": "./cadence/contracts/hybrid-custody/CapabilityFilter.cdc",
 			"aliases": {
-				"emulator": "120e725050340cab",
+				"emulator": "0xf3fcd2c1a78f5eee",
 				"testnet": "294e44e1ec6993c6"
 			}
 		},
 		"DynamicNFT": {
 			"source": "./cadence/contracts/DynamicNFT.cdc",
 			"aliases": {
-				"emulator": "e03daebed8ca0615",
+				"emulator": "0x179b6b1cb6755e31",
 				"testnet": "a60698727837eccf"
 			}
 		},
 		"FTAllFactory": {
 			"source": "./cadence/contracts/hybrid-custody/factories/FTAllFactory.cdc",
 			"aliases": {
-				"emulator": "120e725050340cab",
+				"emulator": "0xf3fcd2c1a78f5eee",
 				"testnet": "294e44e1ec6993c6"
 			}
 		},
 		"FTProviderFactory": {
 			"source": "./cadence/contracts/hybrid-custody/factories/FTProviderFactory.cdc",
 			"aliases": {
-				"emulator": "120e725050340cab",
+				"emulator": "0xf3fcd2c1a78f5eee",
 				"testnet": "294e44e1ec6993c6"
 			}
 		},
@@ -98,21 +98,21 @@
 		"GamePieceNFT": {
 			"source": "./cadence/contracts/GamePieceNFT.cdc",
 			"aliases": {
-				"emulator": "e03daebed8ca0615",
+				"emulator": "0x179b6b1cb6755e31",
 				"testnet": "a60698727837eccf"
 			}
 		},
 		"GamingMetadataViews": {
 			"source": "./cadence/contracts/GamingMetadataViews.cdc",
 			"aliases": {
-				"emulator": "e03daebed8ca0615",
+				"emulator": "0x179b6b1cb6755e31",
 				"testnet": "a60698727837eccf"
 			}
 		},
 		"HybridCustody": {
 			"source": "./cadence/contracts/hybrid-custody/HybridCustody.cdc",
 			"aliases": {
-				"emulator": "120e725050340cab",
+				"emulator": "0xf3fcd2c1a78f5eee",
 				"testnet": "294e44e1ec6993c6"
 			}
 		},
@@ -127,21 +127,21 @@
 		"NFTCollectionPublicFactory": {
 			"source": "./cadence/contracts/hybrid-custody/factories/NFTCollectionPublicFactory.cdc",
 			"aliases": {
-				"emulator": "120e725050340cab",
+				"emulator": "0xf3fcd2c1a78f5eee",
 				"testnet": "294e44e1ec6993c6"
 			}
 		},
 		"NFTProviderAndCollectionFactory": {
 			"source": "./cadence/contracts/hybrid-custody/factories/NFTProviderAndCollectionFactory.cdc",
 			"aliases": {
-				"emulator": "120e725050340cab",
+				"emulator": "0xf3fcd2c1a78f5eee",
 				"testnet": "294e44e1ec6993c6"
 			}
 		},
 		"NFTProviderFactory": {
 			"source": "./cadence/contracts/hybrid-custody/factories/NFTProviderFactory.cdc",
 			"aliases": {
-				"emulator": "120e725050340cab",
+				"emulator": "0xf3fcd2c1a78f5eee",
 				"testnet": "294e44e1ec6993c6"
 			}
 		},
@@ -156,14 +156,14 @@
 		"RockPaperScissorsGame": {
 			"source": "./cadence/contracts/RockPaperScissorsGame.cdc",
 			"aliases": {
-				"emulator": "e03daebed8ca0615",
+				"emulator": "0x179b6b1cb6755e31",
 				"testnet": "a60698727837eccf"
 			}
 		},
 		"StringUtils": {
 			"source": "./cadence/contracts/flow-utils/StringUtils.cdc",
 			"aliases": {
-				"emulator": "045a1763c93006ca",
+				"emulator": "0x01cf0e2f2f715450",
 				"mainnet": "a340dc0a4ec828ab",
 				"testnet": "31ad40c07a2a9788"
 			}
@@ -171,7 +171,7 @@
 		"TicketToken": {
 			"source": "./cadence/contracts/TicketToken.cdc",
 			"aliases": {
-				"emulator": "e03daebed8ca0615",
+				"emulator": "0x179b6b1cb6755e31",
 				"testnet": "a60698727837eccf"
 			}
 		},
@@ -195,16 +195,23 @@
 			"key": "5d4fee50d6098eef11b6cf45fdc043f4eb06d8946638255e381636d6e2886100"
 		},
 		"emulator-flow-utils": {
-			"address": "045a1763c93006ca",
-			"key": "1352a6169a2db021cfc8cebc2eafaa43e5c3a586f338ac53aec8ec6522ab9387"
+			"address": "0x01cf0e2f2f715450",
+			"key": "f84d8acb8a1efa87e316df886825e0b6acfa795f2599cbb306727084aa45b80d"
 		},
 		"emulator-game": {
-			"address": "e03daebed8ca0615",
-			"key": "729f42f33696b96b4c2dc75935282eb235394d5daf45a786741cb1421b8cdeb9"
+			"address": "0x179b6b1cb6755e31",
+			"key": "884bf6b10358c23a35d272123eabb509be0e7bc895c9bfbaaeccae1b1f9204d3"
 		},
 		"emulator-hybrid-custody": {
-			"address": "120e725050340cab",
-			"key": "b9f2e031cc2a6478bc52f6895c67c1cc97b12ba422fcd172d2142e2fea27b5ff"
+			"address": "0xf3fcd2c1a78f5eee",
+			"key": "9219adbbe5caca4f2753fbd4fd22f50d5d5f6a8fe7096bbf381cbd55c2f46aab"
+		},
+		"testnet-game": {
+			"address": "a60698727837eccf",
+			"key": {
+				"type": "file",
+				"location": "testnet-game.pkey"
+			}
 		}
 	},
 	"deployments": {

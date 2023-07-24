@@ -1,16 +1,16 @@
 #!/bin/bash
 
-# Create emulator-game account 0xe03daebed8ca0615 with private key 729f42f33696b96b4c2dc75935282eb235394d5daf45a786741cb1421b8cdeb9
-flow accounts create --key "70e88d5c93d76b0383f403a9e16ab5122c2f62dc38fe7255c4be2481e58823f6eab5aa24d289d4a8fb3e5b82aa787e055af7a8e309536b3203b4ce9b1fb83eb7"
+# Create emulator-flow-utils account 0x01cf0e2f2f715450 with private key f84d8acb8a1efa87e316df886825e0b6acfa795f2599cbb306727084aa45b80d
+flow accounts create --key "a45b0c0d88f7408a19cd86feef67105509aad31f5986c676cf3010fbe001e3a7b20d90d1f5bdfcb3218a6204d87dd910bc52ec32a37c1888725429d808262a1e"
 
-# Create emulator-flow-utils account 0x045a1763c93006ca with private key 1352a6169a2db021cfc8cebc2eafaa43e5c3a586f338ac53aec8ec6522ab9387
-flow accounts create --key "c83981d6c684066792432995f036d2422880b7042fc7724f5e47b7225803f880358db6fd4b8f986837d5390a2cb088768c2e3bf414b21e98b4c04f1219ae4b69"
+# Create emulator-game account 0x179b6b1cb6755e31 with private key 884bf6b10358c23a35d272123eabb509be0e7bc895c9bfbaaeccae1b1f9204d3
+flow accounts create --key "921375073cd516a5c33804ca577086501a9772f2991f9b2e28b81b62fee72f54f0ed1b7e7d4a333885dfa7de8aabc094e14bbec3aaa41895e9fe6d6f7fdb4041"
 
-# Create emulator-hybrid-custody account 0x120e725050340cab with private key b9f2e031cc2a6478bc52f6895c67c1cc97b12ba422fcd172d2142e2fea27b5ff
-flow accounts create --key "074e64fbd0e6935d3afde1c70fc51ee0f485474b63bda28ab4fde4a7f1705e4b4d0d6af66d11f3a1ec46043cb739a276df6a6570c9b34e3b48e4ffb21cd4b155"
+# Create emulator-hybrid-custody account 0xf3fcd2c1a78f5eee with private key 9219adbbe5caca4f2753fbd4fd22f50d5d5f6a8fe7096bbf381cbd55c2f46aab
+flow accounts create --key "1dc63a08035b6c99ba1f94e2bdfa0d65c8afab71734dceb05c53cc50c6e84418258e11c9009f7983bb65bbb361150def006a4f1e14c3a032d2e4cbd0c0d19cbd"
 
-# Transfer Flow to game account for storage
-flow transactions send ./cadence/transactions/flow_token/transfer_flow.cdc 1000.0 0xe03daebed8ca0615
+# Transfer the game developer some $FLOW for storage fees
+flow transactions send ./cadence/transactions/flow_token/transfer_flow.cdc 1000.0 0x179b6b1cb6755e31
 
 # Deploy contracts
 flow deploy
@@ -20,5 +20,5 @@ flow transactions send ./cadence/transactions/account_creator/setup.cdc --signer
 
 # Setup CapabilityFactory & CapabilityFilter resources
 flow transactions send ./cadence/transactions/hybrid_custody/dev_setup/setup_filter_and_factory_manager.cdc \
-    0xe03daebed8ca0615 GamePieceNFT 0xe03daebed8ca0615 TicketToken \
+    0x179b6b1cb6755e31 GamePieceNFT 0x179b6b1cb6755e31 TicketToken \
     --signer emulator-game
