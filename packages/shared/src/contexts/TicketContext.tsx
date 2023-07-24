@@ -144,9 +144,12 @@ export default function TicketContextProvider({ children }: Props) {
                 GET_BALANCE_OF_ALL_CHILD_ACCOUNTS,
                 (arg: any, t: any) => [arg(fcl.withPrefix(address), t.Address)]
               )
-
-            const childTicketVaultAddress =
-              Object.keys(childAccountsTicketBalances)[1] || null
+            var childTicketVaultAddress: string | null = null
+            if (Object.keys(childAccountsTicketBalances)[0] != null && Object.keys(childAccountsTicketBalances)[0] != address) {
+              childTicketVaultAddress = Object.keys(childAccountsTicketBalances)[0]!
+            } else if (Object.keys(childAccountsTicketBalances)[1] != null && Object.keys(childAccountsTicketBalances)[1] != address) {
+              childTicketVaultAddress = Object.keys(childAccountsTicketBalances)[1]!
+            }
             setChildTicketVaultAddress(childTicketVaultAddress)
 
             const sumOfChildAccountBalances = (
