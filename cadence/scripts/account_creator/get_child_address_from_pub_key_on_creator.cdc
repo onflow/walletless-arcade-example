@@ -1,5 +1,5 @@
-import "AccountCreator from "../../contracts/utility/AccountCreator.cdc"
-import "LinkedAccounts from "../../contracts/LinkedAccounts.cdc"
+import "AccountCreator"
+import "LinkedAccounts"
 
 /// Returns the child address associated with a public key if account was created by the AccountCreator.Creator at the
 /// specified Address and the provided public key is still active on the account.

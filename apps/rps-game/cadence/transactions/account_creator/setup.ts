@@ -1,5 +1,5 @@
 const SETUP_ACCOUNT_CREATOR = `
-import "AccountCreator"
+import AccountCreator from 0xAccountCreator
 
 /// Configures and AccountCreator resource in the signer's account
 /// **NOTE:** AccountCreator is used here to keep the demo app client-side & simple and should be replaced by an
