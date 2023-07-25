@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# Generate .pkey for emulator accounts
+cp emulator-account.pkey.example emulator-account.pkey
+cp emulator-flow-utils.pkey.example emulator-flow-utils.pkey
+cp emulator-game.pkey.example emulator-game.pkey
+cp emulator-hybrid-custody.pkey.example emulator-hybrid-custody.pkey
+
+
 # Create emulator-flow-utils account 0x01cf0e2f2f715450 with private key f84d8acb8a1efa87e316df886825e0b6acfa795f2599cbb306727084aa45b80d
 flow accounts create --key "a45b0c0d88f7408a19cd86feef67105509aad31f5986c676cf3010fbe001e3a7b20d90d1f5bdfcb3218a6204d87dd910bc52ec32a37c1888725429d808262a1e"
 

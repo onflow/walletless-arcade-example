@@ -192,19 +192,31 @@
 	"accounts": {
 		"emulator-account": {
 			"address": "0xf8d6e0586b0a20c7",
-			"key": "5d4fee50d6098eef11b6cf45fdc043f4eb06d8946638255e381636d6e2886100"
+			"key": {
+				"type": "file",
+				"location": "emulator-account.pkey"
+			}
 		},
 		"emulator-flow-utils": {
 			"address": "0x01cf0e2f2f715450",
-			"key": "f84d8acb8a1efa87e316df886825e0b6acfa795f2599cbb306727084aa45b80d"
+			"key": {
+				"type": "file",
+				"location": "emulator-flow-utils.pkey"
+			}
 		},
 		"emulator-game": {
 			"address": "0x179b6b1cb6755e31",
-			"key": "884bf6b10358c23a35d272123eabb509be0e7bc895c9bfbaaeccae1b1f9204d3"
+			"key": {
+				"type": "file",
+				"location": "emulator-game.pkey"
+			}
 		},
 		"emulator-hybrid-custody": {
 			"address": "0xf3fcd2c1a78f5eee",
-			"key": "9219adbbe5caca4f2753fbd4fd22f50d5d5f6a8fe7096bbf381cbd55c2f46aab"
+			"key": {
+				"type": "file",
+				"location": "emulator-hybrid-custody.pkey"
+			}
 		},
 		"testnet-game": {
 			"address": "0xa60698727837eccf",
@@ -246,6 +258,17 @@
 				"NFTCollectionPublicFactory",
 				"FTProviderFactory",
 				"FTAllFactory"
+			]
+		},
+		"testnet": {
+			"testnet-game": [
+				"AccountCreator",
+				"GamingMetadataViews",
+				"DynamicNFT",
+				"GamePieceNFT",
+				"TicketToken",
+				"ArcadePrize",
+				"RockPaperScissorsGame"
 			]
 		}
 	}
