@@ -18,10 +18,7 @@ transaction(fundingChildAddress: Address, minterAddress: Address) {
 
     prepare(signer: AuthAccount) {
         // Get a reference to the MinterPublic Capability
-        self.minterRef = getAccount(minterAddress)
-            .getCapability<
-                &ArcadePrize.Administrator{ArcadePrize.NFTMinterPublic}
-            >(
+        self.minterRef = getAccount(minterAddress).getCapability<&ArcadePrize.Administrator{ArcadePrize.NFTMinterPublic}>(
                 ArcadePrize.MinterPublicPath
             ).borrow()
             ?? panic("Could not get a reference to the NFTMinterPublic Capability at the specified address ".concat(minterAddress.toString()))

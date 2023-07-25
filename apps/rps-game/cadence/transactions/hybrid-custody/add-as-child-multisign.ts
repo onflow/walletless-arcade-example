@@ -1,17 +1,17 @@
 const ADD_AS_CHILD_MULTISIGN = `#allowAccountLinking
 
-import "FungibleToken"
-import "NonFungibleToken"
-import "MetadataViews"
+import FungibleToken from 0xFungibleToken
+import NonFungibleToken from 0xNonFungibleToken
+import MetadataViews from 0xMetadataViews
 
-import "CapabilityFactory"
-import "CapabilityDelegator"
-import "CapabilityFilter"
-import "HybridCustody"
+import CapabilityFactory from 0xCapabilityFactory
+import CapabilityDelegator from 0xCapabilityDelegator
+import CapabilityFilter from 0xCapabilityFilter
+import HybridCustody from 0xHybridCustody
 
-import "GamePieceNFT"
-import "RockPaperScissorsGame"
-import "TicketToken"
+import GamePieceNFT from 0xGamePieceNFT
+import RockPaperScissorsGame from 0xRockPaperScissorsGame
+import TicketToken from 0xTicketToken
 
 /// Links the signing accounts as labeled, with the child's AuthAccount Capability maintained in the parent's 
 /// HybridCustody.Manager. Signing parent is also configured with GamePieceNFT.Collection and TicketToken.Vault.
