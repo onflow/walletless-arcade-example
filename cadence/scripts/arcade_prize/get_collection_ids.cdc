@@ -5,10 +5,7 @@ import "ArcadePrize"
 ///
 pub fun main(address: Address): [UInt64]? {
 
-    if let collectionRef = getAccount(address)
-        .getCapability<
-            &ArcadePrize.Collection{NonFungibleToken.CollectionPublic}
-        >(
+    if let collectionRef = getAccount(address).getCapability<&ArcadePrize.Collection{NonFungibleToken.CollectionPublic}>(
             ArcadePrize.CollectionPublicPath
         ).borrow() {
         return collectionRef.getIDs()
