@@ -38,11 +38,11 @@ pub fun main(parentAddress: Address): {Address: UFix64} {
         parentAddress: getTicketTokenBalance(from: parentAddress)
     }
     // Get a ref to the parentAddress's HybridCustody.Manager if possible
-    if let manager = getAccount(parentAddress).borrow<&HybridCustody.Manager(
+    if let manager = getAuthAccount(parentAddress).borrow<&HybridCustody.Manager>(
         from: HybridCustody.ManagerStoragePath
-    ).borrow() {
+    ) {
         // Iterate over the child accounts, adding their balance to the ongoing return mapping
-        let childAccounts: [Address] = manager.getLinkedAccountAddresses()
+        let childAccounts: [Address] = manager.getChildAddresses()
         for address in childAccounts {
             if let balance = getTicketTokenBalanceSafe(from: address) {
                 accountBalances.insert(key: address, balance)

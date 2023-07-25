@@ -1,9 +1,9 @@
 const SELF_CUSTODY_ONBOARDING = `import "FungibleToken"
-import "NonFungibleToken"
-import "MetadataViews"
-import "GamePieceNFT"
-import "RockPaperScissorsGame"
-import "TicketToken"
+import NonFungibleToken from 0xNonFungibleToken
+import MetadataViews from 0xMetadataViews
+import GamePieceNFT from 0xGamePieceNFT
+import RockPaperScissorsGame from 0xRockPaperScissorsGame
+import TicketToken from 0xTicketToken
 
 /// This transaction sets up the following in a signer's account
 /// - GamePieceNFT.Collection
