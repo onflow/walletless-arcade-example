@@ -2,6 +2,7 @@ const GET_ADDRESS_FROM_PUB_KEY = `
 import AccountCreator from 0xAccountCreator
 
 pub fun main(creatorAddress: Address, pubKey: String): Address? {
+
     return getAccount(creatorAddress).getCapability<&{AccountCreator.CreatorPublic}>(
             AccountCreator.CreatorPublicPath
         ).borrow()
