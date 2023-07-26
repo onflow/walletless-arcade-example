@@ -1,4 +1,5 @@
-const ADD_AS_CHILD_MULTISIGN = `#allowAccountLinking
+const ADD_AS_CHILD_MULTISIGN = `
+#allowAccountLinking
 
 import FungibleToken from 0xFungibleToken
 import NonFungibleToken from 0xNonFungibleToken
@@ -20,6 +21,7 @@ transaction(childAccountFactoryAddress: Address, childAccountFilterAddress: Addr
     
     let manager: &HybridCustody.Manager
     let childAccountCapability: Capability<&HybridCustody.ChildAccount{HybridCustody.AccountPrivate, HybridCustody.AccountPublic, MetadataViews.Resolver}>
+    let display: MetadataViews.Display
     
     prepare(parent: AuthAccount, child: AuthAccount) {
     
@@ -54,8 +56,8 @@ transaction(childAccountFactoryAddress: Address, childAccountFilterAddress: Addr
         parent.unlink(HybridCustody.ManagerPublicPath)
         parent.unlink(HybridCustody.ManagerPrivatePath)
 
-        parent.link<&HybridCustody.Manager{HybridCustody.ManagerPrivate, HybridCustody.ManagerPublic}>(HybridCustody.OwnedAccountPrivatePath, target: HybridCustody.ManagerStoragePath)
-        parent.link<&HybridCustody.Manager{HybridCustody.ManagerPublic}>(HybridCustody.OwnedAccountPublicPath, target: HybridCustody.ManagerStoragePath)
+        parent.link<&HybridCustody.Manager{HybridCustody.ManagerPrivate, HybridCustody.ManagerPublic}>(HybridCustody.ManagerPrivatePath, target: HybridCustody.ManagerStoragePath)
+        parent.link<&HybridCustody.Manager{HybridCustody.ManagerPublic}>(HybridCustody.ManagerPublicPath, target: HybridCustody.ManagerStoragePath)
         
         // --------------------- End HybridCustody setup of parent account ---------------------
         
@@ -64,6 +66,17 @@ transaction(childAccountFactoryAddress: Address, childAccountFilterAddress: Addr
         // Publish account to parent
         let owned = child.borrow<&HybridCustody.OwnedAccount>(from: HybridCustody.OwnedAccountStoragePath)
             ?? panic("owned account not found")
+        // Create display from the known contract association
+        let info = RockPaperScissorsGame.info
+        self.display = MetadataViews.Display(
+                name: info.name,
+                description: info.description,
+                thumbnail: info.thumbnail
+            )
+        // Assign to OwnedAccount if still unset
+        if owned.resolveView(Type<MetadataViews.Display>()) as! MetadataViews.Display? == nil {
+            owned.setDisplay(self.display)
+        }
 
         let factory = getAccount(childAccountFactoryAddress).getCapability<&CapabilityFactory.Manager{CapabilityFactory.Getter}>(CapabilityFactory.PublicPath)
         assert(factory.check(), message: "factory address is not configured properly")
@@ -146,8 +159,12 @@ transaction(childAccountFactoryAddress: Address, childAccountFilterAddress: Addr
         // --------------------- End TicketToken setup of parent account ---------------------
     }
     execute {
+        let childAddress = self.childAccountCapability.borrow()?.getAddress() ?? panic("Invalid ChildAccount Capability")
         self.manager.addAccount(cap: self.childAccountCapability)
+        // Set parent-managed Display on the added account
+        self.manager.setChildAccountDisplay(address: childAddress, self.display)
     }
-}`
+}
+`
 
 export default ADD_AS_CHILD_MULTISIGN
