@@ -29,3 +29,9 @@ export async function setSession({
     })
   );
 }
+
+export async function resetSession() {
+  window.localStorage.removeItem(
+    SESSION_KEY
+  );
+}

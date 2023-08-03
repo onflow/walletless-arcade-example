@@ -47,7 +47,7 @@ const Home: NextPage = () => {
   const { purchase_success } = router.query
 
   const {
-    state: { isGamePiecePurchased, setGamePiecePurchased },
+    state: { isGamePiecePurchased, setGamePiecePurchased }, isOldSession,
   } = useRpsGameContext()
 
   const preStripeRedirect = () => {
@@ -129,6 +129,23 @@ const Home: NextPage = () => {
             </div>
           </FlexContainer>
         )}
+        <Modal
+          isOpen={
+            isOldSession === true
+          }
+          handleClose={() => location.reload()}
+          title={'Flow Arcade has been Updated'}
+          DialogContent={() => (
+            <div>
+              {`Since Flow Arcade has been updated, you will need to go through Flow's Walletless Onboarding process. 
+                Refresh and start over, The first step is to login using Google Auth.`}
+            </div>
+          )}
+          buttonText={'Reload!'}
+          buttonFunc={() => { 
+            location.reload();
+          }}
+        />
         <Modal
           isOpen={
             !!session === false &&

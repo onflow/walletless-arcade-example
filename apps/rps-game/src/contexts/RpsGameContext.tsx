@@ -21,6 +21,7 @@ import {
   adminAuthorizationFunction,
 } from '../utils/authz-functions'
 import RESOLVE_MATCH_AND_RETURN_NFTS from '../../cadence/transactions/rock-paper-scissors-game/game-player/resolve-match-and-return-nfts'
+import { resetSession } from '../utils/session'
 
 const LOCAL_STORAGE_GAME_MATCH_ID = 'LOCAL_STORAGE_GAME_MATCH_ID'
 const LOCAL_STORAGE_GAME_PIECE_ID = 'LOCAL_STORAGE_GAME_PIECE_ID'
@@ -291,8 +292,10 @@ export const RpsGameContext = createContext<{
   dispatch: React.Dispatch<Action>
   gameAccountAddress: string | null
   gameAccountPublicKey: string | null
-  loadingOpponentMove: boolean
+  loadingOpponentMove: boolean  
   setLoadingOpponentMove: React.Dispatch<React.SetStateAction<boolean>>
+  isOldSession: boolean
+  setIsOldSession: React.Dispatch<React.SetStateAction<boolean>>
 }>({
   state: initialState,
   dispatch: () => null,
@@ -300,12 +303,15 @@ export const RpsGameContext = createContext<{
   gameAccountPublicKey: null,
   loadingOpponentMove: false,
   setLoadingOpponentMove: () => null,
+  isOldSession: false,
+  setIsOldSession: () => null,
 })
 
 export const useRpsGameContext = () => useContext(RpsGameContext)
 
 export default function RpsGameContextProvider({ children }: Props) {
   const [loadingOpponentMove, setLoadingOpponentMove] = useState<boolean>(false)
+  const [isOldSession, setIsOldSession] = useState<boolean>(false)
 
   const [state, dispatch] = useReducer(reducer, initialState)
   const {
@@ -635,7 +641,10 @@ export default function RpsGameContextProvider({ children }: Props) {
       const res = await executeScript(GET_RPS_WIN_LOSS, (arg: any, t: any) => [
         arg(playerAddress, t.Address),
         arg(nftID, t.UInt64),
-      ])
+      ]).catch(() => {
+        resetSession();
+        setIsOldSession(true);
+      });
 
       dispatch({
         type: 'SET_WIN_LOSS_RECORD',
@@ -750,7 +759,14 @@ export default function RpsGameContextProvider({ children }: Props) {
   useEffect(() => {
     const fn = async () => {
       if (gameAccountAddress) {
+        // getting user's amount will fail if they have an old session 
+        // from prior ticket contract deployment
         await getTicketAmount(gameAccountAddress, false)
+        .catch(() => {
+          // clear local storage
+          resetSession() 
+          setIsOldSession(true)          
+        })         
       }
     }
     fn()
@@ -768,6 +784,8 @@ export default function RpsGameContextProvider({ children }: Props) {
       isPlaying,
       loadingOpponentMove,
       setLoadingOpponentMove,
+      isOldSession,
+      setIsOldSession,
     }),
     [
       state,
@@ -778,6 +796,8 @@ export default function RpsGameContextProvider({ children }: Props) {
       isPlaying,
       loadingOpponentMove,
       setLoadingOpponentMove,
+      isOldSession,
+      setIsOldSession,
     ]
   )
 
