@@ -79,7 +79,7 @@ export default function GameAccountContextProvider({ children }: Props) {
           const session = await getSession()
           await setSession({
             ...session,
-            address: res,
+            gameAccountAddress: res,
           })
           setGameAccountAddress(res)
         }
