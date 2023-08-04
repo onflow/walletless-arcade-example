@@ -221,6 +221,15 @@ function reducer(state: State, action: Action): State {
   }
 }
 
+const resetGameState = () => {
+  window.localStorage.removeItem(
+    LOCAL_STORAGE_GAME_MATCH_ID
+  );
+  window.localStorage.removeItem(
+    LOCAL_STORAGE_GAME_PIECE_ID
+  );
+  resetSession();
+}
 // Selectors
 const getIsPlaying = (
   state: State,
@@ -642,7 +651,7 @@ export default function RpsGameContextProvider({ children }: Props) {
         arg(playerAddress, t.Address),
         arg(nftID, t.UInt64),
       ]).catch(() => {
-        resetSession();
+        resetGameState();
         setIsOldSession(true);
       });
 
@@ -764,7 +773,7 @@ export default function RpsGameContextProvider({ children }: Props) {
         await getTicketAmount(gameAccountAddress, false)
         .catch(() => {
           // clear local storage
-          resetSession() 
+          resetGameState() 
           setIsOldSession(true)          
         })         
       }
