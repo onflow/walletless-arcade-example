@@ -588,7 +588,10 @@ export default function RpsGameContextProvider({ children }: Props) {
       )
 
       if (!txId) return
-      const transactionStatus = await getTransactionStatusOnSealed(txId)
+      const transactionStatus = await getTransactionStatusOnSealed(txId).catch(e => {
+        resetGameState();
+        setIsOldSession(true)
+      })
       const transactionEvents = transactionStatus?.events
 
       if (!transactionEvents || !Array.isArray(transactionEvents)) return
